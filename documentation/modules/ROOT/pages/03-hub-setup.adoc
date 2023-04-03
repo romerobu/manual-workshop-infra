@@ -1,0 +1,49 @@
+= Argo hub setup
+include::_attributes.adoc[]
+
+== Lab overview
+
+# Add diagrams and introduction
+
+== Hub setup
+
+Argo hub is a common cluster for every user on this workshop that will be used for deploying the basic infrastructure on managed clusters using ApplicationSet.
+You can login with your user-x to argo console as admin user of your own project while you will only have view permissions when you login to Openshift console.
+
+Ideally you could simoultaneusly deploy argo hub and managed clusters configuration as you can use a single bootstrap Application to deploy both Applications for argo hub and managed clusters, and then render N Applications
+for managed clusters using ApplicationSet however because of the workshop nature you need to perform cluster scoped actions but your repository could be easily adapted to perform actions on multiple clusters.
+
+First take a look to the helm charts used for argo hub setup and then navigate to the console. As this configuration is already deployed you don't need to make any change, only observe the way it was done.
+
+Navigate to gitops-config-as/hub-setup-a.yaml Application and see how this sets up env config on in-cluster (https://kubernetes.default.svc).
+If you navigate to argo console you won't be able to see this Application because of the RBAC permissions (you don't have permissions on default project) but if you navigate to Openshift Console on Explore API section
+you will see the resource created:
+
+[.lines_7]
+[.console-input]
+[source, java,subs="+macros,+attributes"]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hub-setup
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: openshift-gitops
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
+    targetRevision: main
+    path: hub-setup/ # Pending
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+----
+
+Then navigate to the source repo on Github to take a look to the helm charts used and the configuration applied.
+
+# Explain RBAC and main resources, config applied for ArgoCD etc.
+# PENDING

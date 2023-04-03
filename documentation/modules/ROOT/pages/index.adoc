@@ -1,4 +1,4 @@
-= Welcome to Template Tutorial
+= Let's start!
 :page-layout: home
 :!sectids:
 

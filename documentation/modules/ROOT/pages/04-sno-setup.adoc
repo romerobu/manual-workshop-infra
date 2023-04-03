@@ -1,0 +1,118 @@
+= Managed cluster setup
+
+Then checkout to the workshop branch, where you will see the las Application used for hub setup commented so we do not override this configurations. 
+This repository is intended to apply its configuration as waterfall by applying the bootstrap resource /global-config/bootstrap/gitopsbootstrapper-a.yaml.
+As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges:
+
+[.lines_7]
+[.console-input]
+[source, java,subs="+macros,+attributes"]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitops-bootstrapper-sno-<name>
+  namespace: openshift-operators
+spec:
+  destination:
+    namespace: openshift-operators
+    server: https://kubernetes.default.svc # in-cluster destination
+  project: project-sno-<name>
+  source:
+    repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
+    targetRevision: main
+    path: global-config/gitops-config-as/ # Path to ApplicationSets folder
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+----
+
+Make sure after cluster-definition, the following folder (sno-<name>) is named as you assigned cluster as this value will be used as a parameter for ApplicationSet.
+Then update cluster.json values.
+
+[.lines_7]
+[.console-input]
+[source, java,subs="+macros,+attributes"]
+----
+{
+  "environment": "dev",
+  "cloud": "aws",
+  "project": "project-sno-<name>",
+  "region": "eu-central-<name>",
+  "cluster": {
+    "name": "sno-<name>",
+    "address": "https://api.sno-<name>.<domain>.opentlc.com:6443"
+  }
+}
+----
+
+This bootstrap resource is applying evrything under gitops-config-as folder, which includes cluster-addons-a for managed clusters and hub-setup-a for hub setup.
+
+You must also update cluster-addons-a for your own managed cluster:
+
+[.lines_7]
+[.console-input]
+[source, java,subs="+macros,+attributes"]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cluster-addons-a-sno-<name>
+  namespace: openshift-operators
+spec:
+  destination:
+    namespace: openshift-operators
+    server: https://kubernetes.default.svc
+  project: project-sno-<name>
+  source:
+    repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
+    targetRevision: main
+    path: cluster-addons/cluster-addons-as/
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+----      
+
+The source path of this Application points to the ApplicationSet used. This ApplicationSet creates as many Applications as clusters configured under cluster-config section.
+ApplicationSet uses generators to create Application with multiple origins and destinations using templating. Generator used may vary depending on your use case, in this example
+we are using Git Files generator so cluster definition values are used as parameters. In case we had N cluster-definition files, the ApplicationSet would generate N Applications automatically.
+
+As we did before, we should update ApplicationSet name with your lab data.
+
+
+[.lines_7]
+[.console-input]
+[source, java,subs="+macros,+attributes"]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: setup-sno-<name>
+  namespace: openshift-operators
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
+      revision: main
+      files:
+      - path: "cluster-definition/**/cluster.json"
+  template:
+    metadata:
+      name: 'setup-{{cluster.name}}-a'
+    spec:
+      project: '{{cluster.project}}'
+      source:
+        repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
+        targetRevision: main
+        path: cluster-addons/charts/gitops-setup 
+      destination:
+        server: '{{cluster.address}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true        
+----     
+
+Then navigate under source path to take a look to the Helm charts used for deploying GitOps and setting up the initial config for managed clusters.

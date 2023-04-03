@@ -1,4 +1,4 @@
-= Deploy Service
+= Lab introduction
 include::_attributes.adoc[]
 
 [#service]
