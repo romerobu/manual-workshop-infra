@@ -115,9 +115,13 @@
 <article class="doc">
 <h1 class="page">Managed cluster setup</h1>
 <div class="paragraph">
-<p>Then checkout to the workshop branch, where you will see the las Application used for hub setup commented so we do not override this configurations.
-This repository is intended to apply its configuration as waterfall by applying the bootstrap resource /global-config/bootstrap/gitopsbootstrapper-a.yaml.
-As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges:</p>
+<p>Then checkout to the workshop branch, where you will see the las Application used for hub setup commented so we do not override this configurations.</p>
+</div>
+<div class="paragraph">
+<p>This repository is intended to apply its configuration as waterfall by applying the bootstrap resource /global-config/bootstrap/gitopsbootstrapper-a.yaml.</p>
+</div>
+<div class="paragraph">
+<p>As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges:</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
@@ -129,12 +133,12 @@ metadata:
 spec:
   destination:
     namespace: openshift-operators
-    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a> # in-cluster destination
+    server: https:\//kubernetes.default.svc # in-cluster destination
   project: project-sno-&lt;name&gt;
   source:
-    repoURL: <a href="https://github.com/romerobu/workshop-gitops-content-deploy.git" class="bare">https://github.com/romerobu/workshop-gitops-content-deploy.git</a>
+    repoURL: https:\//github.com\/romerobu\/workshop-gitops-content-deploy.git
     targetRevision: main
-    path: global-config/gitops-config-as/ # Path to ApplicationSets folder
+    path: global-config\/gitops-config-as\/ # Path to ApplicationSets folder
   syncPolicy:
     automated:
       prune: true
@@ -154,7 +158,7 @@ Then update cluster.json values.</p>
   "region": "eu-central-&lt;name&gt;",
   "cluster": {
     "name": "sno-&lt;name&gt;",
-    "address": "https://api.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com:6443"
+    "address": "https:\//api.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com:6443"
   }
 }</code></pre>
 </div>
