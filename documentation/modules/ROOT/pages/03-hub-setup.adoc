@@ -3,7 +3,7 @@ include::_attributes.adoc[]
 
 == Lab overview
 
-# Add diagrams and introduction
+PENDING: Add diagrams and introduction
 
 == Hub setup
 
@@ -45,5 +45,5 @@ spec:
 
 Then navigate to the source repo on Github to take a look to the helm charts used and the configuration applied.
 
-# Explain RBAC and main resources, config applied for ArgoCD etc.
-# PENDING
+PENDING: Explain RBAC and main resources, config applied for ArgoCD etc.
+
