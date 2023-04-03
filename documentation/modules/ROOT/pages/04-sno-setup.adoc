@@ -1,7 +1,9 @@
 = Managed cluster setup
 
 Then checkout to the workshop branch, where you will see the las Application used for hub setup commented so we do not override this configurations. 
+
 This repository is intended to apply its configuration as waterfall by applying the bootstrap resource /global-config/bootstrap/gitopsbootstrapper-a.yaml.
+
 As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges:
 
 [.lines_7]
@@ -16,12 +18,12 @@ metadata:
 spec:
   destination:
     namespace: openshift-operators
-    server: https://kubernetes.default.svc # in-cluster destination
+    server: https:\//kubernetes.default.svc # in-cluster destination
   project: project-sno-<name>
   source:
-    repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
+    repoURL: https:\//github.com\/romerobu\/workshop-gitops-content-deploy.git
     targetRevision: main
-    path: global-config/gitops-config-as/ # Path to ApplicationSets folder
+    path: global-config\/gitops-config-as\/ # Path to ApplicationSets folder
   syncPolicy:
     automated:
       prune: true
@@ -42,7 +44,7 @@ Then update cluster.json values.
   "region": "eu-central-<name>",
   "cluster": {
     "name": "sno-<name>",
-    "address": "https://api.sno-<name>.<domain>.opentlc.com:6443"
+    "address": "https:\//api.sno-<name>.<domain>.opentlc.com:6443"
   }
 }
 ----
