@@ -5,3 +5,9 @@
 * xref:02-deploy.adoc[2. Deploy Service]
 ** xref:02-deploy.adoc#package[Build Service]
 ** xref:02-deploy.adoc#deploy[Deploy Dervice]
+
+* xref:03-hub-setup.adoc[3. Deploy Hub setup]
+** xref:03-hub-setup.adoc#hub[Hub setup]
+
+* xref:04-sno-setup.adoc[4. Deploy Managed setup]
+** xref:04-sno-setup.adoc#managed[Managed setup]
