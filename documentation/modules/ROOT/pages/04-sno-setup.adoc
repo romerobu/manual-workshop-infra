@@ -382,5 +382,39 @@ spec:
 
 Then if you navigate to rbac folder you can see a Group and a Role binding to give cluster admin permissions on argo to the admin user configured via Htpasswd.
 
+Another part of managed cluster setup is configure argo RBAC. Argo RBAC is useful for implementing a governance so every user/role has different level of permissions and access not only to deploy and manage
+resources but the way the platform itself is operated.
+
+For RBAC we need to differentiate between global configuratio on argocd intance and projects RBAC.
+
+If you navigate to rbac section on argo instance, you will see some rbac policies starting like *g*  and *p*.
+
+Policies starting with g assign roles to openshift local groups and their users, while policies starting with p define specific policies for projects, resources, projects and applications and their operations.
+
+Then on AppProject we can define restrictions like source repo, destination servers and resource whitelist allowed per project. Moreover you can define local roles for that AppProject.
+
+The following configuration creates 5 groups of users and two project. Project dev where only argo-operators-dev users can get and sync applications and project 
+pro where applies the global policies.
 
 Finally push your changes to your working branch, login to argo hub cluster with user-<name> and deploy the bootstrap Application.
+
+[.lines_7]
+[.console-input]
+[source, java,subs="+macros,+attributes"]
+----
+oc apply -f ./global-config/bootstrap/gitopsbootstrapper-a.yaml
+----
+
+At this point you should see some applications on syncing on your argo console. You cannot see your colleagues deployments thanks to RBAC.
+Navigate to argo hub console using your user with view role, navigate to ArgoCD instance, take a look to global rbac policies and then navigate to your AppProject
+to verify yor local permissions.
+
+If you try to deploy a new Application from the console you will see you cannot deploy to a different cluster destination than yours.
+
+Once this is completed login to you managed cluster, and verfify:
+
+- GitOps operator is installed
+- Argo instance exists and is cluster wide (PENDING: add screenshot)
+- AppProject exists
+- Login as dev user ... PENDING
+- Login as pro user ... PENDING (test whole RBAC)
