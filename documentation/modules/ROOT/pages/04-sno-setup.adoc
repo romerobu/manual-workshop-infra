@@ -174,10 +174,10 @@ PENDING: add screenshots
 You can take a look to global env vars https://developers.redhat.com/articles/2023/03/06/5-global-environment-variables-provided-openshift-gitops#5_environment_variables__overview[here], how to label namespaces https://docs.openshift.com/container-platform/4.10/cicd/gitops/setting-up-argocd-instance.html#gitops-deploy-resources-different-namespaces_setting-up-argocd-instance[here] 
 and how to create a role binding https://docs.openshift.com/container-platform/4.12/cicd/gitops/configuring-an-openshift-cluster-by-deploying-an-application-with-cluster-configurations.html#gitops-additional-permissions-for-cluster-config_configuring-an-openshift-cluster-by-deploying-an-application-with-cluster-configurations[here].
 
-Once the operator is running, we need to deploy ArgoCD instance. To make sure instance is deploying after the operator is running we use sync waves and custom health check resources.
+Once the operator is running, we need to deploy ArgoCD instance. To make sure instance is deployed after the operator is running we use sync waves and custom health check resources.
 
-Sync waves are defined on each resource as annotations, and they tell argo the order in which resources should be applied once the previos is already in healthy status.
-You can take a look in detail to the documentation https://argo-cd.readthedocs.io/en/stable/user-guide/sync-waves/.
+Sync waves are defined on each resource as annotations, and they tell argo the order in which resources should be applied once the previous is already in healthy status.
+You can take a look in detail to the https://argo-cd.readthedocs.io/en/stable/user-guide/sync-waves/[documentation].
 
 For some specific resources they need a custom healthcheck. Most of the objects only require existing to work but others like subscription may exists but not progress to a successful status so we
 need a custom healthcheck to make sure the next sync wave does not start till the operators are properly installed.
@@ -381,11 +381,17 @@ spec:
 ----   
 
 1.
+
 2.
+
 3.
+
 4.
+
 5.
+
 6.
+
 7.
 
 
