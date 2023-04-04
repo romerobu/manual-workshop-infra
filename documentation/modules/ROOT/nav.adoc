@@ -11,3 +11,6 @@
 
 * xref:04-sno-setup.adoc[4. Deploy Managed setup]
 ** xref:04-sno-setup.adoc#managed[Managed setup]
+
+* xref:05-day2-config.adoc[4. Deploy day 2 config]
+** xref:05-day2-config.adoc#managed[Day 2]
