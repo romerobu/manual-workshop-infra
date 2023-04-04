@@ -417,11 +417,28 @@ spec:
 <p>Next chart is rbac and includes the basic configuration for argo RBAC and projects.</p>
 </div>
 <div class="paragraph">
-<p>Argo RBAC is useful for implementing a governance so every user/role has different level of permissions and access not only to deploy and manage
-resources but the way the platform itself is operated.</p>
+<p>The <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/rbac/">RBAC</a> feature enables restriction of access to Argo CD resources. Argo CD does not have its own user management system and has only one built-in user admin.
+The admin user is a superuser and it has unrestricted access to the system. RBAC requires SSO configuration or one or more local users setup.
+Once SSO or local users are configured, additional RBAC roles can be defined, and SSO groups or local users can then be mapped to roles.</p>
 </div>
 <div class="paragraph">
-<p>Then if you navigate to rbac folder you can see a Group and a Role binding to give cluster admin permissions on argo to the admin user configured via Htpasswd.</p>
+<p>Argo CD has two pre-defined roles but RBAC configuration allows defining roles and groups (see below).</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>role:readonly - read-only access to all resources</p>
+</li>
+<li>
+<p>role:admin - unrestricted access to all resources</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Additionally to the defined roles, it is possible to create some specific roles to allow argo-operators and argo-dev-operators group members manage applications in Argo CD.</p>
+</div>
+<div class="paragraph">
+<p>Then if you navigate to rbac folder you can see a Group and a Role binding resource to give cluster-admin permissions on argo to the admin user configured via Htpasswd.</p>
 </div>
 <div class="paragraph">
 <p>For RBAC we need to differentiate between global configuration on argocd intance and projects RBAC.</p>
@@ -430,14 +447,32 @@ resources but the way the platform itself is operated.</p>
 <p>If you navigate to rbac section on argo instance, you will see some rbac policies starting like <strong>g</strong>  and <strong>p</strong>.</p>
 </div>
 <div class="paragraph">
-<p>Policies starting with g assign roles to openshift local groups and their users, while policies starting with p define specific policies for projects, resources, projects and applications and their operations.</p>
+<p>Policies starting with g assign roles to openshift local groups (they can be both argo roles and ocp roles) and their users, while policies starting with p define specific policies for projects, resources, projects and applications and their operations.</p>
+</div>
+<div class="paragraph">
+<p>The following sections collect the information around Argo CD Roles and Argo CD permission in the managed clusters. It is important to understand the functionality matrix and permission that the following sections try to implement:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>argo-admins: group members have full permissions in Argo CD to admin</p>
+</li>
+<li>
+<p>argo-readers: group members have read-only permissions in Argo CD to access all information</p>
+</li>
+<li>
+<p>argo-operators: group members have permission to manage applications (get and sync) only in Argo CD</p>
+</li>
+<li>
+<p>argo-dev-operators: group members have permission to manage applications (get and sync) only in Argo CD dev project</p>
+</li>
+<li>
+<p>apimanager01: user has no permissions to see anything in Argo CD but has permissions to create objects in the Openshift Clusters</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>Then on AppProject we can define restrictions like source repo, destination servers and resource whitelist allowed per project. Moreover you can define local roles for that AppProject.</p>
-</div>
-<div class="paragraph">
-<p>The following configuration creates 5 groups of users and two project. Project dev where only argo-operators-dev users can get and sync applications and project
-pro where applies the global policies.</p>
 </div>
 <div class="paragraph">
 <p>Finally push your changes to your working branch, login to argo hub cluster with user-&lt;name&gt; and deploy the bootstrap Application.</p>
@@ -504,13 +539,46 @@ to verify yor local permissions.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>AppProject exists</p>
+<p>Dev and Pro AppProject existing</p>
 </li>
 <li>
-<p>Login as dev user &#8230;&#8203; PENDING</p>
+<p>Login as admin user and verify you can create apps on dev project.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: openshift-operators
+  name: app01-dev
+spec:
+  destination:
+    name: ''
+    namespace: dev
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: .
+    repoURL: 'https://github.com/acidonper/jump-app-gitops.git'
+    targetRevision: 'feature/jump-app-dev'
+    helm:
+      valueFiles:
+        - values-quay.yaml
+  project: dev
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Login as user user04 (argo-dev-operators) with role operator-dev and verify you can get and sync apps on dev project.</p>
 </li>
 <li>
-<p>Login as pro user &#8230;&#8203; PENDING (test whole RBAC)</p>
+<p>Login as user apimanager01 (api-manager) and verify you don&#8217;t have permissions to see apps on dev project.</p>
 </li>
 </ul>
 </div>
