@@ -296,20 +296,34 @@ Finally push your changes to your working branch, login to argo hub cluster with
 git add .
 git commit -m ""
 git push origin sno-<name>-setup
-
-oc apply -f ./global-config/bootstrap/gitopsbootstrapper-a.yaml
 ----
 
+To create bootstrap application, navigate to Argo console, click on **New app**, then **Edit as Yaml**, **save** and finally **Create**.
+
 At this point you should see some applications on syncing on your argo console. You cannot see your colleagues deployments thanks to RBAC.
-Navigate to argo hub console using your user with view role, navigate to ArgoCD instance, take a look to global rbac policies and then navigate to your AppProject
+
+image::bootstrap-app.png[]
+
+Deep dive on *setup-sno-<name>-a* to check all the resources created.
+
+Navigate to argo hub console using your user with view role, navigate to ArgoCD instance (Installed Operators -> Openshift GitOps -> ArgoCD), take a look to global rbac policies and then navigate to your AppProject
 to verify yor local permissions.
 
 If you try to deploy a new Application from the console you will see you cannot deploy to a different cluster destination than yours.
 
+image::clusters-list.png[]
+
+It happens the same with projects, you can only see yours:
+
+image::projects-list.png[]
+
 Once this is completed login to you managed cluster, and verfify:
 
 - GitOps operator is installed
-- Argo instance exists and is cluster wide (PENDING: add screenshot)
+- Argo instance exists and is cluster wide 
+
+image::cluster-wide.png[]
+
 - AppProject exists
 - Login as dev user ... PENDING
 - Login as pro user ... PENDING (test whole RBAC)
