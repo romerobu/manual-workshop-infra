@@ -5,6 +5,17 @@ include::_attributes.adoc[]
 
 PENDING: Add diagrams and introduction
 
+== Enviroment
+
+You have access to two clusters, argo-hub and your own sno. You can login to argo-hub using *user-<name>* and to sno using *admin* user.
+At the same time, if you login to argo console using your Openshift user, you will only have permissions over your project and destination cluster.
+
+The reason why argo hub has permissions over your managed cluster is because this is configured as a destination server, given an authentication method.
+
+In argo hub there is a secret on argo namespace for every managed cluster containing this information.
+
+image::cluster-api-sno.png[]
+
 == Hub setup
 
 Argo hub is a common cluster for every user on this workshop that will be used for deploying the basic infrastructure on managed clusters using ApplicationSet.

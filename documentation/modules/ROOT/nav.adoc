@@ -13,5 +13,5 @@
 ** xref:04-sno-setup.adoc[Managed setup]
 ** xref:04-sno-setup-helm.adoc#charts[Helm charts]
 
-* xref:05-day2-config.adoc[4. Deploy day 2 config]
+* xref:05-day2-config.adoc[4. Day 2]
 ** xref:05-day2-config.adoc#managed[Day 2]

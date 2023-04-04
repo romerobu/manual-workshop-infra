@@ -32,7 +32,7 @@ spec:
   project: project-sno-<name>
   source:
     repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
-    targetRevision: main
+    targetRevision: sno-<name>-setup
     path: global-config/gitops-config-as/ # Path to ApplicationSets folder
   syncPolicy:
     automated:
@@ -59,7 +59,7 @@ Then update cluster.json values.
 }
 ----
 
-This bootstrap resource applies evrything under gitops-config-as folder, which includes cluster-addons-a for managed clusters and hub-setup-a for hub setup.
+This bootstrap resource applies everything under gitops-config-as folder, which includes cluster-addons-a for managed clusters and hub-setup-a for hub setup.
 
 You must also update cluster-addons-a for your own managed cluster:
 
@@ -79,7 +79,7 @@ spec:
   project: project-sno-<name>
   source:
     repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
-    targetRevision: main
+    targetRevision: sno-<name>-setup
     path: cluster-addons/cluster-addons-as/
   syncPolicy:
     automated:
@@ -119,7 +119,7 @@ spec:
       project: '{{cluster.project}}'
       source:
         repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
-        targetRevision: main
+        targetRevision: sno-<name>-setup
         path: cluster-addons/charts/gitops-setup 
       destination:
         server: '{{cluster.address}}'
@@ -131,4 +131,4 @@ spec:
 
 Then navigate under source path to take a look to the Helm charts used for deploying GitOps and setting up the initial config for managed clusters.
 
-Disclaimer: ApplicationSet controller is not enabled by default and must be configured on argocd instance.
+*Disclaimer*: ApplicationSet controller is not enabled by default and must be configured on argocd instance.

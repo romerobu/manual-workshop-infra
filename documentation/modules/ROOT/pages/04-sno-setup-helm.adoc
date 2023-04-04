@@ -4,6 +4,7 @@ First Helm chart is operators, which deploys GitOps operator on managed clusters
 only deploying GitOps operator.
 
 If you navigate to subscription.yaml resource you will see there is a global value for applying env variables for GitOps. 
+
 These config values disable the default argocd instance and enables a new instance to be cluster wide. This means this argo application controller sa will have
 cluster wide permissions to perform actions on this cluster.
 
@@ -43,7 +44,7 @@ env variable o label any managed namespace by argo so it will create this role b
 
 After setting this global var you can see a new cluster role binding for this sa and this configuration on argocd console.
 
-PENDING: add screenshots
+image::cluster-wide-role-binding.png[]
 
 You can take a look to global env vars https://developers.redhat.com/articles/2023/03/06/5-global-environment-variables-provided-openshift-gitops#5_environment_variables__overview[here], how to label namespaces https://docs.openshift.com/container-platform/4.10/cicd/gitops/setting-up-argocd-instance.html#gitops-deploy-resources-different-namespaces_setting-up-argocd-instance[here] 
 and how to create a role binding https://docs.openshift.com/container-platform/4.12/cicd/gitops/configuring-an-openshift-cluster-by-deploying-an-application-with-cluster-configurations.html#gitops-additional-permissions-for-cluster-config_configuring-an-openshift-cluster-by-deploying-an-application-with-cluster-configurations[here].
@@ -292,6 +293,10 @@ Finally push your changes to your working branch, login to argo hub cluster with
 [.console-input]
 [source, java,subs="+macros,+attributes"]
 ----
+git add .
+git commit -m ""
+git push origin sno-<name>-setup
+
 oc apply -f ./global-config/bootstrap/gitopsbootstrapper-a.yaml
 ----
 
