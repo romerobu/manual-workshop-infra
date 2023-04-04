@@ -13,7 +13,8 @@ git checkout -b sno-<name>-setup
 
 This repository is intended to apply its configuration as waterfall by applying the bootstrap resource /global-config/bootstrap/gitopsbootstrapper-a.yaml.
 
-As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges:
+As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges.
+
 Then you will have to replace <name> by your cluster.
 
 [.lines_7]
@@ -40,7 +41,7 @@ spec:
       selfHeal: true
 ----
 
-Make sure after cluster-definition, the following folder (sno-<name>) is named as you assigned cluster as this value will be used as a parameter for ApplicationSet.
+Make sure after cluster-definition, the following folder (sno-<name>) is named as your assigned cluster as this value will be used as a parameter for ApplicationSet.
 Then update cluster.json values.
 
 [.lines_7]

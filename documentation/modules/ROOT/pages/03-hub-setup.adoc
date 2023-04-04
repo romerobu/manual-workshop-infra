@@ -7,8 +7,8 @@ PENDING: Add diagrams and introduction
 
 == Enviroment
 
-You have access to two clusters, argo-hub and your own sno. You can login to argo-hub using *user-<name>* and to sno using *admin* user.
-At the same time, if you login to argo console using your Openshift user, you will only have permissions over your project and destination cluster.
+You have access to two clusters, *argo-hub* and your own *sno* (managed). You can login to argo-hub using *user-<name>* and to sno using *admin* user.
+On top of that, if you login to argo console using your Openshift user, you will only have permissions over your project and destination cluster.
 
 The reason why argo hub has permissions over your managed cluster is because this is configured as a destination server, given an authentication method.
 
@@ -21,12 +21,12 @@ image::cluster-api-sno.png[]
 Argo hub is a common cluster for every user on this workshop that will be used for deploying the basic infrastructure on managed clusters using ApplicationSet.
 You can login with your user-x to argo console as admin user of your own project while you will only have view permissions when you login to Openshift console.
 
-Ideally you could simoultaneusly deploy argo hub and managed clusters configuration as you can use a single bootstrap Application to deploy both Applications for argo hub and managed clusters, and then render N Applications
-for managed clusters using ApplicationSet however because of the workshop nature you need to perform cluster scoped actions but your repository could be easily adapted to perform actions on multiple clusters.
+Ideally you could simoultaneusly deploy argo hub and managed clusters configuration as you can use a single bootstrap Application to deploy both applications for argo hub and managed clusters, and then render N Applications
+for managed clusters using ApplicationSet. However because of the workshop structure you need to perform cluster scoped configurations, but your repository could be easily adapted to perform actions on multiple clusters.
 
 First take a look to the helm charts used for argo hub setup and then navigate to the console. As this configuration is already deployed you don't need to make any change, only observe the way it was done.
 
-Navigate to gitops-config-as/hub-setup-a.yaml Application and see how this sets up env config on in-cluster (https://kubernetes.default.svc).
+Navigate to gitops-config-as/hub-setup-a.yaml application and see how this sets up env config on in-cluster (https://kubernetes.default.svc).
 If you navigate to argo console you won't be able to see this Application because of the RBAC permissions (you don't have permissions on default project) but if you navigate to Openshift Console on Explore API section
 you will see the resource created:
 

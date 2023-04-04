@@ -7,7 +7,7 @@
 ** xref:02-deploy.adoc#deploy[Deploy Dervice]
 
 * xref:03-hub-setup.adoc[3. Deploy Hub setup]
-** xref:03-hub-setup.adoc#hub[Hub setup]
+** xref:03-hub-setup.adoc#hub[3.1 Hub setup]
 
 * xref:04-sno-setup.adoc[4. Deploy Managed setup]
 ** xref:04-sno-setup.adoc[4.1. Managed setup]
