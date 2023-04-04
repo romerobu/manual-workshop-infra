@@ -98,7 +98,7 @@
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="05-day2-config.html">4. Deploy day 2 config</a>
+    <a class="nav-link" href="05-day2-config.html">4. Day 2</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="05-day2-config.html#managed">Day 2</a>
@@ -133,8 +133,10 @@
 only deploying GitOps operator.</p>
 </div>
 <div class="paragraph">
-<p>If you navigate to subscription.yaml resource you will see there is a global value for applying env variables for GitOps.
-These config values disable the default argocd instance and enables a new instance to be cluster wide. This means this argo application controller sa will have
+<p>If you navigate to subscription.yaml resource you will see there is a global value for applying env variables for GitOps.</p>
+</div>
+<div class="paragraph">
+<p>These config values disable the default argocd instance and enables a new instance to be cluster wide. This means this argo application controller sa will have
 cluster wide permissions to perform actions on this cluster.</p>
 </div>
 <div class="listingblock lines_7 console-input">
@@ -173,8 +175,10 @@ env variable o label any managed namespace by argo so it will create this role b
 <div class="paragraph">
 <p>After setting this global var you can see a new cluster role binding for this sa and this configuration on argocd console.</p>
 </div>
-<div class="paragraph">
-<p>PENDING: add screenshots</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/cluster-wide-role-binding.png" alt="cluster wide role binding">
+</div>
 </div>
 <div class="paragraph">
 <p>You can take a look to global env vars <a href="https://developers.redhat.com/articles/2023/03/06/5-global-environment-variables-provided-openshift-gitops#5_environment_variables__overview">here</a>, how to label namespaces <a href="https://docs.openshift.com/container-platform/4.10/cicd/gitops/setting-up-argocd-instance.html#gitops-deploy-resources-different-namespaces_setting-up-argocd-instance">here</a>
@@ -440,16 +444,44 @@ pro where applies the global policies.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">oc apply -f ./global-config/bootstrap/gitopsbootstrapper-a.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">git add .
+git commit -m ""
+git push origin sno-&lt;name&gt;-setup</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>At this point you should see some applications on syncing on your argo console. You cannot see your colleagues deployments thanks to RBAC.
-Navigate to argo hub console using your user with view role, navigate to ArgoCD instance, take a look to global rbac policies and then navigate to your AppProject
+<p>To create bootstrap application, navigate to Argo console, click on <strong>New app</strong>, then <strong>Edit as Yaml</strong>, <strong>save</strong> and finally <strong>Create</strong>.</p>
+</div>
+<div class="paragraph">
+<p>At this point you should see some applications on syncing on your argo console. You cannot see your colleagues deployments thanks to RBAC.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bootstrap-app.png" alt="bootstrap app">
+</div>
+</div>
+<div class="paragraph">
+<p>Deep dive on <strong>setup-sno-&lt;name&gt;-a</strong> to check all the resources created.</p>
+</div>
+<div class="paragraph">
+<p>Navigate to argo hub console using your user with view role, navigate to ArgoCD instance (Installed Operators &#8594; Openshift GitOps &#8594; ArgoCD), take a look to global rbac policies and then navigate to your AppProject
 to verify yor local permissions.</p>
 </div>
 <div class="paragraph">
 <p>If you try to deploy a new Application from the console you will see you cannot deploy to a different cluster destination than yours.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/clusters-list.png" alt="clusters list">
+</div>
+</div>
+<div class="paragraph">
+<p>It happens the same with projects, you can only see yours:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/projects-list.png" alt="projects list">
+</div>
 </div>
 <div class="paragraph">
 <p>Once this is completed login to you managed cluster, and verfify:</p>
@@ -460,8 +492,17 @@ to verify yor local permissions.</p>
 <p>GitOps operator is installed</p>
 </li>
 <li>
-<p>Argo instance exists and is cluster wide (PENDING: add screenshot)</p>
+<p>Argo instance exists and is cluster wide</p>
 </li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/cluster-wide.png" alt="cluster wide">
+</div>
+</div>
+<div class="ulist">
+<ul>
 <li>
 <p>AppProject exists</p>
 </li>
@@ -475,7 +516,7 @@ to verify yor local permissions.</p>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="04-sno-setup.html">4. Deploy Managed setup</a></span>
-  <span class="next"><a href="05-day2-config.html">4. Deploy day 2 config</a></span>
+  <span class="next"><a href="05-day2-config.html">4. Day 2</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

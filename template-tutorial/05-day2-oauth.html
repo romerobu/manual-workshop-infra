@@ -3,10 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Argo hub setup :: Template Tutorial</title>
-    <link rel="canonical" href="https://github.com/romerobu/manual-workshop-infra/template-tutorial/03-hub-setup.html">
-    <link rel="prev" href="02-deploy.html">
-    <link rel="next" href="04-sno-setup.html">
+    <title>Untitled :: Template Tutorial</title>
+    <link rel="canonical" href="https://github.com/romerobu/manual-workshop-infra/template-tutorial/05-day2-oauth.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -75,12 +73,12 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="03-hub-setup.html">3. Deploy Hub setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#hub">Hub setup</a>
+    <a class="nav-link" href="03-hub-setup.html#hub">Hub setup</a>
   </li>
 </ul>
   </li>
@@ -117,97 +115,77 @@
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="index.html">Template Tutorial</a></li>
-    <li><a href="03-hub-setup.html">3. Deploy Hub setup</a></li>
-  </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/romerobu/manual-workshop-infra/edit/master/documentation/modules/ROOT/pages/03-hub-setup.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/romerobu/manual-workshop-infra/edit/master/documentation/modules/ROOT/pages/05-day2-oauth.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Argo hub setup</h1>
 <div class="sect1">
-<h2 id="_lab_overview"><a class="anchor" href="#_lab_overview"></a>Lab overview</h2>
+<h2 id="_day_2"><a class="anchor" href="#_day_2"></a>Day 2</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>PENDING: Add diagrams and introduction</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_enviroment"><a class="anchor" href="#_enviroment"></a>Enviroment</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You have access to two clusters, argo-hub and your own sno. You can login to argo-hub using <strong>user-&lt;name&gt;</strong> and to sno using <strong>admin</strong> user.
-At the same time, if you login to argo console using your Openshift user, you will only have permissions over your project and destination cluster.</p>
+<p>As you can see, there is already a local identity provider configured we want to override current users and integrate with other identity providers like LDAP Free Ipa provider and keycloak.</p>
 </div>
 <div class="paragraph">
-<p>The reason why argo hub has permissions over your managed cluster is because this is configured as a destination server, given an authentication method.</p>
+<p>For LDAP apart form integrating against the server we also need to synchronize groups and users.</p>
 </div>
 <div class="paragraph">
-<p>In argo hub there is a secret on argo namespace for every managed cluster containing this information.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/cluster-api-sno.png" alt="cluster api sno">
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_hub_setup"><a class="anchor" href="#_hub_setup"></a>Hub setup</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Argo hub is a common cluster for every user on this workshop that will be used for deploying the basic infrastructure on managed clusters using ApplicationSet.
-You can login with your user-x to argo console as admin user of your own project while you will only have view permissions when you login to Openshift console.</p>
+<p>Let&#8217;s deploy the oauth resources required and verify how groups are synchronized.</p>
 </div>
 <div class="paragraph">
-<p>Ideally you could simoultaneusly deploy argo hub and managed clusters configuration as you can use a single bootstrap Application to deploy both Applications for argo hub and managed clusters, and then render N Applications
-for managed clusters using ApplicationSet however because of the workshop nature you need to perform cluster scoped actions but your repository could be easily adapted to perform actions on multiple clusters.</p>
-</div>
-<div class="paragraph">
-<p>First take a look to the helm charts used for argo hub setup and then navigate to the console. As this configuration is already deployed you don&#8217;t need to make any change, only observe the way it was done.</p>
-</div>
-<div class="paragraph">
-<p>Navigate to gitops-config-as/hub-setup-a.yaml Application and see how this sets up env config on in-cluster (<a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>).
-If you navigate to argo console you won&#8217;t be able to see this Application because of the RBAC permissions (you don&#8217;t have permissions on default project) but if you navigate to Openshift Console on Explore API section
-you will see the resource created:</p>
+<p>Disclaimer: keycloak and FreeIPA server are running on argo hub cluster.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: hub-setup
-  namespace: openshift-gitops
-spec:
-  destination:
-    namespace: openshift-gitops
-    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
-  project: default
-  source:
-    repoURL: <a href="https://github.com/romerobu/workshop-gitops-content-deploy.git" class="bare">https://github.com/romerobu/workshop-gitops-content-deploy.git</a>
-    targetRevision: main
-    path: hub-setup/ # Pending
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true</code></pre>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    helm:
+      parameters:
+        - name: global.oauth.enabled
+          value: 'true'
+        - name: global.oauth.oauth.keycloak.clientid
+          value: 'myclient-1'
+        - name: global.oauth.oauth.keycloak.issuer
+          value: 'https://keycloak-keycloak.apps.argo-hub.sandbox1444.opentlc.com/realms/myrealm-1'
+        - name: global.oauth.oauth.keycloak.data
+          value: ''
+        - name: global.oauth.oauth.ldap.sync.ldap_url
+          value: 'ldap://10.0.210.36:32106'
+        - name: global.operators.enabled
+          value: 'false'
+        - name: global.nmstate.enabled
+          value: 'false'
+        - name: global.monitoring.enabled
+          value: 'false'
+        - name: global.namespace.enabled
+          value: 'false'
+        - name: global.bookinfo.enabled
+          value: 'false'
+        - name: operators.nmstate.enabled
+          value: 'false'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Then navigate to the source repo on Github to take a look to the helm charts used and the configuration applied.</p>
+<p>If you take a look to the helm charts you will notice we do not only need to update oauth but create others resources needed for integration like secrets, cm and cron job for syncying groups.</p>
 </div>
 <div class="paragraph">
-<p>PENDING: Explain RBAC and main resources, config applied for ArgoCD etc.</p>
+<p>Sync waves are needed to make sure those resources like secrets and cm for authentication exists when we update Oauth config, otherwise openshift-authentication will become Degraded.
+When you update oauth values, and update existing Application you can notice how they are created in phases and not all at the same time.</p>
+</div>
+<div class="paragraph">
+<p>For groups syncying, cron job shows last 5 executions, including the state according to the result (failed or success).</p>
+</div>
+<div class="paragraph">
+<p>Furthermore you can notice some resources with no status (white fields). Those resources are created by Openshift for configuration issues but they are not managed by argo, that&#8217;s why argo is not tracking them.</p>
+</div>
+<div class="paragraph">
+<p>Once every resource is deployed, verify authentication cluster operator is OK, logout and log in back. Then you should see new identity providers listed.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">oc get co</code></pre>
 </div>
 </div>
 </div>
-<nav class="pagination">
-  <span class="prev"><a href="02-deploy.html">2. Deploy Service</a></span>
-  <span class="next"><a href="04-sno-setup.html">4. Deploy Managed setup</a></span>
-</nav>
+</div>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
