@@ -1,4 +1,4 @@
-== Day 2
+== Configure Identity Providers
 
 As you can see, there is already a local identity provider configured we want to override current users and integrate with other identity providers like LDAP Free Ipa provider and keycloak.
 
