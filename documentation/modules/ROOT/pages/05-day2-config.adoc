@@ -28,4 +28,4 @@ helm template . --output-dir application-sno
 
 If you try to deploy this Application on your cluster you will it syncs, but it does not render objects as every value is disabled.
 
-PENDING: add screenshot
+image::day-2-sno-initial-app.png[]

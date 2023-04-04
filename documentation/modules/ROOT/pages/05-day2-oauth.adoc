@@ -16,16 +16,15 @@ Disclaimer: keycloak and FreeIPA server are running on argo hub cluster.
       parameters:
         - name: global.oauth.enabled
           value: 'true'
-        - name: global.oauth.oauth.keycloak.clientid
-          value: 'myclient-1'     
-        - name: global.oauth.oauth.keycloak.issuer
-          value: 'https://keycloak-keycloak.apps.argo-hub.sandbox1444.opentlc.com/realms/myrealm-1'           
-        - name: global.oauth.oauth.keycloak.data
-          value: ''
-        - name: global.oauth.oauth.ldap.sync.ldap_url
-          value: 'ldap://10.0.210.36:32106'
-        - name: global.operators.enabled
-          value: 'false'
+        - name: oauth.oauth.keycloak.clientid
+          value: myclient-<name>
+        - name: oauth.oauth.keycloak.issuer
+          value: >-
+            https://keycloak-keycloak.apps.argo-hub.<domain>>.opentlc.com/realms/myrealm-<name>
+        - name: oauth.oauth.keycloak.data
+          value: "your keycloak secret" *
+        - name: oauth.oauth.ldap.sync.ldap_url
+          value: 'ldap://<nodeport:port>'        
         - name: global.nmstate.enabled
           value: 'false'
         - name: global.monitoring.enabled
@@ -38,6 +37,8 @@ Disclaimer: keycloak and FreeIPA server are running on argo hub cluster.
           value: 'false'      
 ---- 
 
+*Keycloack secret*: Login to argo-hub console, find keycloack url, login as myuser-<name>/myuser-<name>, naviagte to your realm, then go to your client and  find your secret on Credentials tab.
+
 If you take a look to the helm charts you will notice we do not only need to update oauth but create others resources needed for integration like secrets, cm and cron job for syncying groups.
 
 Sync waves are needed to make sure those resources like secrets and cm for authentication exists when we update Oauth config, otherwise openshift-authentication will become Degraded.
@@ -46,6 +47,7 @@ When you update oauth values, and update existing Application you can notice how
 For groups syncying, cron job shows last 5 executions, including the state according to the result (failed or success).
 
 Furthermore you can notice some resources with no status (white fields). Those resources are created by Openshift for configuration issues but they are not managed by argo, that's why argo is not tracking them.
+https://argo-cd.readthedocs.io/en/stable/user-guide/resource_tracking/[Resource tracking] has been set to annotation+label on argo instance.
 
 Once every resource is deployed, verify authentication cluster operator is OK, logout and log in back. Then you should see new identity providers listed.
 
@@ -54,4 +56,11 @@ Once every resource is deployed, verify authentication cluster operator is OK, l
 [source, java,subs="+macros,+attributes"]
 ----
 oc get co
+
+oc get oauth cluster -o yaml 
 ----
+
+You can try keycloack server with myuser-<name>/myuser-<name>.
+
+You can try login to LDAP server with user paul/"" who is an admin user.
+You can try login to LDAP server with user mark/"" who is an viewer user.
