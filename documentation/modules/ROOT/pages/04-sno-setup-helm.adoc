@@ -1,0 +1,310 @@
+= Helm charts
+
+First Helm chart is operators, which deploys GitOps operator on managed clusters. This chart is intented to deploy any kind of operator, even though in this case we are
+only deploying GitOps operator.
+
+If you navigate to subscription.yaml resource you will see there is a global value for applying env variables for GitOps. 
+These config values disable the default argocd instance and enables a new instance to be cluster wide. This means this argo application controller sa will have
+cluster wide permissions to perform actions on this cluster.
+
+[.lines_7]
+[.console-input]
+[source, java,subs="+macros,+attributes"]
+----
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: {{ $key }}
+  namespace: {{ $val.namespace }}
+  {{- if $.Values.global.argocd.enabled }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+  {{- end }}
+spec:
+  channel: {{ $val.channel }}
+  installPlanApproval: {{ $val.approval }}
+  name: {{ $val.name }}
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+{{- if $val.csv }}
+  startingCSV: {{ $val.csv }}
+{{- end }}
+{{- if $.Values.operators.gitops.enabled }}
+  config:
+    env:
+    - name: ARGOCD_CLUSTER_CONFIG_NAMESPACES
+      value: openshift-operators # namespace of argocd instance
+    - name: DISABLE_DEFAULT_ARGOCD_INSTANCE
+      value: "true"        
+----   
+
+By default any new instance created is namespace scoped and you need to give additional privileges to sa argo application controller. You can either create a custom role binding, set this global
+env variable o label any managed namespace by argo so it will create this role binding automatically only for that namespace.
+
+After setting this global var you can see a new cluster role binding for this sa and this configuration on argocd console.
+
+PENDING: add screenshots
+
+You can take a look to global env vars https://developers.redhat.com/articles/2023/03/06/5-global-environment-variables-provided-openshift-gitops#5_environment_variables__overview[here], how to label namespaces https://docs.openshift.com/container-platform/4.10/cicd/gitops/setting-up-argocd-instance.html#gitops-deploy-resources-different-namespaces_setting-up-argocd-instance[here] 
+and how to create a role binding https://docs.openshift.com/container-platform/4.12/cicd/gitops/configuring-an-openshift-cluster-by-deploying-an-application-with-cluster-configurations.html#gitops-additional-permissions-for-cluster-config_configuring-an-openshift-cluster-by-deploying-an-application-with-cluster-configurations[here].
+
+Once the operator is running, we need to deploy ArgoCD instance. To make sure instance is deployed after the operator is running we use sync waves and custom health check resources.
+
+Sync waves are defined on each resource as annotations, and they tell argo the order in which resources should be applied once the previous is already in healthy status.
+You can take a look in detail to the https://argo-cd.readthedocs.io/en/stable/user-guide/sync-waves/[documentation].
+
+For some specific resources they need a custom healthcheck. Most of the objects only require existing to work but others like subscription may exists but not progress to a successful status so we
+need a custom healthcheck to make sure the next sync wave does not start till the operators are properly installed.
+
+Navigate to ArgoCD instance and take a look to the *resourceCustomizations* section, as well as other configurations that we will review later on.
+
+[.lines_7]
+[.console-input]
+[source, java,subs="+macros,+attributes"]
+----
+kind: ArgoCD
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: {{ $.Values.argocd.name }}
+  namespace: {{ $.Values.operators.gitops.namespace }}
+  {{- if $.Values.global.argocd.enabled }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+  {{- end }}  
+spec:
+  sso:
+    dex:  
+      openShiftOAuth: true # 1
+      resources:
+        limits:
+          cpu: 500m
+          memory: 256Mi
+        requests:
+          cpu: 250m 
+          memory: 128Mi
+    provider: dex
+  resourceTrackingMethod: annotation+label # 2
+  applicationSet: # 3
+    logLevel: info
+  controller:
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 2048Mi
+      requests:
+        cpu: 250m
+        memory: 1024Mi
+  ha:
+    enabled: false
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  rbac: # 4
+    defaultPolicy: ''
+    policy: |-
+      g, {{ $.Values.argocd.group }}, role:admin
+      p, role:operator, applications, get, */*, allow
+      p, role:operator, applications, sync, */*, allow
+      g, argo-admins, role:admin 
+      g, argo-readers, role:readonly
+      g, argo-operators, role:operator
+      g, argo-dev-operators, role:operator-dev      
+    scopes: '[groups]'
+  redis:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  repo: 
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1024Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+    env:
+        - name: AVP_AUTH_TYPE
+          valueFrom:
+            secretKeyRef:
+              key: AVP_AUTH_TYPE
+              name: argocd-vault-plugin-credentials
+        - name: AVP_TYPE
+          valueFrom:
+            secretKeyRef:
+              key: AVP_TYPE
+              name: argocd-vault-plugin-credentials
+        - name: VAULT_ADDR
+          valueFrom:
+            secretKeyRef:
+              key: VAULT_ADDR
+              name: argocd-vault-plugin-credentials
+        - name: AVP_K8S_ROLE
+          valueFrom:
+            secretKeyRef:
+              key: AVP_K8S_ROLE
+              name: argocd-vault-plugin-credentials       
+    mountsatoken: true
+    sidecarContainers: # 5
+      - command:
+          - /var/run/argocd/argocd-cmp-server
+        image: 'quay.io/argoproj/argocd:v2.4.8'
+        name: avp-helm
+        volumeMounts:
+          - mountPath: /var/run/argocd
+            name: var-files
+          - mountPath: /home/argocd/cmp-server/plugins
+            name: plugins
+          - mountPath: /tmp
+            name: tmp-dir
+          - mountPath: /home/argocd/cmp-server/config
+            name: cmp-plugin
+          - mountPath: /usr/local/bin/argocd-vault-plugin
+            name: custom-tools
+            subPath: argocd-vault-plugin
+    volumeMounts:
+      - mountPath: /usr/local/bin/argocd-vault-plugin
+        name: custom-tools
+        subPath: argocd-vault-plugin
+    volumes:
+      - configMap:
+          name: cmp-plugin
+        name: cmp-plugin
+      - emptyDir: {}
+        name: custom-tools
+      - emptyDir: {}
+        name: tmp-dir                  
+    initContainers:
+      - args:
+          - >-
+            wget -O /custom-tools/argocd-vault-plugin
+            https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VERSION}/argocd-vault-plugin_${AVP_VERSION}_linux_amd64
+            && chmod +x /custom-tools/argocd-vault-plugin && ls -la
+            /custom-tools/
+        command:
+          - sh
+          - '-c'
+        env:
+          - name: AVP_VERSION
+            value: 1.11.0
+        image: 'alpine:3.8'
+        name: download-tools
+        volumeMounts:
+          - mountPath: /custom-tools
+            name: custom-tools               
+  resourceExclusions: "- apiGroups:\n  - tekton.dev\n  clusters:\n  - '*'\n  kinds:\n  - TaskRun\n  - PipelineRun        \n"
+  server:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    route:
+      enabled: true
+  configManagementPlugins: | # 6
+    - name: argocd-vault-plugin
+      generate:
+        command: ["argocd-vault-plugin"]
+        args: ["generate", "./"]      
+  resourceCustomizations: | # 7
+    operators.coreos.com/Subscription:
+      health.lua: |      
+        health_status = {}
+        if obj.status ~= nil then
+          if obj.status.conditions ~= nil then
+            numDegraded = 0
+            numPending = 0
+            msg = ""
+            for i, condition in pairs(obj.status.conditions) do
+              msg = msg .. i .. ": " .. condition.type .. " | " .. condition.status .. "\n"
+              if condition.type == "InstallPlanPending" and condition.status == "True" then
+                numPending = numPending + 1
+              elseif (condition.type == "InstallPlanMissing" and condition.reason ~= "ReferencedInstallPlanNotFound") then
+                numDegraded = numDegraded + 1
+              elseif (condition.type == "CatalogSourcesUnhealthy" or condition.type == "InstallPlanFailed" or condition.type == "ResolutionFailed") and condition.status == "True" then
+                numDegraded = numDegraded + 1
+              end
+            end
+            if numDegraded == 0 and numPending == 0 then
+              health_status.status = "Healthy"
+              health_status.message = msg
+              return health_status
+            elseif numPending > 0 and numDegraded == 0 then
+              health_status.status = "Progressing"
+              health_status.message = "An install plan for a subscription is pending installation"
+              return health_status
+            else
+              health_status.status = "Degraded"
+              health_status.message = msg
+              return health_status
+            end
+          end
+        end
+        health_status.status = "Progressing"
+        health_status.message = "An install plan for a subscription is pending installation"
+        return health_status    
+----   
+
+1.
+
+2.
+
+3.
+
+4.
+
+5.
+
+6.
+
+7.
+
+Next chart is rbac and includes the basic configuration for argo RBAC and projects.
+
+Argo RBAC is useful for implementing a governance so every user/role has different level of permissions and access not only to deploy and manage
+resources but the way the platform itself is operated.
+
+Then if you navigate to rbac folder you can see a Group and a Role binding to give cluster admin permissions on argo to the admin user configured via Htpasswd.
+
+For RBAC we need to differentiate between global configuration on argocd intance and projects RBAC.
+
+If you navigate to rbac section on argo instance, you will see some rbac policies starting like *g*  and *p*.
+
+Policies starting with g assign roles to openshift local groups and their users, while policies starting with p define specific policies for projects, resources, projects and applications and their operations.
+
+Then on AppProject we can define restrictions like source repo, destination servers and resource whitelist allowed per project. Moreover you can define local roles for that AppProject.
+
+The following configuration creates 5 groups of users and two project. Project dev where only argo-operators-dev users can get and sync applications and project 
+pro where applies the global policies.
+
+Finally push your changes to your working branch, login to argo hub cluster with user-<name> and deploy the bootstrap Application.
+
+[.lines_7]
+[.console-input]
+[source, java,subs="+macros,+attributes"]
+----
+oc apply -f ./global-config/bootstrap/gitopsbootstrapper-a.yaml
+----
+
+At this point you should see some applications on syncing on your argo console. You cannot see your colleagues deployments thanks to RBAC.
+Navigate to argo hub console using your user with view role, navigate to ArgoCD instance, take a look to global rbac policies and then navigate to your AppProject
+to verify yor local permissions.
+
+If you try to deploy a new Application from the console you will see you cannot deploy to a different cluster destination than yours.
+
+Once this is completed login to you managed cluster, and verfify:
+
+- GitOps operator is installed
+- Argo instance exists and is cluster wide (PENDING: add screenshot)
+- AppProject exists
+- Login as dev user ... PENDING
+- Login as pro user ... PENDING (test whole RBAC)
