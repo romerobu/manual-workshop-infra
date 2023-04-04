@@ -141,16 +141,15 @@
       parameters:
         - name: global.oauth.enabled
           value: 'true'
-        - name: global.oauth.oauth.keycloak.clientid
-          value: 'myclient-1'
-        - name: global.oauth.oauth.keycloak.issuer
-          value: 'https://keycloak-keycloak.apps.argo-hub.sandbox1444.opentlc.com/realms/myrealm-1'
-        - name: global.oauth.oauth.keycloak.data
-          value: ''
-        - name: global.oauth.oauth.ldap.sync.ldap_url
-          value: 'ldap://10.0.210.36:32106'
-        - name: global.operators.enabled
-          value: 'false'
+        - name: oauth.oauth.keycloak.clientid
+          value: myclient-&lt;name&gt;
+        - name: oauth.oauth.keycloak.issuer
+          value: &gt;-
+            <a href="https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;&gt;.opentlc.com/realms/myrealm-&lt;name&gt" class="bare">https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;&gt;.opentlc.com/realms/myrealm-&lt;name&gt</a>;
+        - name: oauth.oauth.keycloak.data
+          value: "your keycloak secret" *
+        - name: oauth.oauth.ldap.sync.ldap_url
+          value: 'ldap://&lt;nodeport:port&gt;'
         - name: global.nmstate.enabled
           value: 'false'
         - name: global.monitoring.enabled
@@ -164,6 +163,9 @@
 </div>
 </div>
 <div class="paragraph">
+<p><strong>Keycloack secret</strong>: Login to argo-hub console, find keycloack url, login as myuser-&lt;name&gt;/myuser-&lt;name&gt;, naviagte to your realm, then go to your client and  find your secret on Credentials tab.</p>
+</div>
+<div class="paragraph">
 <p>If you take a look to the helm charts you will notice we do not only need to update oauth but create others resources needed for integration like secrets, cm and cron job for syncying groups.</p>
 </div>
 <div class="paragraph">
@@ -174,15 +176,25 @@ When you update oauth values, and update existing Application you can notice how
 <p>For groups syncying, cron job shows last 5 executions, including the state according to the result (failed or success).</p>
 </div>
 <div class="paragraph">
-<p>Furthermore you can notice some resources with no status (white fields). Those resources are created by Openshift for configuration issues but they are not managed by argo, that&#8217;s why argo is not tracking them.</p>
+<p>Furthermore you can notice some resources with no status (white fields). Those resources are created by Openshift for configuration issues but they are not managed by argo, that&#8217;s why argo is not tracking them.
+<a href="https://argo-cd.readthedocs.io/en/stable/user-guide/resource_tracking/">Resource tracking</a> has been set to annotation+label on argo instance.</p>
 </div>
 <div class="paragraph">
 <p>Once every resource is deployed, verify authentication cluster operator is OK, logout and log in back. Then you should see new identity providers listed.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">oc get co</code></pre>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">oc get co
+
+oc get oauth cluster -o yaml</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>You can try keycloack server with myuser-&lt;name&gt;/myuser-&lt;name&gt;.</p>
+</div>
+<div class="paragraph">
+<p>You can try login to LDAP server with user paul/"" who is an admin user.
+You can try login to LDAP server with user mark/"" who is an viewer user.</p>
 </div>
 </div>
 </div>
