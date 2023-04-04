@@ -1,10 +1,11 @@
 = Managed cluster setup
 
-Then checkout to the workshop branch, where you will see the las Application used for hub setup commented so we do not override this configurations. 
+Then checkout to the workshop branch, bear in mind the application hub-setup is commented as this configuration is supposed to be applied only once by an admin user. 
 
 This repository is intended to apply its configuration as waterfall by applying the bootstrap resource /global-config/bootstrap/gitopsbootstrapper-a.yaml.
 
 As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges:
+Then you will have to replace <name> by your cluster.
 
 [.lines_7]
 [.console-input]
@@ -49,7 +50,7 @@ Then update cluster.json values.
 }
 ----
 
-This bootstrap resource is applying evrything under gitops-config-as folder, which includes cluster-addons-a for managed clusters and hub-setup-a for hub setup.
+This bootstrap resource applies evrything under gitops-config-as folder, which includes cluster-addons-a for managed clusters and hub-setup-a for hub setup.
 
 You must also update cluster-addons-a for your own managed cluster:
 
@@ -77,10 +78,10 @@ spec:
       selfHeal: true
 ----      
 
-The source path of this Application points to the ApplicationSet used. This ApplicationSet creates as many Applications as clusters configured under cluster-config section.
+The source path of this Application points to the https://argo-cd.readthedocs.io/en/stable/user-guide/application-set/[ApplicationSet] used. This ApplicationSet creates as many Applications as clusters configured under cluster-config section.
 ApplicationSet uses generators to create Application with multiple origins and destinations using templating. 
 
-Generator used may vary depending on your use case, in this example
+https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators/[Generator] used may vary depending on your use case, in this example
 we are using Git Files generator so cluster definition values are used as parameters. In case we had N cluster-definition files, the ApplicationSet would generate N Applications automatically.
 
 As we did before, we should update ApplicationSet name with your lab data.
@@ -121,10 +122,15 @@ spec:
 
 Then navigate under source path to take a look to the Helm charts used for deploying GitOps and setting up the initial config for managed clusters.
 
+Disclaimer: ApplicationSet controller is not enabled by default and must be configured on argocd instance.
+
 == Helm charts
 
-First Helm chart is operators, which deploys GitOps operator on managed clusters. If you navigate to subscription.yaml resource you will see there is a global value
-for applying env variables for GitOps. These config values disable the default argocd instance and enables a new instance to be cluster wide. This means this argo application controller sa will have
+First Helm chart is operators, which deploys GitOps operator on managed clusters. This chart is intented to deploy any kind of operator, even though in this case we are
+only deploying GitOps operator.
+
+If you navigate to subscription.yaml resource you will see there is a global value for applying env variables for GitOps. 
+These config values disable the default argocd instance and enables a new instance to be cluster wide. This means this argo application controller sa will have
 cluster wide permissions to perform actions on this cluster.
 
 [.lines_7]
@@ -158,12 +164,15 @@ spec:
       value: "true"        
 ----   
 
-By default any new instance create is namespace scoped and you need to give additional privileges to sa argo application controller. You can either create a custom role binging, set this gloval
-env var o label any managed namespace by argo so it will create this role binding automatically.
+By default any new instance created is namespace scoped and you need to give additional privileges to sa argo application controller. You can either create a custom role binding, set this global
+env variable o label any managed namespace by argo so it will create this role binding automatically only for that namespace.
 
 After setting this global var you can see a new cluster role binding for this sa and this configuration on argocd console.
 
 PENDING: add screenshots
+
+You can take a look to global env vars https://developers.redhat.com/articles/2023/03/06/5-global-environment-variables-provided-openshift-gitops#5_environment_variables__overview[here], how to label namespaces https://docs.openshift.com/container-platform/4.10/cicd/gitops/setting-up-argocd-instance.html#gitops-deploy-resources-different-namespaces_setting-up-argocd-instance[here] 
+and how to create a role binding https://docs.openshift.com/container-platform/4.12/cicd/gitops/configuring-an-openshift-cluster-by-deploying-an-application-with-cluster-configurations.html#gitops-additional-permissions-for-cluster-config_configuring-an-openshift-cluster-by-deploying-an-application-with-cluster-configurations[here].
 
 Once the operator is running, we need to deploy ArgoCD instance. To make sure instance is deploying after the operator is running we use sync waves and custom health check resources.
 
