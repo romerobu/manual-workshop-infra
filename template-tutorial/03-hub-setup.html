@@ -80,7 +80,7 @@
     <a class="nav-link" href="03-hub-setup.html">3. Deploy Hub setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#hub">Hub setup</a>
+    <a class="nav-link" href="#hub">3.1 Hub setup</a>
   </li>
 </ul>
   </li>
@@ -154,8 +154,8 @@
 <h2 id="_enviroment"><a class="anchor" href="#_enviroment"></a>Enviroment</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You have access to two clusters, argo-hub and your own sno. You can login to argo-hub using <strong>user-&lt;name&gt;</strong> and to sno using <strong>admin</strong> user.
-At the same time, if you login to argo console using your Openshift user, you will only have permissions over your project and destination cluster.</p>
+<p>You have access to two clusters, <strong>argo-hub</strong> and your own <strong>sno</strong> (managed). You can login to argo-hub using <strong>user-&lt;name&gt;</strong> and to sno using <strong>admin</strong> user.
+On top of that, if you login to argo console using your Openshift user, you will only have permissions over your project and destination cluster.</p>
 </div>
 <div class="paragraph">
 <p>The reason why argo hub has permissions over your managed cluster is because this is configured as a destination server, given an authentication method.</p>
@@ -178,14 +178,14 @@ At the same time, if you login to argo console using your Openshift user, you wi
 You can login with your user-x to argo console as admin user of your own project while you will only have view permissions when you login to Openshift console.</p>
 </div>
 <div class="paragraph">
-<p>Ideally you could simoultaneusly deploy argo hub and managed clusters configuration as you can use a single bootstrap Application to deploy both Applications for argo hub and managed clusters, and then render N Applications
-for managed clusters using ApplicationSet however because of the workshop nature you need to perform cluster scoped actions but your repository could be easily adapted to perform actions on multiple clusters.</p>
+<p>Ideally you could simoultaneusly deploy argo hub and managed clusters configuration as you can use a single bootstrap Application to deploy both applications for argo hub and managed clusters, and then render N Applications
+for managed clusters using ApplicationSet. However because of the workshop structure you need to perform cluster scoped configurations, but your repository could be easily adapted to perform actions on multiple clusters.</p>
 </div>
 <div class="paragraph">
 <p>First take a look to the helm charts used for argo hub setup and then navigate to the console. As this configuration is already deployed you don&#8217;t need to make any change, only observe the way it was done.</p>
 </div>
 <div class="paragraph">
-<p>Navigate to gitops-config-as/hub-setup-a.yaml Application and see how this sets up env config on in-cluster (<a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>).
+<p>Navigate to gitops-config-as/hub-setup-a.yaml application and see how this sets up env config on in-cluster (<a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>).
 If you navigate to argo console you won&#8217;t be able to see this Application because of the RBAC permissions (you don&#8217;t have permissions on default project) but if you navigate to Openshift Console on Explore API section
 you will see the resource created:</p>
 </div>

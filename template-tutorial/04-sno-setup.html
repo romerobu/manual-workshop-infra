@@ -80,7 +80,7 @@
     <a class="nav-link" href="03-hub-setup.html">3. Deploy Hub setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-hub-setup.html#hub">Hub setup</a>
+    <a class="nav-link" href="03-hub-setup.html#hub">3.1 Hub setup</a>
   </li>
 </ul>
   </li>
@@ -156,8 +156,10 @@ git checkout -b sno-&lt;name&gt;-setup</code></pre>
 <p>This repository is intended to apply its configuration as waterfall by applying the bootstrap resource /global-config/bootstrap/gitopsbootstrapper-a.yaml.</p>
 </div>
 <div class="paragraph">
-<p>As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges:
-Then you will have to replace &lt;name&gt; by your cluster.</p>
+<p>As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges.</p>
+</div>
+<div class="paragraph">
+<p>Then you will have to replace &lt;name&gt; by your cluster.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
@@ -182,7 +184,7 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>Make sure after cluster-definition, the following folder (sno-&lt;name&gt;) is named as you assigned cluster as this value will be used as a parameter for ApplicationSet.
+<p>Make sure after cluster-definition, the following folder (sno-&lt;name&gt;) is named as your assigned cluster as this value will be used as a parameter for ApplicationSet.
 Then update cluster.json values.</p>
 </div>
 <div class="listingblock lines_7 console-input">
