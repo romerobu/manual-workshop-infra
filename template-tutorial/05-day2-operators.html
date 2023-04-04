@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Untitled :: Template Tutorial</title>
     <link rel="canonical" href="https://github.com/romerobu/manual-workshop-infra/template-tutorial/05-day2-operators.html">
+    <link rel="prev" href="05-day2-oauth.html#oauth">
+    <link rel="next" href="05-day2-monitoring.html#monitoring">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -87,19 +89,34 @@
     <a class="nav-link" href="04-sno-setup.html">4. Deploy Managed setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-sno-setup.html">Managed setup</a>
+    <a class="nav-link" href="04-sno-setup.html">4.1. Managed setup</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-sno-setup-helm.html#charts">Helm charts</a>
+    <a class="nav-link" href="04-sno-setup-helm.html#charts">4.2. Helm charts</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="05-day2-config.html">4. Day 2</a>
+    <a class="nav-link" href="05-day2-config.html">5. Day 2</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="05-day2-config.html#managed">Day 2</a>
+    <a class="nav-link" href="05-day2-oauth.html#oauth">5.1 Configure Identity Providers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#operators">5.2 Deploy Operators</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-day2-monitoring.html#monitoring">5.3 Configure Monitoring</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-day2-namespace.html#namespace">5.4 Namespace configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-day2-nmstate.html#namespace">5.5 NMstate configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-day2-vault.html#namespace">5.6 Vault configuration</a>
   </li>
 </ul>
   </li>
@@ -115,12 +132,74 @@
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Template Tutorial</a></li>
+    <li><a href="05-day2-config.html">5. Day 2</a></li>
+    <li><a href="#operators">5.2 Deploy Operators</a></li>
+  </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/romerobu/manual-workshop-infra/edit/master/documentation/modules/ROOT/pages/05-day2-operators.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-
+<div class="sect1">
+<h2 id="_configure_operators"><a class="anchor" href="#_configure_operators"></a>Configure operators</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once authentication is configured, we are going to deploy some operators. Operatos helm charts use range values so we can define as many operators as we want on values section.</p>
+</div>
+<div class="paragraph">
+<p>We are going to deploy tekton, kiali, jaeger, servicemesh and nmstate operator. Furthermore we are going to deploy Service Mesh Control Plane and Member Roll and an example application called bookinfo.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    helm:
+      parameters:
+        - name: global.oauth.enabled
+          value: 'true'
+        - name: oauth.oauth.keycloak.clientid
+          value: myclient-&lt;name&gt;
+        - name: oauth.oauth.keycloak.issuer
+          value: &gt;-
+            <a href="https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;&gt;.opentlc.com/realms/myrealm-&lt;name&gt" class="bare">https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;&gt;.opentlc.com/realms/myrealm-&lt;name&gt</a>;
+        - name: oauth.oauth.keycloak.data
+          value: "your keycloak secret" *
+        - name: oauth.oauth.ldap.sync.ldap_url
+          value: 'ldap://&lt;nodeport:port&gt;'
+        - name: global.nmstate.enabled
+          value: 'false'
+        - name: global.monitoring.enabled
+          value: 'false'
+        - name: global.namespace.enabled
+          value: 'false'
+        - name: global.bookinfo.enabled
+          value: 'true'
+        - name: global.operators.enabled
+          value: 'true'
+        - name: operators.operators.servicemesh.enabled
+          value: 'true'
+        - name: operators.operators.jaeger.enabled
+          value: 'true'
+        - name: operators.operators.kiali.enabled
+          value: 'true'
+        - name: operators.operators.tekton.enabled
+          value: 'true'
+        - name: operators.operators.nmstate.enabled
+          value: 'true'
+        - name: operators.istio.enabled
+          value: 'true'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case sync waves are very important as for being able to deploy bookinfo app, operator must be installed in the first place but also mesh should be configured.
+If sync waves are not configured properly it will try to create reosurces whose api still doesn&#8217;t exist in the cluster.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="05-day2-oauth.html#oauth">5.1 Configure Identity Providers</a></span>
+  <span class="next"><a href="05-day2-monitoring.html#monitoring">5.3 Configure Monitoring</a></span>
+</nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>

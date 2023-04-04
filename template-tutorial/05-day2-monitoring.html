@@ -3,9 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Let&#8217;s start! :: Template Tutorial</title>
-    <link rel="canonical" href="https://github.com/romerobu/manual-workshop-infra/template-tutorial/index.html">
-    <link rel="next" href="01-setup.html">
+    <title>Untitled :: Template Tutorial</title>
+    <link rel="canonical" href="https://github.com/romerobu/manual-workshop-infra/template-tutorial/05-day2-monitoring.html">
+    <link rel="prev" href="05-day2-operators.html#operators">
+    <link rel="next" href="05-day2-namespace.html#namespace">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -106,7 +107,7 @@
     <a class="nav-link" href="05-day2-operators.html#operators">5.2 Deploy Operators</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="05-day2-monitoring.html#monitoring">5.3 Configure Monitoring</a>
+    <a class="nav-link" href="#monitoring">5.3 Configure Monitoring</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="05-day2-namespace.html#namespace">5.4 Namespace configuration</a>
@@ -133,48 +134,70 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Template Tutorial</a></li>
-    <li><a href="index.html">Let&#8217;s start!</a></li>
+    <li><a href="05-day2-config.html">5. Day 2</a></li>
+    <li><a href="#monitoring">5.3 Configure Monitoring</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/romerobu/manual-workshop-infra/edit/master/documentation/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/romerobu/manual-workshop-infra/edit/master/documentation/modules/ROOT/pages/05-day2-monitoring.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Let&#8217;s start!</h1>
-<div class="sect1 text-center strong">
-<h2>Publish Services to Kubernetes</h2>
+<div class="sect1">
+<h2 id="_configure_monitoring"><a class="anchor" href="#_configure_monitoring"></a>Configure monitoring</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A Kubernetes tutorial to show how you can deploy a Java service to a Kubernetes cluster as it was a child game.</p>
+<p>Now we are going to deploy some basic configuration about monitoring.</p>
+</div>
+<div class="paragraph">
+<p>In the first place we are going to enable user-defined projects monitoring. Then we will create an example app, with a Service Monitor and a custom Prometheus Rule.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    helm:
+      parameters:
+        - name: global.oauth.enabled
+          value: 'true'
+        - name: oauth.oauth.keycloak.clientid
+          value: myclient-&lt;name&gt;
+        - name: oauth.oauth.keycloak.issuer
+          value: &gt;-
+            <a href="https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;&gt;.opentlc.com/realms/myrealm-&lt;name&gt" class="bare">https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;&gt;.opentlc.com/realms/myrealm-&lt;name&gt</a>;
+        - name: oauth.oauth.keycloak.data
+          value: "your keycloak secret" *
+        - name: oauth.oauth.ldap.sync.ldap_url
+          value: 'ldap://&lt;nodeport:port&gt;'
+        - name: global.nmstate.enabled
+          value: 'false'
+        - name: global.monitoring.enabled
+          value: 'true'
+        - name: global.namespace.enabled
+          value: 'false'
+        - name: global.bookinfo.enabled
+          value: 'true'
+        - name: global.operators.enabled
+          value: 'true'
+        - name: operators.operators.servicemesh.enabled
+          value: 'true'
+        - name: operators.operators.jaeger.enabled
+          value: 'true'
+        - name: operators.operators.kiali.enabled
+          value: 'true'
+        - name: operators.operators.tekton.enabled
+          value: 'true'
+        - name: operators.operators.nmstate.enabled
+          value: 'true'
+        - name: operators.istio.enabled
+          value: 'true'</code></pre>
 </div>
 </div>
-</div>
-<div class="sect1 tiles browse">
-<h2>Browse modules</h2>
-<div class="sectionbody">
-<div class="ulist tile">
-<div class="title"><a href="01-setup.html" class="xref page">Get Started</a></div>
-<ul>
-<li>
-<p><a href="01-setup.html#minikube" class="xref page">Minikube</a></p>
-</li>
-</ul>
-</div>
-<div class="ulist tile">
-<div class="title"><a href="02-deploy.html" class="xref page">Deploying</a></div>
-<ul>
-<li>
-<p><a href="02-deploy.html#package" class="xref page">Package the Application</a></p>
-</li>
-<li>
-<p><a href="02-deploy.html#deploy" class="xref page">Deploy the Application</a></p>
-</li>
-</ul>
+<div class="paragraph">
+<p>This is an easy configuration as sync waves are not a must because objects don&#8217;t have direct dependencies and they do not affect to existing configurations.</p>
 </div>
 </div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="01-setup.html">1. Setup</a></span>
+  <span class="prev"><a href="05-day2-operators.html#operators">5.2 Deploy Operators</a></span>
+  <span class="next"><a href="05-day2-namespace.html#namespace">5.4 Namespace configuration</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
