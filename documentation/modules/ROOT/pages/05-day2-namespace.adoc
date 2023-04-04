@@ -1,8 +1,12 @@
-== Configure operators
+== Configure namespace
 
-Once authentication is configured, we are going to deploy some operators. Operatos helm charts use range values so we can define as many operators as we want on values section.
+Part of day 2 configurations are setting namespace scoped configurations for managing networking and quotas for apps, as well as setting RBAC.
 
-We are going to deploy tekton, kiali, jaeger, servicemesh and nmstate operator. Furthermore we are going to deploy Service Mesh Control Plane and Member Roll and an example application called bookinfo.
+In this example, based on the last app deployment we are going to deploy some resources and objects quotas by namespace.
+
+Therefore we are going to set some cluster and local roles.
+
+Finally we are going to deploy a Network Policy to prevent traffic to the app. You can try enabling/disabling this feature to see how traffic is allowed and denied.
 
 [.lines_7]
 [.console-input]
@@ -24,9 +28,11 @@ We are going to deploy tekton, kiali, jaeger, servicemesh and nmstate operator. 
         - name: global.nmstate.enabled
           value: 'false'
         - name: global.monitoring.enabled
-          value: 'false'     
+          value: 'true'     
         - name: global.namespace.enabled
-          value: 'false'                         
+          value: 'true' 
+        - name: namespace.networkpolicy.enabled
+          value: 'true'                                   
         - name: global.bookinfo.enabled
           value: 'true'          
         - name: global.operators.enabled
@@ -44,6 +50,3 @@ We are going to deploy tekton, kiali, jaeger, servicemesh and nmstate operator. 
         - name: operators.istio.enabled
           value: 'true'                                                              
 ---- 
-
-In this case sync waves are very important as for being able to deploy bookinfo app, operator must be installed in the first place but also mesh should be configured.
-If sync waves are not configured properly it will try to create reosurces whose api still doesn't exist in the cluster.

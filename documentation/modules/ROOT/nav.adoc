@@ -10,8 +10,13 @@
 ** xref:03-hub-setup.adoc#hub[Hub setup]
 
 * xref:04-sno-setup.adoc[4. Deploy Managed setup]
-** xref:04-sno-setup.adoc[Managed setup]
-** xref:04-sno-setup-helm.adoc#charts[Helm charts]
+** xref:04-sno-setup.adoc[4.1. Managed setup]
+** xref:04-sno-setup-helm.adoc#charts[4.2. Helm charts]
 
-* xref:05-day2-config.adoc[4. Day 2]
-** xref:05-day2-config.adoc#managed[Day 2]
+* xref:05-day2-config.adoc[5. Day 2]
+** xref:05-day2-oauth.adoc#oauth[5.1 Configure Identity Providers]
+** xref:05-day2-operators.adoc#operators[5.2 Deploy Operators]
+** xref:05-day2-monitoring.adoc#monitoring[5.3 Configure Monitoring]
+** xref:05-day2-namespace.adoc#namespace[5.4 Namespace configuration]
+** xref:05-day2-nmstate.adoc#namespace[5.5 NMstate configuration]
+** xref:05-day2-vault.adoc#namespace[5.6 Vault configuration]

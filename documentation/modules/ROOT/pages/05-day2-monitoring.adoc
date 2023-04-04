@@ -1,8 +1,8 @@
-== Configure operators
+== Configure monitoring
 
-Once authentication is configured, we are going to deploy some operators. Operatos helm charts use range values so we can define as many operators as we want on values section.
+Now we are going to deploy some basic configuration about monitoring.
 
-We are going to deploy tekton, kiali, jaeger, servicemesh and nmstate operator. Furthermore we are going to deploy Service Mesh Control Plane and Member Roll and an example application called bookinfo.
+In the first place we are going to enable user-defined projects monitoring. Then we will create an example app, with a Service Monitor and a custom Prometheus Rule.
 
 [.lines_7]
 [.console-input]
@@ -24,7 +24,7 @@ We are going to deploy tekton, kiali, jaeger, servicemesh and nmstate operator. 
         - name: global.nmstate.enabled
           value: 'false'
         - name: global.monitoring.enabled
-          value: 'false'     
+          value: 'true'     
         - name: global.namespace.enabled
           value: 'false'                         
         - name: global.bookinfo.enabled
@@ -45,5 +45,4 @@ We are going to deploy tekton, kiali, jaeger, servicemesh and nmstate operator. 
           value: 'true'                                                              
 ---- 
 
-In this case sync waves are very important as for being able to deploy bookinfo app, operator must be installed in the first place but also mesh should be configured.
-If sync waves are not configured properly it will try to create reosurces whose api still doesn't exist in the cluster.
+This is an easy configuration as sync waves are not a must because objects don't have direct dependencies and they do not affect to existing configurations.
