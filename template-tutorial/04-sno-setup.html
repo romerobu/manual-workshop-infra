@@ -143,45 +143,22 @@
 <article class="doc">
 <h1 class="page">Managed cluster setup</h1>
 <div class="paragraph">
-<p>Then checkout to the workshop branch and create a new branch for your user. Bear in mind the application hub-setup is commented as this configuration is supposed to be applied only once by an admin user.</p>
+<p>Then checkout and create a new branch for your user.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">git branch # main
-git checkout sno-setup
 git checkout -b sno-&lt;name&gt;-setup</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This repository is intended to apply its configuration as waterfall by applying the bootstrap resource /global-config/bootstrap/gitopsbootstrapper-a.yaml.</p>
+<p>Argo hub setup has been already performed, so you just need to focused on managed your single node cluster.</p>
 </div>
 <div class="paragraph">
 <p>As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges.</p>
 </div>
 <div class="paragraph">
 <p>Then you will have to replace &lt;name&gt; by your cluster.</p>
-</div>
-<div class="listingblock lines_7 console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: gitops-bootstrapper-sno-&lt;name&gt;
-  namespace: openshift-operators
-spec:
-  destination:
-    namespace: openshift-operators
-    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a> # in-cluster destination
-  project: project-sno-&lt;name&gt;
-  source:
-    repoURL: <a href="https://github.com/romerobu/workshop-gitops-content-deploy.git" class="bare">https://github.com/romerobu/workshop-gitops-content-deploy.git</a>
-    targetRevision: sno-&lt;name&gt;-setup
-    path: global-config/gitops-config-as/ # Path to ApplicationSets folder
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true</code></pre>
-</div>
 </div>
 <div class="paragraph">
 <p>Make sure after cluster-definition, the following folder (sno-&lt;name&gt;) is named as your assigned cluster as this value will be used as a parameter for ApplicationSet.
@@ -202,17 +179,14 @@ Then update cluster.json values.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>This bootstrap resource applies everything under gitops-config-as folder, which includes cluster-addons-a for managed clusters and hub-setup-a for hub setup.</p>
-</div>
-<div class="paragraph">
-<p>You must also update cluster-addons-a for your own managed cluster:</p>
+<p>You must also update managed-setup-a for your own managed cluster. Note how this application deploys to a different namespace and argo instance compared to hub-setup application:</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cluster-addons-a-sno-&lt;name&gt;
+  name: managed-setup-a-&lt;name&gt;
   namespace: openshift-operators
 spec:
   destination:
