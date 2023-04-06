@@ -316,12 +316,78 @@ stringData:
             name: custom-tools
 
 
-  configManagementPlugins: |
+  configManagementPlugins: | # register plugin
     - name: argocd-vault-plugin
       generate:
         command: ["argocd-vault-plugin"]
         args: ["generate", "./"]</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>In this case, this configuration is already running on your cluster. If you take a look to the configuration applied by ApplicationSet on your single node those resources have been already created.
+So the next is testing this actually works.</p>
+</div>
+<div class="paragraph">
+<p>In <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm charts repository</a> there a branch called <strong>vault-secrets</strong>. If you take a look to charts/oauth/values.yaml you will
+on ldap.bindPassword field there is a placeholder of the path to the secret in vault server:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">&lt;path:kv-v2/data/demo#ldap_bind_password&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So we need to modify existing application day2-sno-&lt;name&gt; to pull from this branch and use plugin:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">project: default
+source:
+  repoURL: 'https://github.com/romerobu/helm-infra-gitops-workshop.git'
+  path: .
+  targetRevision: vault-secrets # branch with placeholder
+  plugin:
+    env:
+      - name: HELM_VALUES
+        value: &gt;-
+          -f charts/namespace/values.yaml
+          -f charts/operators/values.yaml
+          -f charts/oauth/values.yaml
+          -f charts/bookinfo/values.yaml
+          -f charts/monitoring/values.yaml
+          -f charts/nmstate/values.yaml
+          --set global.oauth.enabled=true
+          --set oauth.oauth.keycloak.clientid=myclient-1
+          --set oauth.oauth.keycloak.issuer=https://keycloak-keycloak.apps.argo-hub.sandbox1444.opentlc.com/realms/myrealm-1
+          --set oauth.oauth.keycloak.data=Oua8Mb8prUhMCFCUtwvpTPf3pQgD8KGE
+          --set oauth.oauth.ldap.sync.ldap_url='ldap://10.0.210.36:32106'
+          --set global.nmstate.enabled=false
+          --set global.monitoring.enabled=true
+          --set global.namespace.enabled=true
+          --set namespace.networkpolicy.enabled=false
+          --set global.bookinfo.enabled=true
+          --set global.operators.enabled=true
+          --set operators.operators.servicemesh.enabled=true
+          --set operators.operators.jaeger.enabled=true
+          --set operators.operators.kiali.enabled=true
+          --set operators.operators.tekton.enabled=true
+          --set operators.operators.nmstate.enabled=true
+          --set operators.istio.enabled=true
+destination:
+  server: 'https://kubernetes.default.svc'
+syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see this application is slightly different to the last one used. This is because we need to pass values files and parameters so argocd-vault-plugin-helm can used them
+to render helm charts. This might looks slightly different depending on you repository structure.</p>
+</div>
+<div class="paragraph">
+<p>After applying this new application, it will be out of sync for some seconds. Once it is synced, navigate to your Openshift cluster and verify vault has replaced secret data properly.
+You can try to delete it and see how it is created. Finally you can ask your instructor to update this secret on vault server, try a hard refresh on argo and see how it is updated.</p>
 </div>
 </div>
 </div>
