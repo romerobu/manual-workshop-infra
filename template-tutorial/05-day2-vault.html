@@ -141,7 +141,190 @@
   </div>
   <div class="content">
 <article class="doc">
+<div class="sect1">
+<h2 id="_configure_vault_secrets"><a class="anchor" href="#_configure_vault_secrets"></a>Configure vault secrets</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vault by Hashicorp is a tool that allows to store and encrypt secrets to secure applications and protect sensitive data.
+Vault server stores the sensitive data while a special pluging for argo retrieves this information when creating objects thanks to the use of paths and
+references so we do not leave sensitive information oc code repository.</p>
+</div>
+<div class="paragraph">
+<p>First of all you can see a running instance on vault on argo-hub cluster. This server stores sensitive data for configurin oauth while on your managed cluster you can see
+a secret containing credentials for authenticating with vault, a config map with plugin for using helm with vault and argo, and a special configuration on Argo CD.</p>
+</div>
+<div class="paragraph">
+<p>Those resources are required to implement Argo CD Vault plugin. This plugin allows using placeholders with path to secrets on yaml fields where the secret should be replaced, and the plugin is in
+charge of this substitution.</p>
+</div>
+<div class="paragraph">
+<p>There are several ways of installing it, as sidecars plugin or as config map plugin, but this last one will be <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/#installing-a-config-management-plugin">deprecated</a> in the future.</p>
+</div>
+<div class="paragraph">
+<p>So this installation approach follows the method <a href="https://argocd-vault-plugin.readthedocs.io/en/stable/installation/#initcontainer-and-configuration-via-sidecar">initContainer + sidecar</a>.</p>
+</div>
+<div class="paragraph">
+<p>Config map <strong>cmp-plugin</strong> defines the plugin that will be mounted in the sidecar container:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cmp-plugin # To be defined parameters
+  namespace: openshift-operators
+data:
+  plugin.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: argocd-vault-plugin-helm
+    spec:
+      allowConcurrency: true
+      discover:
+        find:
+          command:
+            - sh
+            - "-c"
+            - "find . -name 'Chart.yaml' &amp;&amp; find . -name 'values.yaml'"
+      init:
+       command:
+          - bash
+          - "-c"
+          - |
+            helm repo add bitnami <a href="https://charts.bitnami.com/bitnami" class="bare">https://charts.bitnami.com/bitnami</a>
+            helm dependency build
+      generate:
+        command:
+          - bash
+          - "-c"
+          - |
+            helm template . $ARGOCD_ENV_HELM_VALUES | # values passed in Application
+            argocd-vault-plugin generate -s openshift-operators:argocd-vault-plugin-credentials - # generate using plugin + credentials
+      lockRepo: false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Secret <strong>argocd-vault-plugin-credentials</strong> defines vault server address, authentication type (approle) and role credentials:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">kind: Secret
+apiVersion: v1
+metadata:
+  name: argocd-vault-plugin-credentials # To be defined parameters
+  namespace: openshift-operators # argocd namespace
+type: Opaque
+stringData:
+  VAULT_ADDR: "http://vault-vault.apps.argo-hub.sandbox1444.opentlc.com"
+  AVP_TYPE: vault
+  AVP_AUTH_TYPE: approle
+  AVP_ROLE_ID: e545c46e-12d8-67e6-a98a-73b0782900e8
+  AVP_SECRET_ID: d8fd9d3d-23f6-8743-0ed0-b52fc81c57a7</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are several authentication method, you can take a look <a href="https://developer.hashicorp.com/vault/docs/concepts/auth">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Then you need to configure using this plugin on argo cd:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  repo:
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1024Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+    env:
+        - name: AVP_AUTH_TYPE # Field from argocd-vault-plugin-credentials secret
+          valueFrom:
+            secretKeyRef:
+              key: AVP_AUTH_TYPE
+              name: argocd-vault-plugin-credentials
+        - name: AVP_TYPE
+          valueFrom:
+            secretKeyRef:
+              key: AVP_TYPE
+              name: argocd-vault-plugin-credentials
+        - name: VAULT_ADDR
+          valueFrom:
+            secretKeyRef:
+              key: VAULT_ADDR
+              name: argocd-vault-plugin-credentials
+        - name: AVP_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              key: AVP_ROLE_ID
+              name: argocd-vault-plugin-credentials
+        - name: AVP_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              key: AVP_SECRET_ID
+              name: argocd-vault-plugin-credentials
+    mountsatoken: true
+    serviceaccount: argocd-repo-server # sa to be used
+    sidecarContainers: # sidecar container running plugin
+      - command:
+          - /var/run/argocd/argocd-cmp-server
+        image: 'quay.io/argoproj/argocd:v2.4.8'
+        name: avp-helm
+        volumeMounts:
+          - mountPath: /var/run/argocd
+            name: var-files
+          - mountPath: /home/argocd/cmp-server/plugins
+            name: plugins
+          - mountPath: /tmp
+            name: tmp-dir
+          - mountPath: /home/argocd/cmp-server/config
+            name: cmp-plugin
+          - mountPath: /usr/local/bin/argocd-vault-plugin
+            name: custom-tools
+            subPath: argocd-vault-plugin
+    volumeMounts:
+      - mountPath: /usr/local/bin/argocd-vault-plugin
+        name: custom-tools
+        subPath: argocd-vault-plugin
+    volumes:
+      - configMap:
+          name: cmp-plugin
+        name: cmp-plugin
+      - emptyDir: {}
+        name: custom-tools
+      - emptyDir: {}
+        name: tmp-dir
+    initContainers: # init container
+      - args:
+          - &gt;-
+            wget -O /custom-tools/argocd-vault-plugin
+            <a href="https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VERSION}/argocd-vault-plugin_${AVP_VERSION}_linux_amd64" class="bare">https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VERSION}/argocd-vault-plugin_${AVP_VERSION}_linux_amd64</a>
+            &amp;&amp; chmod +x /custom-tools/argocd-vault-plugin &amp;&amp; ls -la
+            /custom-tools/
+        command:
+          - sh
+          - '-c'
+        env:
+          - name: AVP_VERSION
+            value: 1.14.0
+        image: 'alpine:3.8'
+        name: download-tools
+        volumeMounts:
+          - mountPath: /custom-tools
+            name: custom-tools
 
+
+  configManagementPlugins: |
+    - name: argocd-vault-plugin
+      generate:
+        command: ["argocd-vault-plugin"]
+        args: ["generate", "./"]</code></pre>
+</div>
+</div>
+</div>
+</div>
 <nav class="pagination">
   <span class="prev"><a href="05-day2-nmstate.html#namespace">5.5 NMstate configuration</a></span>
 </nav>
