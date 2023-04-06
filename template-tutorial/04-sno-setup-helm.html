@@ -144,7 +144,7 @@
 <article class="doc">
 <h1 class="page">Helm charts</h1>
 <div class="paragraph">
-<p>First Helm chart is operators, which deploys GitOps operator on managed clusters. This chart is intented to deploy any kind of operator, even though in this case we are
+<p>First Helm chart is <strong>operators</strong>, which deploys GitOps operator on managed clusters. This chart is intented to deploy any kind of operator, even though in this case we are
 only deploying GitOps operator.</p>
 </div>
 <div class="paragraph">
@@ -152,7 +152,7 @@ only deploying GitOps operator.</p>
 </div>
 <div class="paragraph">
 <p>These config values disable the default argocd instance and enables a new instance to be cluster wide. This means this argo application controller sa will have
-cluster wide permissions to perform actions on this cluster.</p>
+permissions to work in all namespaces within the cluster.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
@@ -184,8 +184,12 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>By default any new instance created is namespace scoped and you need to give additional privileges to sa argo application controller. You can either create a custom role binding, set this global
-env variable o label any managed namespace by argo so it will create this role binding automatically only for that namespace.</p>
+<p>By default any new instance created is namespace scoped, this means you will only be allowed to deploy within your namespace. If you want to deploy across all namespace
+you need to change this configuration to make the instance cluster wide. Additionally your argo sa may not have privileges enough to work with cluster wide resources and you might need to
+assign a new role binding for it.</p>
+</div>
+<div class="paragraph">
+<p>You can either create a custom role binding or labelling any managed namespace by argo so it will create this role binding automatically only for that namespace.</p>
 </div>
 <div class="paragraph">
 <p>After setting this global var you can see a new cluster role binding for this sa and this configuration on argocd console.</p>
@@ -200,7 +204,7 @@ env variable o label any managed namespace by argo so it will create this role b
 and how to create a role binding <a href="https://docs.openshift.com/container-platform/4.12/cicd/gitops/configuring-an-openshift-cluster-by-deploying-an-application-with-cluster-configurations.html#gitops-additional-permissions-for-cluster-config_configuring-an-openshift-cluster-by-deploying-an-application-with-cluster-configurations">here</a>.</p>
 </div>
 <div class="paragraph">
-<p>Once the operator is running, we need to deploy ArgoCD instance. To make sure instance is deployed after the operator is running we use sync waves and custom health check resources.</p>
+<p>Once the operator is running, we need to deploy ArgoCD instance. To make sure instance is deployed after the operator is running we use sync waves and custom resources healthcheck.</p>
 </div>
 <div class="paragraph">
 <p>Sync waves are defined on each resource as annotations, and they tell argo the order in which resources should be applied once the previous is already in healthy status.
@@ -208,7 +212,10 @@ You can take a look in detail to the <a href="https://argo-cd.readthedocs.io/en/
 </div>
 <div class="paragraph">
 <p>For some specific resources they need a custom healthcheck. Most of the objects only require existing to work but others like subscription may exists but not progress to a successful status so we
-need a custom healthcheck to make sure the next sync wave does not start till the operators are properly installed.</p>
+need a <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/health/">custom healthcheck</a> to make sure the next sync wave does not start till the operators are properly installed.</p>
+</div>
+<div class="paragraph">
+<p>Resource healthcheck is defined in the argo instace, which is also deployed using helm charts.</p>
 </div>
 <div class="paragraph">
 <p>Navigate to ArgoCD instance and take a look to the <strong>resourceCustomizations</strong> section, as well as other configurations that we will review later on.</p>
@@ -407,29 +414,33 @@ spec:
         return health_status</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>1.</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Dex uses groups and users defined within Openshift by checking the Oauth server</p>
+</li>
+<li>
+<p>Overrides default tracking method by label to annotation+label</p>
+</li>
+<li>
+<p>Enable ApplicationSet controller</p>
+</li>
+<li>
+<p>Configure argo RBAC</p>
+</li>
+<li>
+<p>Configure vault plugin as a sidecar container</p>
+</li>
+<li>
+<p>Configure new plugin for vault</p>
+</li>
+<li>
+<p>Configure resource healthcheck for Subscription</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p>2.</p>
-</div>
-<div class="paragraph">
-<p>3.</p>
-</div>
-<div class="paragraph">
-<p>4.</p>
-</div>
-<div class="paragraph">
-<p>5.</p>
-</div>
-<div class="paragraph">
-<p>6.</p>
-</div>
-<div class="paragraph">
-<p>7.</p>
-</div>
-<div class="paragraph">
-<p>Next chart is rbac and includes the basic configuration for argo RBAC and projects.</p>
+<p>Next chart is <strong>rbac</strong> and includes the basic configuration for argo RBAC and projects.</p>
 </div>
 <div class="paragraph">
 <p>The <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/rbac/">RBAC</a> feature enables restriction of access to Argo CD resources. Argo CD does not have its own user management system and has only one built-in user admin.
@@ -534,7 +545,7 @@ to verify yor local permissions.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Once this is completed login to you managed cluster, and verfify:</p>
+<p>Once this is completed login to you managed cluster, and verify:</p>
 </div>
 <div class="ulist">
 <ul>
