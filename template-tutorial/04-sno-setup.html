@@ -230,8 +230,31 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>The source path of this Application points to the <a href="https://argo-cd.readthedocs.io/en/stable/user-guide/application-set/">ApplicationSet</a> used. This ApplicationSet creates as many Applications as clusters configured under cluster-config section.
-ApplicationSet uses generators to create Application with multiple origins and destinations using templating.</p>
+<p>The source path of this Application points to the <a href="https://argo-cd.readthedocs.io/en/stable/user-guide/application-set/">ApplicationSet</a> used.
+ApplicationSet is a CR that can be uset to genereate Applications to multiple cluster from multiple originis. ApplicationSet controller is installed alongside Argo CD
+even though it must be explicitaly enabled.</p>
+</div>
+<div class="paragraph">
+<p>ApplicationSet is a helpful approach for multi cluster management, and it "supplements Argo CD by adding aadditional features in support of cluster-administrator-focused scanerios". Some of those are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Ability to use a single Kubernetes manifest to target multiple Kubernetes clusters with Argo CD.</p>
+</li>
+<li>
+<p>Ability to use a single Kubernetes manifest to deploy multiple applications from one or multiple Git repositories with Argo CD.</p>
+</li>
+<li>
+<p>Improved support for monorepos (multiple Argo CD Application resources defined within a single Git repository).</p>
+</li>
+<li>
+<p>Improves ability of individual cluster tenants to deploy applications using ArgoCD (without needing to involve privileged cluster admin in enabling the destanion servers).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>ApplicationSet uses generators to create Application with multiple origins and destinations using templating.</p>
 </div>
 <div class="paragraph">
 <p><a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators/">Generator</a> used may vary depending on your use case, in this example
