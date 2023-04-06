@@ -88,14 +88,26 @@ spec:
       selfHeal: true
 ----      
 
-The source path of this Application points to the https://argo-cd.readthedocs.io/en/stable/user-guide/application-set/[ApplicationSet] used. This ApplicationSet creates as many Applications as clusters configured under cluster-config section.
+The source path of this Application points to the https://argo-cd.readthedocs.io/en/stable/user-guide/application-set/[ApplicationSet] used. 
+ApplicationSet is a CR that can be uset to genereate Applications to multiple cluster from multiple originis. ApplicationSet controller is installed alongside Argo CD 
+even though it must be explicitaly enabled. 
+
+ApplicationSet is a helpful approach for multi cluster management, and it "supplements Argo CD by adding aadditional features in support of cluster-administrator-focused scanerios". Some of those are:
+
+- Ability to use a single Kubernetes manifest to target multiple Kubernetes clusters with Argo CD.
+
+- Ability to use a single Kubernetes manifest to deploy multiple applications from one or multiple Git repositories with Argo CD.
+
+- Improved support for monorepos (multiple Argo CD Application resources defined within a single Git repository).
+
+- Improves ability of individual cluster tenants to deploy applications using ArgoCD (without needing to involve privileged cluster admin in enabling the destanion servers).
+
 ApplicationSet uses generators to create Application with multiple origins and destinations using templating. 
 
 https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators/[Generator] used may vary depending on your use case, in this example
 we are using Git Files generator so cluster definition values are used as parameters. In case we had N cluster-definition files, the ApplicationSet would generate N Applications automatically.
 
 As we did before, we should update ApplicationSet name with your lab data.
-
 
 [.lines_7]
 [.console-input]
