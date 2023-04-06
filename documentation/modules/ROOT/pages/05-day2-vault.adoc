@@ -213,7 +213,6 @@ source:
           --set global.oauth.enabled=true 
           --set oauth.oauth.keycloak.clientid=myclient-1 
           --set oauth.oauth.keycloak.issuer=https://keycloak-keycloak.apps.argo-hub.sandbox1444.opentlc.com/realms/myrealm-1
-          --set oauth.oauth.keycloak.data=Oua8Mb8prUhMCFCUtwvpTPf3pQgD8KGE 
           --set oauth.oauth.ldap.sync.ldap_url='ldap://10.0.210.36:32106' 
           --set global.nmstate.enabled=false 
           --set global.monitoring.enabled=true
@@ -236,7 +235,7 @@ syncPolicy:
 ----
 
 As you can see this application is slightly different to the last one used. This is because we need to pass values files and parameters so argocd-vault-plugin-helm can used them
-to render helm charts. This might looks slightly different depending on you repository structure.
+to render helm charts. This might looks slightly different depending on you repository structure. If you do not need to pass any plugin you can simply invoke "plugin: {}".
 
 After applying this new application, it will be out of sync for some seconds. Once it is synced, navigate to your Openshift cluster and verify vault has replaced secret data properly.
 You can try to delete it and see how it is created. Finally you can ask your instructor to update this secret on vault server, try a hard refresh on argo and see how it is updated.

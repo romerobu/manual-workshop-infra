@@ -1,45 +1,20 @@
 = Managed cluster setup
 
-Then checkout to the workshop branch and create a new branch for your user. Bear in mind the application hub-setup is commented as this configuration is supposed to be applied only once by an admin user. 
+Then checkout and create a new branch for your user. 
 
 [.lines_7]
 [.console-input]
 [source, java,subs="+macros,+attributes"]
 ----
 git branch # main
-git checkout sno-setup
 git checkout -b sno-<name>-setup
 ----
 
-This repository is intended to apply its configuration as waterfall by applying the bootstrap resource /global-config/bootstrap/gitopsbootstrapper-a.yaml.
+Argo hub setup has been already performed, so you just need to focused on managed your single node cluster.
 
 As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges.
 
 Then you will have to replace <name> by your cluster.
-
-[.lines_7]
-[.console-input]
-[source, java,subs="+macros,+attributes"]
-----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: gitops-bootstrapper-sno-<name>
-  namespace: openshift-operators
-spec:
-  destination:
-    namespace: openshift-operators
-    server: https://kubernetes.default.svc # in-cluster destination
-  project: project-sno-<name>
-  source:
-    repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
-    targetRevision: sno-<name>-setup
-    path: global-config/gitops-config-as/ # Path to ApplicationSets folder
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-----
 
 Make sure after cluster-definition, the following folder (sno-<name>) is named as your assigned cluster as this value will be used as a parameter for ApplicationSet.
 Then update cluster.json values.
@@ -60,9 +35,7 @@ Then update cluster.json values.
 }
 ----
 
-This bootstrap resource applies everything under gitops-config-as folder, which includes cluster-addons-a for managed clusters and hub-setup-a for hub setup.
-
-You must also update cluster-addons-a for your own managed cluster:
+You must also update managed-setup-a for your own managed cluster. Note how this application deploys to a different namespace and argo instance compared to hub-setup application:
 
 [.lines_7]
 [.console-input]
@@ -71,7 +44,7 @@ You must also update cluster-addons-a for your own managed cluster:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cluster-addons-a-sno-<name>
+  name: managed-setup-a-<name>
   namespace: openshift-operators
 spec:
   destination:
