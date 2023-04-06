@@ -5,7 +5,7 @@ At this point you have a cluster with an argo instance deployed and cluster admi
 As we might need to apply this configuration to multiple managed clusters, we need to be able to render multiple applications using helm charts, even though we are applying this configuration
 to our single scoped cluster.
 
-Fork this https://github.com/romerobu/helm-infra-gitops-workshop.git[repository] and checkout to your working branch.
+Fork this https://github.com/romerobu/workshop-gitops-apps-deploy.git[repository] and checkout to your working branch.
 
 [.lines_7]
 [.console-input]
@@ -18,7 +18,7 @@ git checkout -b sno-<name>
 Take a look to the code, this repo renders Applications by applying a source code, importing and overriding values for each chart so you are not expected to modify those charts
 but their values.
 
-You can take a look to the charts https://github.com/romerobu/workshop-gitops-apps-deploy.git[here].
+You can take a look to the charts https://github.com/romerobu/helm-infra-gitops-workshop.git[here].
 
 You must override values.yaml with your cluster data, and then render the application to be deployed on your managed cluster:
 
