@@ -326,10 +326,11 @@ To create bootstrap application, navigate to Argo console, click on **New app**,
 
 At this point you should see some applications on syncing on your argo console. You cannot see your colleagues deployments thanks to RBAC.
 
-# PENDING, UPDATE SCREENSHOT
 image::bootstrap-app.png[]
 
 Deep dive on *setup-sno-<name>-a* to check all the resources created.
+
+image::setup-sno-x-a.png[]
 
 Navigate to argo hub console using your user with view role, navigate to ArgoCD instance (Installed Operators -> Openshift GitOps -> ArgoCD), take a look to global rbac policies and then navigate to your AppProject
 to verify yor local permissions.
