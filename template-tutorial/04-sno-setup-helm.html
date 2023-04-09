@@ -143,8 +143,6 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Helm charts</h1>
-<div id="preamble">
-<div class="sectionbody">
 <div class="paragraph">
 <p>First Helm chart is <strong>operators</strong>, which deploys GitOps operator on managed clusters. This chart is intented to deploy any kind of operator, even though in this case we are
 only deploying GitOps operator.</p>
@@ -518,9 +516,6 @@ git push origin sno-&lt;name&gt;-setup</code></pre>
 <div class="paragraph">
 <p>At this point you should see some applications on syncing on your argo console. You cannot see your colleagues deployments thanks to RBAC.</p>
 </div>
-</div>
-</div>
-<h1 id="_pending_update_screenshot" class="sect0"><a class="anchor" href="#_pending_update_screenshot"></a>PENDING, UPDATE SCREENSHOT</h1>
 <div class="imageblock">
 <div class="content">
 <img src="_images/bootstrap-app.png" alt="bootstrap app">
@@ -528,6 +523,11 @@ git push origin sno-&lt;name&gt;-setup</code></pre>
 </div>
 <div class="paragraph">
 <p>Deep dive on <strong>setup-sno-&lt;name&gt;-a</strong> to check all the resources created.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/setup-sno-x-a.png" alt="setup sno x a">
+</div>
 </div>
 <div class="paragraph">
 <p>Navigate to argo hub console using your user with view role, navigate to ArgoCD instance (Installed Operators &#8594; Openshift GitOps &#8594; ArgoCD), take a look to global rbac policies and then navigate to your AppProject
