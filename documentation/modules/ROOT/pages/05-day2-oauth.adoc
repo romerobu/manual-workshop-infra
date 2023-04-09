@@ -1,8 +1,10 @@
 == Configure Identity Providers
 
-As you can see, there is already a local identity provider configured but we want to override current users and integrate with other identity providers like LDAP Free Ipa provider and keycloak.
+As you can see, there is already a local identity provider configured but we want to override current users and integrate with other identity providers like LDAP Free Ipa provider and Keycloak.
 
-For LDAP apart form integrating against the server we also need to synchronize groups and users.
+For configuring Identity Providers on Openshift you just need to modify the existing https://docs.openshift.com/container-platform/4.12/authentication/identity_providers/configuring-htpasswd-identity-provider.html[Oauth] resource with the provider and its configuration data.
+
+For some of them we just need to set up the integration while for others like LDAP apart from the integration agains the server we also need to synchronize groups and users.
 
 Let's deploy the oauth resources required and verify how groups are synchronized.
 
