@@ -149,7 +149,7 @@
 <p>Once authentication is configured, we are going to deploy some operators. Operatos helm charts use range values so we can define as many operators as we want on values section.</p>
 </div>
 <div class="paragraph">
-<p>We are going to deploy tekton, kiali, jaeger, servicemesh and nmstate operator. Furthermore we are going to deploy Service Mesh Control Plane and Member Roll and an example application called bookinfo.</p>
+<p>We are going to deploy tekton, kiali, jaeger, servicemesh and nmstate operator. Furthermore we are going to deploy Service Mesh Control Plane and Member Roll and an example application called bookinfo for service mesh.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
@@ -191,10 +191,65 @@
 </div>
 </div>
 <div class="paragraph">
-<p>In this case sync waves are very important as for being able to deploy bookinfo app, operator must be installed in the first place but also mesh should be configured.
-If sync waves are not configured properly it will try to create reosurces whose api still doesn&#8217;t exist in the cluster.</p>
+<p>Helm charts includes subcription definition for each operator in the last version available in stable channel, while Install Plan is set to Automatic so we do not need to manually approve installation.
+This is all set in values as parameters so we can use these charts for different installation methods by overriding those values.</p>
+</div>
+<div class="paragraph">
+<p>In this case sync waves and healthchecks are very important as for being able to deploy bookinfo app, operator must be installed in the first place but also mesh should be configured.</p>
+</div>
+<div class="paragraph">
+<p>If sync waves are not configured properly it will try to create reosurces whose api still doesn&#8217;t exist in the cluster.</p>
+</div>
+<div class="paragraph">
+<p>Once operators are installed you can view them as well with the Install Plan managed by argo:</p>
 </div>
 </div>
+</div>
+<h1 id="_add_screenshot" class="sect0"><a class="anchor" href="#_add_screenshot"></a>Add screenshot</h1>
+<div class="paragraph">
+<p>Then you can try to uninstall an operator by disabling it from helm chart, for example tekton operator as we are not planning to use it:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    helm:
+      parameters:
+        - name: global.oauth.enabled
+          value: 'true'
+        - name: oauth.oauth.keycloak.clientid
+          value: myclient-&lt;name&gt;
+        - name: oauth.oauth.keycloak.issuer
+          value: &gt;-
+            <a href="https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;&gt;.opentlc.com/realms/myrealm-&lt;name&gt" class="bare">https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;&gt;.opentlc.com/realms/myrealm-&lt;name&gt</a>;
+        - name: oauth.oauth.keycloak.data
+          value: "your keycloak secret" *
+        - name: oauth.oauth.ldap.sync.ldap_url
+          value: 'ldap://&lt;nodeport:port&gt;'
+        - name: global.nmstate.enabled
+          value: 'false'
+        - name: global.monitoring.enabled
+          value: 'false'
+        - name: global.namespace.enabled
+          value: 'false'
+        - name: global.bookinfo.enabled
+          value: 'true'
+        - name: global.operators.enabled
+          value: 'true'
+        - name: operators.operators.servicemesh.enabled
+          value: 'true'
+        - name: operators.operators.jaeger.enabled
+          value: 'true'
+        - name: operators.operators.kiali.enabled
+          value: 'true'
+        - name: operators.operators.tekton.enabled
+          value: 'false'
+        - name: operators.operators.nmstate.enabled
+          value: 'true'
+        - name: operators.istio.enabled
+          value: 'true'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then argo should reconcile resources according to the new configuration.</p>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="05-day2-oauth.html#oauth">5.1 Configure Identity Providers</a></span>
