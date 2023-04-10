@@ -346,8 +346,8 @@ source:
           -f charts/nmstate/values.yaml
           --set global.oauth.enabled=true
           --set oauth.oauth.keycloak.clientid=myclient-1
-          --set oauth.oauth.keycloak.issuer=https://keycloak-keycloak.apps.argo-hub.sandbox1444.opentlc.com/realms/myrealm-1
-          --set oauth.oauth.ldap.sync.ldap_url='ldap://10.0.210.36:32106'
+          --set oauth.oauth.keycloak.issuer=https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;/realms/myrealm-&lt;name&gt;
+          --set oauth.oauth.ldap.sync.ldap_url='ldap://&lt;node_ip&gt;:&lt;nodeport&gt;'
           --set global.nmstate.enabled=false
           --set global.monitoring.enabled=true
           --set global.namespace.enabled=true
