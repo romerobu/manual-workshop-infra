@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Untitled :: Template Tutorial</title>
+    <link rel="canonical" href="https://github.com/romerobu/manual-workshop-infra/template-tutorial/04-day2-vault.html">
+    <link rel="prev" href="04-day2-nmstate.html#namespace">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://github.com/romerobu/manual-workshop-infra">Template Tutorial</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="template-tutorial" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">1. Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#minikube">Setup Minikube</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-hub-setup.html">2. Deploy Hub setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-hub-setup.html#hub">2.1 Hub setup</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-sno-setup.html">3. Deploy Managed setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-sno-setup.html">3.1. Managed setup</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-sno-setup-helm.html#charts">3.2. Helm charts</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-day2-config.html">4. Day 2</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-oauth.html#oauth">4.1 Configure Identity Providers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-operators.html#operators">4.2 Deploy Operators</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-monitoring.html#monitoring">4.3 Configure Monitoring</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-namespace.html#namespace">4.4 Namespace configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-nmstate.html#namespace">4.5 NMstate configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#namespace">4.6 Vault configuration</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Template Tutorial</a></li>
+    <li><a href="04-day2-config.html">4. Day 2</a></li>
+    <li><a href="#namespace">4.6 Vault configuration</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/romerobu/manual-workshop-infra/edit/master/documentation/modules/ROOT/pages/04-day2-vault.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<div class="sect1">
+<h2 id="_configure_vault_secrets"><a class="anchor" href="#_configure_vault_secrets"></a>Configure vault secrets</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Vault by Hashicorp is a tool that allows to store and encrypt secrets to secure applications and protect sensitive data.
+Vault server stores the sensitive data while a special pluging for argo retrieves this information when creating objects thanks to the use of paths and
+references so we do not leave sensitive information oc code repository.</p>
+</div>
+<div class="paragraph">
+<p>First of all you can see a running instance on vault on argo-hub cluster. This server stores sensitive data for configurin oauth while on your managed cluster you can see
+a secret containing credentials for authenticating with vault, a config map with plugin for using helm with vault and argo, and a special configuration on Argo CD.</p>
+</div>
+<div class="paragraph">
+<p>Those resources are required to implement Argo CD Vault plugin. This plugin allows using placeholders with path to secrets on yaml fields where the secret should be replaced, and the plugin is in
+charge of this substitution.</p>
+</div>
+<div class="paragraph">
+<p>There are several ways of installing it, as sidecars plugin or as config map plugin, but this last one will be <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/#installing-a-config-management-plugin">deprecated</a> in the future.</p>
+</div>
+<div class="paragraph">
+<p>So this installation approach follows the method <a href="https://argocd-vault-plugin.readthedocs.io/en/stable/installation/#initcontainer-and-configuration-via-sidecar">initContainer + sidecar</a>.</p>
+</div>
+<div class="paragraph">
+<p>Config map <strong>cmp-plugin</strong> defines the plugin that will be mounted in the sidecar container:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cmp-plugin # To be defined parameters
+  namespace: openshift-operators
+data:
+  plugin.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: argocd-vault-plugin-helm
+    spec:
+      allowConcurrency: true
+      discover:
+        find:
+          command:
+            - sh
+            - "-c"
+            - "find . -name 'Chart.yaml' &amp;&amp; find . -name 'values.yaml'"
+      init:
+       command:
+          - bash
+          - "-c"
+          - |
+            helm repo add bitnami <a href="https://charts.bitnami.com/bitnami" class="bare">https://charts.bitnami.com/bitnami</a>
+            helm dependency build
+      generate:
+        command:
+          - bash
+          - "-c"
+          - |
+            helm template . $ARGOCD_ENV_HELM_VALUES | # values passed in Application
+            argocd-vault-plugin generate -s openshift-operators:argocd-vault-plugin-credentials - # generate using plugin + credentials
+      lockRepo: false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Secret <strong>argocd-vault-plugin-credentials</strong> defines vault server address, authentication type (approle) and role credentials:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">kind: Secret
+apiVersion: v1
+metadata:
+  name: argocd-vault-plugin-credentials # To be defined parameters
+  namespace: openshift-operators # argocd namespace
+type: Opaque
+stringData:
+  VAULT_ADDR: "http://vault-vault.apps.argo-hub.sandbox1444.opentlc.com"
+  AVP_TYPE: vault
+  AVP_AUTH_TYPE: approle
+  AVP_ROLE_ID: e545c46e-12d8-67e6-a98a-73b0782900e8
+  AVP_SECRET_ID: d8fd9d3d-23f6-8743-0ed0-b52fc81c57a7</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are several authentication method, you can take a look <a href="https://developer.hashicorp.com/vault/docs/concepts/auth">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Then you need to configure using this plugin on argo cd:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  repo:
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1024Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+    env:
+        - name: AVP_AUTH_TYPE # Field from argocd-vault-plugin-credentials secret
+          valueFrom:
+            secretKeyRef:
+              key: AVP_AUTH_TYPE
+              name: argocd-vault-plugin-credentials
+        - name: AVP_TYPE
+          valueFrom:
+            secretKeyRef:
+              key: AVP_TYPE
+              name: argocd-vault-plugin-credentials
+        - name: VAULT_ADDR
+          valueFrom:
+            secretKeyRef:
+              key: VAULT_ADDR
+              name: argocd-vault-plugin-credentials
+        - name: AVP_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              key: AVP_ROLE_ID
+              name: argocd-vault-plugin-credentials
+        - name: AVP_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              key: AVP_SECRET_ID
+              name: argocd-vault-plugin-credentials
+    mountsatoken: true
+    serviceaccount: argocd-repo-server # sa to be used
+    sidecarContainers: # sidecar container running plugin
+      - command:
+          - /var/run/argocd/argocd-cmp-server
+        image: 'quay.io/argoproj/argocd:v2.4.8'
+        name: avp-helm
+        volumeMounts:
+          - mountPath: /var/run/argocd
+            name: var-files
+          - mountPath: /home/argocd/cmp-server/plugins
+            name: plugins
+          - mountPath: /tmp
+            name: tmp-dir
+          - mountPath: /home/argocd/cmp-server/config
+            name: cmp-plugin
+          - mountPath: /usr/local/bin/argocd-vault-plugin
+            name: custom-tools
+            subPath: argocd-vault-plugin
+    volumeMounts:
+      - mountPath: /usr/local/bin/argocd-vault-plugin
+        name: custom-tools
+        subPath: argocd-vault-plugin
+    volumes:
+      - configMap:
+          name: cmp-plugin
+        name: cmp-plugin
+      - emptyDir: {}
+        name: custom-tools
+      - emptyDir: {}
+        name: tmp-dir
+    initContainers: # init container
+      - args:
+          - &gt;-
+            wget -O /custom-tools/argocd-vault-plugin
+            <a href="https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VERSION}/argocd-vault-plugin_${AVP_VERSION}_linux_amd64" class="bare">https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VERSION}/argocd-vault-plugin_${AVP_VERSION}_linux_amd64</a>
+            &amp;&amp; chmod +x /custom-tools/argocd-vault-plugin &amp;&amp; ls -la
+            /custom-tools/
+        command:
+          - sh
+          - '-c'
+        env:
+          - name: AVP_VERSION
+            value: 1.14.0
+        image: 'alpine:3.8'
+        name: download-tools
+        volumeMounts:
+          - mountPath: /custom-tools
+            name: custom-tools
+
+
+  configManagementPlugins: | # register plugin
+    - name: argocd-vault-plugin
+      generate:
+        command: ["argocd-vault-plugin"]
+        args: ["generate", "./"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case, this configuration is already running on your cluster. If you take a look to the configuration applied by ApplicationSet on your single node those resources have been already created.
+So the next is testing this actually works.</p>
+</div>
+<div class="paragraph">
+<p>In <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm charts repository</a> there a branch called <strong>vault-secrets</strong>. If you take a look to charts/oauth/values.yaml you will
+on ldap.bindPassword field there is a placeholder of the path to the secret in vault server:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">&lt;path:kv-v2/data/demo#ldap_bind_password&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So we need to modify existing application day2-sno-&lt;name&gt; to pull from this branch and use plugin:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">project: default
+source:
+  repoURL: 'https://github.com/romerobu/helm-infra-gitops-workshop.git'
+  path: .
+  targetRevision: vault-secrets # branch with placeholder
+  plugin:
+    env:
+      - name: HELM_VALUES
+        value: &gt;-
+          -f charts/namespace/values.yaml
+          -f charts/operators/values.yaml
+          -f charts/oauth/values.yaml
+          -f charts/bookinfo/values.yaml
+          -f charts/monitoring/values.yaml
+          -f charts/nmstate/values.yaml
+          --set global.oauth.enabled=true
+          --set oauth.oauth.keycloak.clientid=myclient-1
+          --set oauth.oauth.keycloak.issuer=https://keycloak-keycloak.apps.argo-hub.sandbox1444.opentlc.com/realms/myrealm-1
+          --set oauth.oauth.ldap.sync.ldap_url='ldap://10.0.210.36:32106'
+          --set global.nmstate.enabled=false
+          --set global.monitoring.enabled=true
+          --set global.namespace.enabled=true
+          --set namespace.networkpolicy.enabled=false
+          --set global.bookinfo.enabled=true
+          --set global.operators.enabled=true
+          --set operators.operators.servicemesh.enabled=true
+          --set operators.operators.jaeger.enabled=true
+          --set operators.operators.kiali.enabled=true
+          --set operators.operators.tekton.enabled=true
+          --set operators.operators.nmstate.enabled=true
+          --set operators.istio.enabled=true
+destination:
+  server: 'https://kubernetes.default.svc'
+syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see this application is slightly different to the last one used. This is because we need to pass values files and parameters so argocd-vault-plugin-helm can used them
+to render helm charts. This might looks slightly different depending on you repository structure. If you do not need to pass any plugin you can simply invoke "plugin: {}".</p>
+</div>
+<div class="paragraph">
+<p>After applying this new application, it will be out of sync for some seconds. Once it is synced, navigate to your Openshift cluster and verify vault has replaced secret data properly.
+You can try to delete it and see how it is created. Finally you can ask your instructor to update this secret on vault server, try a hard refresh on argo and see how it is updated.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="04-day2-nmstate.html#namespace">4.5 NMstate configuration</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
