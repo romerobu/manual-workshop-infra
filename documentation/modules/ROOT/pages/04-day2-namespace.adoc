@@ -53,12 +53,15 @@ Finally we are going to deploy a Network Policy to prevent traffic to the app. Y
 
 Once you update the Application you want be able to create more than 4 pods in namespace app. Try to update replicas deployment to see if quota has been correctly applied by argo.
 
-*add screenshot*
+image::app-replicas.png[]
+image::quota-applied.png[]
 
-Then if you try to navigate to app route you will see you are not allowd:
+Deployment never progess to 5 replicas, and argo stays in Progressing trying to reconcile a not allowd valued of replicas. Finally set it back to 1 replica.
 
-*add screenshot*
+Then if you try to navigate to app route you will see you are not allowed:
+
+image::traffic-not-allowed.png[]
 
 Then disable network policy and verify how you have traffic access:
 
-*add screenshot*
+image::traffic-allowed.png[]
