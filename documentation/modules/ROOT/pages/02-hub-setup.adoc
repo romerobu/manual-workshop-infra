@@ -3,7 +3,13 @@ include::_attributes.adoc[]
 
 == Lab overview
 
-PENDING: Add diagrams and introduction
+image::diagram-1.png[]
+
+image::diagram-2.png[]
+
+image::diagram-3.png[]
+
+image::diagram-4.png[]
 
 == Enviroment
 
