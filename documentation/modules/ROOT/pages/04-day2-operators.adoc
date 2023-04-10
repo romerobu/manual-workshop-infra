@@ -54,7 +54,7 @@ If sync waves are not configured properly it will try to create reosurces whose 
 
 Once operators are installed you can view them as well with the Install Plan managed by argo:
 
-# Add screenshot
+* add screenshot *
 
 Then you can try to uninstall an operator by disabling it from helm chart, for example tekton operator as we are not planning to use it:
 

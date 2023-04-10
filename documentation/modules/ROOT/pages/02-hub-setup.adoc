@@ -59,7 +59,7 @@ spec:
 Then go to openshift-gitops console and take a look to the objects managed by argo. As you can see, using range of values while rendering charts allows to create charts for
 multiple destinations without much complexity.
 
-# ADD SCREENSHOT
+* add screenshot *
 
 For this initial setup it is only required to create argocd instance, app projects, groups and role bindings and secrets for cluster destinations.
 
