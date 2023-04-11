@@ -108,6 +108,15 @@
   </li>
 </ul>
   </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="05-challenges.html">5. Challenges</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="05-challenges.html#challenges">5.1 Challenges</a>
+  </li>
+</ul>
+  </li>
 </ul>
   </li>
 </ul>
@@ -152,7 +161,7 @@
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">    helm:
       parameters:
-        - name: *global.oauth.enabled*
+        - name: global.oauth.enabled
           value: 'true'
         - name: oauth.oauth.keycloak.clientid
           value: myclient-&lt;name&gt;
