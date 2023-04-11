@@ -211,10 +211,11 @@ source:
           -f charts/monitoring/values.yaml 
           -f charts/nmstate/values.yaml 
           --set global.oauth.enabled=true 
-          --set oauth.oauth.keycloak.clientid=myclient-1 
+          --set oauth.oauth.keycloak.clientid=myclient-<name>
           --set oauth.oauth.keycloak.issuer=https://keycloak-keycloak.apps.argo-hub.<domain>/realms/myrealm-<name>
           --set oauth.oauth.ldap.sync.ldap_url='ldap://<node_ip>:<nodeport>' 
-          --set global.nmstate.enabled=false 
+          --set oauth.oauth.keycloak.data="wAadePAC6nUmTxzp80SrE7hdGM6T3up9"
+          --set global.nmstate.enabled=false
           --set global.monitoring.enabled=true
           --set global.namespace.enabled=true 
           --set namespace.networkpolicy.enabled=false 
