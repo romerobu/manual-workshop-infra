@@ -184,29 +184,33 @@ Please have them installed and configured before you get started with any of the
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code>helm</code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://helm.sh/docs/intro/install/#from-homebrew-macos">Download</a></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://helm.sh/docs/intro/install/#from-dnfyum-fedora">Download</a></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://helm.sh/docs/intro/install/#from-scoop-windows">Download</a></p>
-<p class="tableblock">== Get tutorial sources</p>
-<p class="tableblock">:tutorial-url: <a href="https://github.com/redhat-developer-demos/rhd-tutorial-common.git" class="bare">https://github.com/redhat-developer-demos/rhd-tutorial-common.git</a>
-:folder: my_folder
-Before we start setting up the environment, let’s clone the tutorial sources and set the <code>TUTORIAL_HOME</code> environment variable to point to the root directory of the tutorial:</p>
-<p class="tableblock">[.console-input]
-[source,bash,subs="attributes+,macros"]
-----
-git clone {tutorial-url} {folder}
-----</p>
-<p class="tableblock">[.console-input]
-[source,bash,subs="attributes,macros"]
-----
-export TUTORIAL_HOME="$(pwd)/{folder}"
-----</p>
-<p class="tableblock">[.console-input]
-[source,bash,subs="attributes,+macros"]
-----
-cd $TUTORIAL_HOME
-----</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://helm.sh/docs/intro/install/#from-scoop-windows">Download</a></p></td>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_get_tutorial_sources"><a class="anchor" href="#_get_tutorial_sources"></a>Get tutorial sources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before we start setting up the environment, let’s clone the tutorial sources and set the <code>TUTORIAL_HOME</code> environment variable to point to the root directory of the tutorial:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone <a href="https://github.com/redhat-developer-demos/rhd-tutorial-common.git" class="bare">https://github.com/redhat-developer-demos/rhd-tutorial-common.git</a> my_folder</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">export TUTORIAL_HOME="$(pwd)/my_folder"</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd $TUTORIAL_HOME</code></pre>
+</div>
+</div>
 </div>
 </div>
 <nav class="pagination">
