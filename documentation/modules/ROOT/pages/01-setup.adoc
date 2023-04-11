@@ -28,7 +28,7 @@ Please have them installed and configured before you get started with any of the
 | https://argo-cd.readthedocs.io/en/stable/cli_installation/#download-with-curl[Download]
 | https://argo-cd.readthedocs.io/en/stable/cli_installation/#windows[Download]
 
-[#downloadtutorial]
+
 == Get tutorial sources
 
 :tutorial-url: https://github.com/redhat-developer-demos/rhd-tutorial-common.git
