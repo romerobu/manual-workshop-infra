@@ -138,7 +138,7 @@
 We are setting an argo of argo architecture to manage setup on destination clusters, while we are applying day 2 operations locally on managed clusters.</p>
 </div>
 <div class="paragraph">
-<p>This is the general overview of the lab. You will be able to connect to both argo-hub and managed clusters, and day 2 operations will setup based on servers running on argo hub.</p>
+<p>This is the general overview of the lab. You will be able to connect to both argo-hub and managed clusters, and day 2 operations will setup based on gitops instance running on managed cluster.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -177,15 +177,15 @@ This ApplicationSet will generate N Application to apply GitOps and RBAC setup o
 <h2 id="_enviroment"><a class="anchor" href="#_enviroment"></a>Enviroment</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You have access to two clusters, <strong>argo-hub</strong> and your own <strong>single node</strong> (managed). You can login to argo-hub using <strong>user-&lt;name&gt;</strong> and to sno using <strong>admin</strong> user.
+<p>You have access to two clusters, <strong>argo-hub</strong> and your own <strong><a href="https://www.redhat.com/en/blog/meet-single-node-openshift-our-smallest-openshift-footprint-edge-architectures">single node</a></strong> (managed). You can login to argo-hub using <strong>user-&lt;name&gt;</strong> and to sno using <strong>admin</strong> user.
 On top of that, if you login to argo console using your Openshift user, you will only have permissions over your project and destination cluster.</p>
 </div>
 <div class="paragraph">
 <p>The reason why argo hub has permissions over your managed cluster is because this is configured as a destination server, given an authentication method.</p>
 </div>
 <div class="paragraph">
-<p>In argo hub there is a secret on argo namespace for every managed cluster containing this information. There are several ways to implement this, you can generate an
-authentication token for this purpose or you can pass kubeconfig file to five full control over the destination cluster.</p>
+<p>In argo hub there is a secret in argo namespace for every managed cluster containing this information. There are several ways to implement this, you can generate an
+authentication token for this purpose or you can pass kubeconfig file to give full control over the destination cluster.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -199,7 +199,7 @@ authentication token for this purpose or you can pass kubeconfig file to five fu
 <div class="sectionbody">
 <div class="paragraph">
 <p>Argo hub is a common cluster for every user in this workshop that will be used for deploying the basic infrastructure on managed clusters using ApplicationSet.
-In this cluster you can find two argo instance, openshift-gitops (default) and argocd. Default instance is intended to manage the hub itself, and it is in charge of
+In this cluster you can find two argo instances, openshift-gitops (default) and argocd. Default instance is intended to manage the hub itself, and it is in charge of
 deploying the argocd instance and its configuration. While argocd is dedicated for managed clusters setup and configuration.</p>
 </div>
 <div class="paragraph">

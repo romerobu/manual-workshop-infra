@@ -145,8 +145,10 @@ git checkout -b sno-&lt;name&gt;-setup</code></pre>
 <div class="paragraph">
 <p>As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges.</p>
 </div>
-<div class="paragraph">
-<p>Then you will have to replace &lt;name&gt; by your cluster.</p>
+<div class="literalblock">
+<div class="content">
+<pre>Then you will have to replace &lt;name&gt; by your cluster and your repo url to your github account.</pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Make sure after cluster-definition, the following folder (sno-&lt;name&gt;) is named as your assigned cluster as this value will be used as a parameter for ApplicationSet.
@@ -182,7 +184,7 @@ spec:
     server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
   project: project-sno-&lt;name&gt;
   source:
-    repoURL: <a href="https://github.com/romerobu/workshop-gitops-content-deploy.git" class="bare">https://github.com/romerobu/workshop-gitops-content-deploy.git</a>
+    repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
     targetRevision: sno-&lt;name&gt;-setup
     path: cluster-addons/cluster-addons-as/
   syncPolicy:
@@ -235,7 +237,7 @@ metadata:
 spec:
   generators:
   - git:
-      repoURL: <a href="https://github.com/romerobu/workshop-gitops-content-deploy.git" class="bare">https://github.com/romerobu/workshop-gitops-content-deploy.git</a>
+      repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
       revision: main
       files:
       - path: "cluster-definition/**/cluster.json"
@@ -245,7 +247,7 @@ spec:
     spec:
       project: '{{cluster.project}}'
       source:
-        repoURL: <a href="https://github.com/romerobu/workshop-gitops-content-deploy.git" class="bare">https://github.com/romerobu/workshop-gitops-content-deploy.git</a>
+        repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
         targetRevision: sno-&lt;name&gt;-setup
         path: cluster-addons/charts/gitops-setup
       destination:
