@@ -4,7 +4,7 @@ Then checkout and create a new branch for your user.
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
 git branch # main
 git checkout -b sno-<name>-setup
@@ -21,7 +21,7 @@ Then update cluster.json values.
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
 {
   "environment": "dev",
@@ -39,7 +39,7 @@ You must also update managed-setup-a for your own managed cluster. Note how this
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -84,7 +84,7 @@ As we did before, we should update ApplicationSet name with your lab data.
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet

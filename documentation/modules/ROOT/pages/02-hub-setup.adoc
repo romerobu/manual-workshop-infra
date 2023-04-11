@@ -53,7 +53,7 @@ Navigate to global-config/bootstrap-a/hub-setup-a.yaml application and see how t
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
 apiVersion: argoproj.io/v1alpha1
 kind: Application

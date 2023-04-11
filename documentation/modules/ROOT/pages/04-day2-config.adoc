@@ -9,7 +9,7 @@ Fork this https://github.com/romerobu/workshop-gitops-apps-deploy.git[repository
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
 git branch # main
 git checkout -b sno-<name>      

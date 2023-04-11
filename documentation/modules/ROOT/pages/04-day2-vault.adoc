@@ -18,7 +18,7 @@ Config map *cmp-plugin* defines the plugin that will be mounted in the sidecar c
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
 apiVersion: v1
 kind: ConfigMap
@@ -60,7 +60,7 @@ Secret *argocd-vault-plugin-credentials* defines vault server address, authentic
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
 kind: Secret
 apiVersion: v1
@@ -82,7 +82,7 @@ Then you need to configure using this plugin on argo cd:
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
   repo:
     resources:
@@ -184,7 +184,7 @@ on ldap.bindPassword field there is a placeholder of the path to the secret in v
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
 <path:kv-v2/data/demo#ldap_bind_password>
 ----
@@ -193,7 +193,7 @@ So we need to modify existing application day2-sno-<name> to pull from this bran
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
 project: default
 source:

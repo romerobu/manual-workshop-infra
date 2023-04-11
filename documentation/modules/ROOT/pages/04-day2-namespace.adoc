@@ -10,7 +10,7 @@ Finally we are going to deploy a Network Policy to prevent traffic to the app. Y
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
     helm:
       parameters:

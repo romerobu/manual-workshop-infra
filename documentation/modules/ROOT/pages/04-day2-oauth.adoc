@@ -12,7 +12,7 @@ Let's deploy the oauth resources required and verify how groups are synchronized
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
     helm:
       parameters:
@@ -55,7 +55,7 @@ Once every resource is deployed, verify authentication cluster operator is OK, l
 
 [.lines_7]
 [.console-input]
-[source, java,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes"]
 ----
 oc get co
 
