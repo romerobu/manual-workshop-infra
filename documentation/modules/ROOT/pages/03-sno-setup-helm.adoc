@@ -318,7 +318,7 @@ Finally push your changes to your working branch, login to argo hub cluster with
 [source, java,subs="+macros,+attributes"]
 ----
 git add .
-git commit -m ""
+git commit -m "Your message"
 git push origin sno-<name>-setup
 ----
 

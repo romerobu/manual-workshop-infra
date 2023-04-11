@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 In this lab we are covering a GitOps infrastructure configuration approach. 
 We are setting an argo of argo architecture to manage setup on destination clusters, while we are applying day 2 operations locally on managed clusters.
 
-This is the general overview of the lab. You will be able to connect to both argo-hub and managed clusters, and day 2 operations will setup based on servers running on argo hub.
+This is the general overview of the lab. You will be able to connect to both argo-hub and managed clusters, and day 2 operations will setup based on gitops instance running on managed cluster.
 
 image::diagram-1.png[]
 
@@ -26,20 +26,20 @@ image::diagram-4.png[]
 
 == Enviroment
 
-You have access to two clusters, *argo-hub* and your own *single node* (managed). You can login to argo-hub using *user-<name>* and to sno using *admin* user.
+You have access to two clusters, *argo-hub* and your own *https://www.redhat.com/en/blog/meet-single-node-openshift-our-smallest-openshift-footprint-edge-architectures[single node]* (managed). You can login to argo-hub using *user-<name>* and to sno using *admin* user.
 On top of that, if you login to argo console using your Openshift user, you will only have permissions over your project and destination cluster.
 
 The reason why argo hub has permissions over your managed cluster is because this is configured as a destination server, given an authentication method.
 
-In argo hub there is a secret on argo namespace for every managed cluster containing this information. There are several ways to implement this, you can generate an 
-authentication token for this purpose or you can pass kubeconfig file to five full control over the destination cluster.
+In argo hub there is a secret in argo namespace for every managed cluster containing this information. There are several ways to implement this, you can generate an 
+authentication token for this purpose or you can pass kubeconfig file to give full control over the destination cluster.
 
 image::cluster-api-sno.png[]
 
 == Hub setup
 
 Argo hub is a common cluster for every user in this workshop that will be used for deploying the basic infrastructure on managed clusters using ApplicationSet.
-In this cluster you can find two argo instance, openshift-gitops (default) and argocd. Default instance is intended to manage the hub itself, and it is in charge of
+In this cluster you can find two argo instances, openshift-gitops (default) and argocd. Default instance is intended to manage the hub itself, and it is in charge of
 deploying the argocd instance and its configuration. While argocd is dedicated for managed clusters setup and configuration.
 
 As argo hub setup should be done only once before this lab, you can login to openshift-gitops argo console with view permissions to take a look to the objects

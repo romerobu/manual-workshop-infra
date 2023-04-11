@@ -14,7 +14,7 @@ Argo hub setup has been already performed, so you just need to focused on manage
 
 As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges.
 
-Then you will have to replace <name> by your cluster.
+ Then you will have to replace <name> by your cluster and your repo url to your github account.
 
 Make sure after cluster-definition, the following folder (sno-<name>) is named as your assigned cluster as this value will be used as a parameter for ApplicationSet.
 Then update cluster.json values.
@@ -52,7 +52,7 @@ spec:
     server: https://kubernetes.default.svc
   project: project-sno-<name>
   source:
-    repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
+    repoURL: https://github.com/<your_user>/workshop-gitops-content-deploy.git
     targetRevision: sno-<name>-setup
     path: cluster-addons/cluster-addons-as/
   syncPolicy:
@@ -94,7 +94,7 @@ metadata:
 spec:
   generators:
   - git:
-      repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
+      repoURL: https://github.com/<your_user>/workshop-gitops-content-deploy.git
       revision: main
       files:
       - path: "cluster-definition/**/cluster.json"
@@ -104,7 +104,7 @@ spec:
     spec:
       project: '{{cluster.project}}'
       source:
-        repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
+        repoURL: https://github.com/<your_user>/workshop-gitops-content-deploy.git
         targetRevision: sno-<name>-setup
         path: cluster-addons/charts/gitops-setup 
       destination:
