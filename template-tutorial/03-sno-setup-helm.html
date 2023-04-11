@@ -144,7 +144,7 @@ permissions to work in all namespaces within the cluster.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">apiVersion: operators.coreos.com/v1alpha1
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
   name: {{ $key }}
@@ -210,7 +210,7 @@ need a <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/health/
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">kind: ArgoCD
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">kind: ArgoCD
 apiVersion: argoproj.io/v1alpha1
 metadata:
   name: {{ $.Values.argocd.name }}
@@ -493,7 +493,7 @@ Once SSO or local users are configured, additional RBAC roles can be defined, an
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">git add .
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">git add .
 git commit -m "Your message"
 git push origin sno-&lt;name&gt;-setup</code></pre>
 </div>
@@ -567,7 +567,7 @@ to verify yor local permissions.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">apiVersion: argoproj.io/v1alpha1
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   namespace: openshift-operators

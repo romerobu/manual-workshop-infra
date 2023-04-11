@@ -156,7 +156,7 @@ charge of this substitution.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">apiVersion: v1
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cmp-plugin # To be defined parameters
@@ -197,7 +197,7 @@ data:
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">kind: Secret
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">kind: Secret
 apiVersion: v1
 metadata:
   name: argocd-vault-plugin-credentials # To be defined parameters
@@ -219,7 +219,7 @@ stringData:
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  repo:
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">  repo:
     resources:
       limits:
         cpu: 1000m
@@ -321,7 +321,7 @@ on ldap.bindPassword field there is a placeholder of the path to the secret in v
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">&lt;path:kv-v2/data/demo#ldap_bind_password&gt;</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">&lt;path:kv-v2/data/demo#ldap_bind_password&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -329,7 +329,7 @@ on ldap.bindPassword field there is a placeholder of the path to the secret in v
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">project: default
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">project: default
 source:
   repoURL: 'https://github.com/romerobu/helm-infra-gitops-workshop.git'
   path: .

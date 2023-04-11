@@ -135,7 +135,7 @@
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">git branch # main
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">git branch # main
 git checkout -b sno-&lt;name&gt;-setup</code></pre>
 </div>
 </div>
@@ -156,7 +156,7 @@ Then update cluster.json values.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">{
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">{
   "environment": "dev",
   "cloud": "aws",
   "project": "project-sno-&lt;name&gt;",
@@ -173,7 +173,7 @@ Then update cluster.json values.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">apiVersion: argoproj.io/v1alpha1
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: managed-setup-a-&lt;name&gt;
@@ -229,7 +229,7 @@ we are using Git Files generator so cluster definition values are used as parame
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">apiVersion: argoproj.io/v1alpha1
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: setup-sno-&lt;name&gt;
