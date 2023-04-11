@@ -4,22 +4,29 @@ include::_attributes.adoc[]
 [#prerequisite]
 == Prerequisite CLI tools
 
-include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-common/master/prerequisites-kubernetes.adoc[]
+include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-common/master/versions.adoc[]
+
+The following CLI tools are required for running the exercises in this tutorial. 
+Please have them installed and configured before you get started with any of the tutorial chapters.
+
+[cols="4*^,4*.",options="header,+attributes"]
 |===
+|**Tool**|**macOS**|**Fedora**|**windows**
 
-include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-common/master/optional-requisites.adoc[]
-|===
+| `Git`
+| https://git-scm.com/download/mac[Download]
+| https://git-scm.com/download/linux[Download]
+| https://git-scm.com/download/win[Download]
 
-[#minikube]
-== Setup Kubernetes
+| `oc`
+| https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable-4.12/openshift-client-mac-4.12.10.tar.gz[Download]
+| https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable-4.12/openshift-client-linux-4.12.10.tar.gz[Download]
+| https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable-4.12/openshift-client-windows-4.12.10.zip[Download]
 
-:profile: my_profile
-
-include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-common/master/kubernetes-setup.adoc[]
-
-And then you are ready for start using Kubernetes:
-
-image::kubelogo.png[]
+| `argocd`
+| https://argo-cd.readthedocs.io/en/stable/cli_installation/#download-with-curl[Download]
+| https://argo-cd.readthedocs.io/en/stable/cli_installation/#download-with-curl[Download]
+| https://argo-cd.readthedocs.io/en/stable/cli_installation/#windows[Download]
 
 [#downloadtutorial]
 == Get tutorial sources
