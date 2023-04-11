@@ -16,3 +16,6 @@
 ** xref:04-day2-namespace.adoc#namespace[4.4 Namespace configuration]
 ** xref:04-day2-nmstate.adoc#namespace[4.5 NMstate configuration]
 ** xref:04-day2-vault.adoc#namespace[4.6 Vault configuration]
+
+* xref:05-challenges.adoc[5. Challenges]
+** xref:05-challenges.adoc#challenges[5.1 Challenges]
