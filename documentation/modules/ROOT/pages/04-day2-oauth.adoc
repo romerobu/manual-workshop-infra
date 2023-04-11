@@ -10,9 +10,10 @@ Let's deploy the oauth resources required and verify how groups are synchronized
 
 *Reminder*: keycloak and FreeIPA server are running on argo hub cluster.
 
+:source-highlighter: rouge
 [.lines_7]
 [.console-input]
-[source, shell,subs="+macros,+attributes"]
+[source, shell,subs="+macros,+attributes",highlight=2..5]
 ----
     helm:
       parameters:
