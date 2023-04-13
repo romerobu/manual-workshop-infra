@@ -150,41 +150,26 @@
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">    helm:
-      parameters:
-        - name: global.oauth.enabled
-          value: 'true'
-        - name: oauth.oauth.keycloak.clientid
-          value: myclient-&lt;name&gt;
-        - name: oauth.oauth.keycloak.issuer
-          value: &gt;-
-            <a href="https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;&gt;.opentlc.com/realms/myrealm-&lt;name&gt" class="bare">https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;&gt;.opentlc.com/realms/myrealm-&lt;name&gt</a>;
-        - name: oauth.oauth.keycloak.data
-          value: "your keycloak secret" *
-        - name: oauth.oauth.ldap.sync.ldap_url
-          value: 'ldap://&lt;nodeport:port&gt;'
-        - name: global.nmstate.enabled
-          value: 'false'
-        - name: global.monitoring.enabled
-          value: 'false'
-        - name: global.namespace.enabled
-          value: 'false'
-        - name: global.bookinfo.enabled
-          value: 'true'
-        - name: global.operators.enabled
-          value: 'true'
-        - name: operators.operators.servicemesh.enabled
-          value: 'true'
-        - name: operators.operators.jaeger.enabled
-          value: 'true'
-        - name: operators.operators.kiali.enabled
-          value: 'true'
-        - name: operators.operators.tekton.enabled
-          value: 'true'
-        - name: operators.operators.nmstate.enabled
-          value: 'true'
-        - name: operators.istio.enabled
-          value: 'true'</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-&lt;name&gt;-operators
+  namespace: openshift-operators
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
+      valueFiles:
+        - values-operators.yaml
+    path: .
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    targetRevision: sno-&lt;name&gt;
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -204,51 +189,6 @@ This is all set in values as parameters so we can use these charts for different
 <div class="content">
 <img src="_images/operators-install-plan.png" alt="operators install plan">
 </div>
-</div>
-<div class="paragraph">
-<p>Then you can try to uninstall an operator by disabling it from helm chart, for example tekton operator as we are not planning to use it:</p>
-</div>
-<div class="listingblock lines_7 console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">    helm:
-      parameters:
-        - name: global.oauth.enabled
-          value: 'true'
-        - name: oauth.oauth.keycloak.clientid
-          value: myclient-&lt;name&gt;
-        - name: oauth.oauth.keycloak.issuer
-          value: &gt;-
-            <a href="https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;&gt;.opentlc.com/realms/myrealm-&lt;name&gt" class="bare">https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;&gt;.opentlc.com/realms/myrealm-&lt;name&gt</a>;
-        - name: oauth.oauth.keycloak.data
-          value: "your keycloak secret" *
-        - name: oauth.oauth.ldap.sync.ldap_url
-          value: 'ldap://&lt;nodeport:port&gt;'
-        - name: global.nmstate.enabled
-          value: 'false'
-        - name: global.monitoring.enabled
-          value: 'false'
-        - name: global.namespace.enabled
-          value: 'false'
-        - name: global.bookinfo.enabled
-          value: 'true'
-        - name: global.operators.enabled
-          value: 'true'
-        - name: operators.operators.servicemesh.enabled
-          value: 'true'
-        - name: operators.operators.jaeger.enabled
-          value: 'true'
-        - name: operators.operators.kiali.enabled
-          value: 'true'
-        - name: operators.operators.tekton.enabled
-          value: 'false'
-        - name: operators.operators.nmstate.enabled
-          value: 'true'
-        - name: operators.istio.enabled
-          value: 'true'</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then argo should reconcile resources according to the new configuration.</p>
 </div>
 </div>
 </div>
