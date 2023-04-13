@@ -8,41 +8,26 @@ We are going to deploy tekton, kiali, jaeger, servicemesh and nmstate operator. 
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-<name>-operators
+  namespace: openshift-operators
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
     helm:
-      parameters:
-        - name: global.oauth.enabled
-          value: 'true'
-        - name: oauth.oauth.keycloak.clientid
-          value: myclient-<name>
-        - name: oauth.oauth.keycloak.issuer
-          value: >-
-            https://keycloak-keycloak.apps.argo-hub.<domain>>.opentlc.com/realms/myrealm-<name>
-        - name: oauth.oauth.keycloak.data
-          value: "your keycloak secret" *
-        - name: oauth.oauth.ldap.sync.ldap_url
-          value: 'ldap://<nodeport:port>'        
-        - name: global.nmstate.enabled
-          value: 'false'
-        - name: global.monitoring.enabled
-          value: 'false'     
-        - name: global.namespace.enabled
-          value: 'false'                         
-        - name: global.bookinfo.enabled
-          value: 'true'          
-        - name: global.operators.enabled
-          value: 'true'      
-        - name: operators.operators.servicemesh.enabled
-          value: 'true' 
-        - name: operators.operators.jaeger.enabled
-          value: 'true'
-        - name: operators.operators.kiali.enabled
-          value: 'true'
-        - name: operators.operators.tekton.enabled
-          value: 'true'   
-        - name: operators.operators.nmstate.enabled
-          value: 'true' 
-        - name: operators.istio.enabled
-          value: 'true'                                                              
+      valueFiles:
+        - values-operators.yaml
+    path: .
+    repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
+    targetRevision: sno-<name>
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true   
 ---- 
 
 Helm charts includes subcription definition for each operator in the last version available in stable channel, while Install Plan is set to Automatic so we do not need to manually approve installation.
@@ -56,47 +41,3 @@ Once operators are installed you can view them as well with the Install Plan man
 
 image::operators-install-plan.png[]
 
-Then you can try to uninstall an operator by disabling it from helm chart, for example tekton operator as we are not planning to use it:
-
-[.lines_7]
-[.console-input]
-[source, shell,subs="+macros,+attributes"]
-----
-    helm:
-      parameters:
-        - name: global.oauth.enabled
-          value: 'true'
-        - name: oauth.oauth.keycloak.clientid
-          value: myclient-<name>
-        - name: oauth.oauth.keycloak.issuer
-          value: >-
-            https://keycloak-keycloak.apps.argo-hub.<domain>>.opentlc.com/realms/myrealm-<name>
-        - name: oauth.oauth.keycloak.data
-          value: "your keycloak secret" *
-        - name: oauth.oauth.ldap.sync.ldap_url
-          value: 'ldap://<nodeport:port>'        
-        - name: global.nmstate.enabled
-          value: 'false'
-        - name: global.monitoring.enabled
-          value: 'false'     
-        - name: global.namespace.enabled
-          value: 'false'                         
-        - name: global.bookinfo.enabled
-          value: 'true'          
-        - name: global.operators.enabled
-          value: 'true'      
-        - name: operators.operators.servicemesh.enabled
-          value: 'true' 
-        - name: operators.operators.jaeger.enabled
-          value: 'true'
-        - name: operators.operators.kiali.enabled
-          value: 'true'
-        - name: operators.operators.tekton.enabled
-          value: 'false'   
-        - name: operators.operators.nmstate.enabled
-          value: 'true' 
-        - name: operators.istio.enabled
-          value: 'true'                                                              
----- 
-
-Then argo should reconcile resources according to the new configuration.

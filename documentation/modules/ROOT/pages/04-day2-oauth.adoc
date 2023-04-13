@@ -40,7 +40,7 @@ Then create a new Application to apply this operation:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: day-2-sno-<name>
+  name: sno-<name>-oauth
   namespace: openshift-operators
 spec:
   destination:
