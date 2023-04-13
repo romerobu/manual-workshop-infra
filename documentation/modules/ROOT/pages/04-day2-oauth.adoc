@@ -10,33 +10,53 @@ Let's deploy the oauth resources required and verify how groups are synchronized
 
 *Reminder*: keycloak and FreeIPA server are running on argo hub cluster.
 
+First we need to take a look to *oauth* chart values. As you can see you need to define some missing values for each managed cluster. You can do this by setting those on chart values file,
+ setting them as parametes or defining a new values file for your deployment.
+
+Go to your working branch and create a file called *values-oauth.yaml*:
+
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
+oauth:
+  enabled: true # Enable dependency
+  keycloak: # Update chart values
+    clientid: myclient-<name>
+    issuer: https://keycloak-keycloak.apps.argo-hub.<domain>.opentlc.com/realms/myrealm-<name>
+    data: <your_keycloak_secret_data>
+  ldap:
+    sync:
+      ldap_url: 'ldap://<ip>:<nodeport>'
+     
+---- 
+
+Then create a new Application to apply this operation:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: day-2-sno-<name>
+  namespace: openshift-operators
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
     helm:
-      parameters:
-        - name: global.oauth.enabled
-          value: 'true'
-        - name: oauth.oauth.keycloak.clientid
-          value: myclient-<name>
-        - name: oauth.oauth.keycloak.issuer
-          value: >-
-            https://keycloak-keycloak.apps.argo-hub.<domain>.opentlc.com/realms/myrealm-<name>
-        - name: oauth.oauth.keycloak.data
-          value: "your keycloak secret" 
-        - name: oauth.oauth.ldap.sync.ldap_url
-          value: 'ldap://ip:port>'        
-        - name: global.nmstate.enabled
-          value: 'false'
-        - name: global.monitoring.enabled
-          value: 'false'     
-        - name: global.namespace.enabled
-          value: 'false'                         
-        - name: global.bookinfo.enabled
-          value: 'false'     
-        - name: operators.nmstate.enabled
-          value: 'false'      
+      valueFiles:
+        - values-oauth.yaml
+    path: .
+    repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
+    targetRevision: sno-<name>
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true   
 ---- 
 
 *Keycloack secret*: Login to argo-hub console, find keycloack url, login as admin/admin, navigate to your realm, then go to your client and  find your secret on Credentials tab.
