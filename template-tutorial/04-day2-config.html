@@ -147,7 +147,7 @@
 to our single scoped cluster.</p>
 </div>
 <div class="paragraph">
-<p>Fork this <a href="https://github.com/romerobu/workshop-gitops-apps-deploy.git">repository</a> and checkout to your working branch.</p>
+<p>Fork this <a href="https://github.com/romerobu/helm-infra-gitops-workshop.git">repository</a> and checkout to your working branch.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
@@ -156,27 +156,57 @@ git checkout -b sno-&lt;name&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Take a look to the code, this repo renders Applications by applying a source code, importing and overriding values for each chart so you are not expected to modify those charts
-but their values.</p>
+<p>Take a look to the code, this repo contains helm charts for configuring day 2 operations in our managed cluster. It contains several dependencies and its charts with some default values
+that you might override by creating your own values.</p>
 </div>
 <div class="paragraph">
-<p>You can take a look to the charts <a href="https://github.com/romerobu/helm-infra-gitops-workshop.git">here</a>.</p>
-</div>
-<div class="paragraph">
-<p>You must override values.yaml with your cluster data, and then render the application to be deployed on your managed cluster:</p>
+<p>You can test those charts rendering using this command.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>helm template . --output-dir application-sno</pre>
+<pre>helm template . --debug -f values-&lt;chartname&gt;.yaml (optional)</pre>
 </div>
 </div>
 <div class="paragraph">
+<p>You can apply charts, first by creating a single Application that applies charts all-in-one or creating a single Application per chart or kind of configuration to be applied.</p>
+</div>
+<div class="paragraph">
 <p>If you try to deploy this Application on your cluster you will see it syncs, but it does not render objects as every value is disabled.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: day-2-sno-&lt;name&gt;
+  namespace: openshift-operators
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
+      valueFiles:
+        - values.yaml
+    path: .
+    repoURL: 'https://github.com/romerobu/helm-infra-gitops-workshop.git'
+    targetRevision: sno-&lt;name&gt;
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
+</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/day-2-sno-initial-app.png" alt="day 2 sno initial app">
 </div>
+</div>
+<div class="paragraph">
+<p>This is because dependencies include conditions for enabling/disabling those charts. As every value is set to false it does not apply anything.</p>
+</div>
+<div class="paragraph">
+<p>Then delete this Application.</p>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="03-sno-setup-helm.html#charts">3.2. Helm charts</a></span>
