@@ -335,42 +335,20 @@ on ldap.bindPassword field there is a placeholder of the path to the secret in v
 </div>
 </div>
 <div class="paragraph">
-<p>So we need to modify existing application day2-sno-&lt;name&gt; to pull from this branch and use plugin:</p>
+<p>So we need to modify existing applications sno-x-&lt;name&gt; to pull from this branch and use plugin:</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">project: default
 source:
-  repoURL: 'https://github.com/romerobu/helm-infra-gitops-workshop.git'
+  repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
   path: .
   targetRevision: vault-secrets # branch with placeholder
   plugin:
     env:
       - name: HELM_VALUES
         value: &gt;-
-          -f charts/namespace/values.yaml
-          -f charts/operators/values.yaml
-          -f charts/oauth/values.yaml
-          -f charts/bookinfo/values.yaml
-          -f charts/monitoring/values.yaml
-          -f charts/nmstate/values.yaml
-          --set global.oauth.enabled=true
-          --set oauth.oauth.keycloak.clientid=myclient-&lt;name&gt;
-          --set oauth.oauth.keycloak.issuer=https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;/realms/myrealm-&lt;name&gt;
-          --set oauth.oauth.ldap.sync.ldap_url='ldap://&lt;node_ip&gt;:&lt;nodeport&gt;'
-          --set oauth.oauth.keycloak.data="wAadePAC6nUmTxzp80SrE7hdGM6T3up9"
-          --set global.nmstate.enabled=false
-          --set global.monitoring.enabled=true
-          --set global.namespace.enabled=true
-          --set namespace.networkpolicy.enabled=false
-          --set global.bookinfo.enabled=true
-          --set global.operators.enabled=true
-          --set operators.operators.servicemesh.enabled=true
-          --set operators.operators.jaeger.enabled=true
-          --set operators.operators.kiali.enabled=true
-          --set operators.operators.tekton.enabled=true
-          --set operators.operators.nmstate.enabled=true
-          --set operators.istio.enabled=true
+          -f &lt;values-file&gt;.yaml
 destination:
   server: 'https://kubernetes.default.svc'
 syncPolicy:

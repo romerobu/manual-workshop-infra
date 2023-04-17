@@ -154,41 +154,27 @@ In the first place we are going to enable user-defined projects monitoring. Then
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">    helm:
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-&lt;name&gt;-monitoring
+  namespace: openshift-operators
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
       parameters:
-        - name: global.oauth.enabled
-          value: 'true'
-        - name: oauth.oauth.keycloak.clientid
-          value: myclient-&lt;name&gt;
-        - name: oauth.oauth.keycloak.issuer
-          value: &gt;-
-            <a href="https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;.opentlc.com/realms/myrealm-&lt;name&gt" class="bare">https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;.opentlc.com/realms/myrealm-&lt;name&gt</a>;
-        - name: oauth.oauth.keycloak.data
-          value: "your keycloak secret" *
-        - name: oauth.oauth.ldap.sync.ldap_url
-          value: 'ldap://&lt;nodeport:port&gt;'
-        - name: global.nmstate.enabled
-          value: 'false'
-        - name: global.monitoring.enabled
-          value: 'true'
-        - name: global.namespace.enabled
-          value: 'false'
-        - name: global.bookinfo.enabled
-          value: 'true'
-        - name: global.operators.enabled
-          value: 'true'
-        - name: operators.operators.servicemesh.enabled
-          value: 'true'
-        - name: operators.operators.jaeger.enabled
-          value: 'true'
-        - name: operators.operators.kiali.enabled
-          value: 'true'
-        - name: operators.operators.tekton.enabled
-          value: 'true'
-        - name: operators.operators.nmstate.enabled
-          value: 'true'
-        - name: operators.istio.enabled
-          value: 'true'</code></pre>
+        - name: monitoring.enabled:
+          value: true
+    path: .
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    targetRevision: sno-&lt;name&gt;
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
 </div>
 </div>
 <div class="paragraph">
