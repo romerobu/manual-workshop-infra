@@ -189,7 +189,7 @@ on ldap.bindPassword field there is a placeholder of the path to the secret in v
 <path:kv-v2/data/demo#ldap_bind_password>
 ----
 
-So we need to modify existing application day2-sno-<name> to pull from this branch and use plugin:
+So we need to modify existing applications sno-x-<name> to pull from this branch and use plugin:
 
 [.lines_7]
 [.console-input]
@@ -197,36 +197,14 @@ So we need to modify existing application day2-sno-<name> to pull from this bran
 ----
 project: default
 source:
-  repoURL: 'https://github.com/romerobu/helm-infra-gitops-workshop.git'
+  repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
   path: .
   targetRevision: vault-secrets # branch with placeholder
   plugin:
     env:
       - name: HELM_VALUES
         value: >-
-          -f charts/namespace/values.yaml 
-          -f charts/operators/values.yaml 
-          -f charts/oauth/values.yaml 
-          -f charts/bookinfo/values.yaml 
-          -f charts/monitoring/values.yaml 
-          -f charts/nmstate/values.yaml 
-          --set global.oauth.enabled=true 
-          --set oauth.oauth.keycloak.clientid=myclient-<name>
-          --set oauth.oauth.keycloak.issuer=https://keycloak-keycloak.apps.argo-hub.<domain>/realms/myrealm-<name>
-          --set oauth.oauth.ldap.sync.ldap_url='ldap://<node_ip>:<nodeport>' 
-          --set oauth.oauth.keycloak.data="wAadePAC6nUmTxzp80SrE7hdGM6T3up9"
-          --set global.nmstate.enabled=false
-          --set global.monitoring.enabled=true
-          --set global.namespace.enabled=true 
-          --set namespace.networkpolicy.enabled=false 
-          --set global.bookinfo.enabled=true 
-          --set global.operators.enabled=true 
-          --set operators.operators.servicemesh.enabled=true 
-          --set operators.operators.jaeger.enabled=true 
-          --set operators.operators.kiali.enabled=true 
-          --set operators.operators.tekton.enabled=true 
-          --set operators.operators.nmstate.enabled=true 
-          --set operators.istio.enabled=true
+          -f <values-file>.yaml
 destination:
   server: 'https://kubernetes.default.svc'
 syncPolicy:

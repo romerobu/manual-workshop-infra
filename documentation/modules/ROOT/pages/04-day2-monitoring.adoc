@@ -11,41 +11,27 @@ In the first place we are going to enable user-defined projects monitoring. Then
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-<name>-monitoring
+  namespace: openshift-operators
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
     helm:
       parameters:
-        - name: global.oauth.enabled
-          value: 'true'
-        - name: oauth.oauth.keycloak.clientid
-          value: myclient-<name>
-        - name: oauth.oauth.keycloak.issuer
-          value: >-
-            https://keycloak-keycloak.apps.argo-hub.<domain>.opentlc.com/realms/myrealm-<name>
-        - name: oauth.oauth.keycloak.data
-          value: "your keycloak secret" *
-        - name: oauth.oauth.ldap.sync.ldap_url
-          value: 'ldap://<nodeport:port>'        
-        - name: global.nmstate.enabled
-          value: 'false'
-        - name: global.monitoring.enabled
-          value: 'true'     
-        - name: global.namespace.enabled
-          value: 'false'                         
-        - name: global.bookinfo.enabled
-          value: 'true'          
-        - name: global.operators.enabled
-          value: 'true'      
-        - name: operators.operators.servicemesh.enabled
-          value: 'true' 
-        - name: operators.operators.jaeger.enabled
-          value: 'true'
-        - name: operators.operators.kiali.enabled
-          value: 'true'
-        - name: operators.operators.tekton.enabled
-          value: 'true'   
-        - name: operators.operators.nmstate.enabled
-          value: 'true' 
-        - name: operators.istio.enabled
-          value: 'true'                                                              
+        - name: monitoring.enabled: 
+          value: true
+    path: .
+    repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
+    targetRevision: sno-<name>
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true                                                            
 ---- 
 
 This is an easy configuration as sync waves are not a must because objects don't have direct dependencies and they do not affect to existing configurations.
