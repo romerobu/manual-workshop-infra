@@ -4,8 +4,8 @@ Vault by Hashicorp is a tool that allows to store and encrypt secrets to secure 
 Vault server stores the sensitive data while a special pluging for argo retrieves this information when creating objects thanks to the use of paths and 
 references so we do not leave sensitive information oc code repository. 
 
-First of all you can see a running instance on vault on argo-hub cluster. This server stores sensitive data for configurin oauth while on your managed cluster you can see
-a secret containing credentials for authenticating with vault, a config map with plugin for using helm with vault and argo, and a special configuration on Argo CD.
+First of all you can see a running instance of vault on argo-hub cluster. This server stores sensitive data for configuring secrets and config maps, while on your managed cluster you can see
+a secret containing credentials for authenticating with vault, a config map with plugin for using helm with vault and argo, and a special configuration on Argo CD instance.
 
 Those resources are required to implement Argo CD Vault plugin. This plugin allows using placeholders with path to secrets on yaml fields where the secret should be replaced, and the plugin is in 
 charge of this substitution.
@@ -72,8 +72,8 @@ stringData:
   VAULT_ADDR: "http://vault-vault.apps.argo-hub.sandbox1444.opentlc.com"
   AVP_TYPE: vault
   AVP_AUTH_TYPE: approle
-  AVP_ROLE_ID: e545c46e-12d8-67e6-a98a-73b0782900e8
-  AVP_SECRET_ID: d8fd9d3d-23f6-8743-0ed0-b52fc81c57a7
+  AVP_ROLE_ID: <your_role_id>
+  AVP_SECRET_ID: <your_secret_id>
 ----  
 
 There are several authentication method, you can take a look https://developer.hashicorp.com/vault/docs/concepts/auth[here].
@@ -176,41 +176,48 @@ Then you need to configure using this plugin on argo cd:
         args: ["generate", "./"] 
 ----
 
-In this case, this configuration is already running on your cluster. If you take a look to the configuration applied by ApplicationSet on your single node those resources have been already created.
+In this case, this configuration is already running on your cluster. If you take a look to the configuration applied by ApplicationSet on your single node where those resources have been already created as part of bootstrapping.
 So the next is testing this actually works.
 
-In https://github.com/romerobu/helm-infra-gitops-workshop[helm charts repository] there a branch called *vault-secrets*. If you take a look to charts/oauth/values.yaml you will 
-on ldap.bindPassword field there is a placeholder of the path to the secret in vault server:
+In https://github.com/romerobu/helm-infra-gitops-workshop[helm charts repository] in main branch but also in your working branch, you can find a secret using a vault placeholder in *insert path to secret*:
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-<path:kv-v2/data/demo#ldap_bind_password>
+<kv-v2/data/demo#password>
 ----
 
-So we need to modify existing applications sno-x-<name> to pull from this branch and use plugin:
+So we need to modify existing application sno-<name>-vault to use plugin:
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-project: default
-source:
-  repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
-  path: .
-  targetRevision: vault-secrets # branch with placeholder
-  plugin:
-    env:
-      - name: HELM_VALUES
-        value: >-
-          -f <values-file>.yaml
-destination:
-  server: 'https://kubernetes.default.svc'
-syncPolicy:
-  automated:
-    prune: true
-    selfHeal: true
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: openshift-operators
+  name: sno-<name>-vault
+spec:
+  destination:
+    name: ''
+    namespace: dev
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
+    path: .
+    targetRevision: sno-<name>-setup
+    plugin:
+      env:
+        - name: HELM_VALUES
+          value: >-
+            -f <values-file>.yaml
+  project: dev
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false      
 ----
 
 As you can see this application is slightly different to the last one used. This is because we need to pass values files and parameters so argocd-vault-plugin-helm can used them

@@ -527,19 +527,19 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   namespace: openshift-operators
-  name: app01-dev
+  name: sno-<name>-vault
 spec:
   destination:
     name: ''
     namespace: dev
     server: 'https://kubernetes.default.svc'
   source:
-    path: .
-    repoURL: 'https://github.com/acidonper/jump-app-gitops.git'
-    targetRevision: 'feature/jump-app-dev'
     helm:
       valueFiles:
-        - values-quay.yaml
+        - <values for vault app>.yaml
+    path: .
+    repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
+    targetRevision: sno-<name>
   project: dev
   syncPolicy:
     automated:
