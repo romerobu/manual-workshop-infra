@@ -23,8 +23,8 @@ spec:
   source:
     helm:
       parameters:
-        - name: monitoring.enabled: 
-          value: true
+        - name: monitoring.enabled
+          value: 'true'
     path: .
     repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
     targetRevision: sno-<name>
