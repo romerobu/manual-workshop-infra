@@ -14,7 +14,7 @@ Argo hub setup has been already performed, so you just need to focused on manage
 
 As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges.
 
- Then you will have to replace <name> by your cluster and your repo url to your github account.
+Then you will have to replace <name> by your cluster and your repo url to your github account.
 
 Make sure after cluster-definition, the following folder (sno-<name>) is named as your assigned cluster as this value will be used as a parameter for ApplicationSet.
 Then update cluster.json values.
@@ -27,7 +27,7 @@ Then update cluster.json values.
   "environment": "dev",
   "cloud": "aws",
   "project": "project-sno-<name>",
-  "region": "eu-central-<name>",
+  "region": "<region>",
   "cluster": {
     "name": "sno-<name>",
     "address": "https://api.sno-<name>.<domain>.opentlc.com:6443"
@@ -87,22 +87,24 @@ As we did before, we should update ApplicationSet name with your lab data.
 [source, shell,subs="+macros,+attributes"]
 ----
 apiVersion: argoproj.io/v1alpha1
+---
+apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: setup-sno-<name>
+  name: gitops-setup-sno-<name>
   namespace: openshift-operators
 spec:
   generators:
   - git:
-      repoURL: https://github.com/<your_user>/workshop-gitops-content-deploy.git
-      revision: main
+      repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
+      revision: sno-<name>-setup
       files:
       - path: "cluster-definition/**/cluster.json"
   template:
     metadata:
-      name: 'setup-{{cluster.name}}-a'
+      name: 'gitops-setup-{{cluster.name}}-a'
     spec:
-      project: '{{cluster.project}}'
+      project: '{{project}}'
       source:
         repoURL: https://github.com/<your_user>/workshop-gitops-content-deploy.git
         targetRevision: sno-<name>-setup
@@ -112,9 +114,46 @@ spec:
       syncPolicy:
         automated:
           prune: true
-          selfHeal: true        
+          selfHeal: true       
+----    
+
+This first ApplicationSet deploys the operator and an initial non default cluster wide instance for day 2 and infra operations.
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: bootstrap-sno-<name>
+  namespace: openshift-operators
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/romerobu/workshop-gitops-content-deploy.git
+      revision: sno-<name>-setup
+      files:
+      - path: "cluster-definition/**/cluster.json"
+  template:
+    metadata:
+      name: 'bootstrap-{{cluster.name}}-a'
+    spec:
+      project: '{{project}}'
+      source:
+        repoURL: https://github.com/<your_user>/workshop-gitops-content-deploy.git
+        targetRevision: sno-<name>-setup
+        path: cluster-addons/charts/bootstrap-app
+      destination:
+        server: '{{cluster.address}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true       
 ----     
+
+This ApplicationSet deploys and Application on the recently deployed instance on destination cluster to deploy and manage a second instance for applications.
 
 Then navigate under source path to take a look to the Helm charts used for deploying GitOps and setting up the initial config for managed clusters.
 
-*Disclaimer*: ApplicationSet controller is not enabled by default and must be configured on argocd instance.
+*Reminder*: ApplicationSet controller is not enabled by default and must be configured on argocd instance.
