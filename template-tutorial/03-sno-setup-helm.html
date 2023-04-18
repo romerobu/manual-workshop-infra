@@ -752,19 +752,19 @@ to verify yor local permissions.</p>
 kind: Application
 metadata:
   namespace: openshift-operators
-  name: app01-dev
+  name: sno-&lt;name&gt;-vault
 spec:
   destination:
     name: ''
     namespace: dev
     server: 'https://kubernetes.default.svc'
   source:
-    path: .
-    repoURL: 'https://github.com/acidonper/jump-app-gitops.git'
-    targetRevision: 'feature/jump-app-dev'
     helm:
       valueFiles:
-        - values-quay.yaml
+        - &lt;values for vault app&gt;.yaml
+    path: .
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    targetRevision: sno-&lt;name&gt;
   project: dev
   syncPolicy:
     automated:

@@ -151,8 +151,8 @@ Vault server stores the sensitive data while a special pluging for argo retrieve
 references so we do not leave sensitive information oc code repository.</p>
 </div>
 <div class="paragraph">
-<p>First of all you can see a running instance on vault on argo-hub cluster. This server stores sensitive data for configurin oauth while on your managed cluster you can see
-a secret containing credentials for authenticating with vault, a config map with plugin for using helm with vault and argo, and a special configuration on Argo CD.</p>
+<p>First of all you can see a running instance of vault on argo-hub cluster. This server stores sensitive data for configuring secrets and config maps, while on your managed cluster you can see
+a secret containing credentials for authenticating with vault, a config map with plugin for using helm with vault and argo, and a special configuration on Argo CD instance.</p>
 </div>
 <div class="paragraph">
 <p>Those resources are required to implement Argo CD Vault plugin. This plugin allows using placeholders with path to secrets on yaml fields where the secret should be replaced, and the plugin is in
@@ -220,8 +220,8 @@ stringData:
   VAULT_ADDR: "http://vault-vault.apps.argo-hub.sandbox1444.opentlc.com"
   AVP_TYPE: vault
   AVP_AUTH_TYPE: approle
-  AVP_ROLE_ID: e545c46e-12d8-67e6-a98a-73b0782900e8
-  AVP_SECRET_ID: d8fd9d3d-23f6-8743-0ed0-b52fc81c57a7</code></pre>
+  AVP_ROLE_ID: &lt;your_role_id&gt;
+  AVP_SECRET_ID: &lt;your_secret_id&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -325,39 +325,46 @@ stringData:
 </div>
 </div>
 <div class="paragraph">
-<p>In this case, this configuration is already running on your cluster. If you take a look to the configuration applied by ApplicationSet on your single node those resources have been already created.
+<p>In this case, this configuration is already running on your cluster. If you take a look to the configuration applied by ApplicationSet on your single node where those resources have been already created as part of bootstrapping.
 So the next is testing this actually works.</p>
 </div>
 <div class="paragraph">
-<p>In <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm charts repository</a> there a branch called <strong>vault-secrets</strong>. If you take a look to charts/oauth/values.yaml you will
-on ldap.bindPassword field there is a placeholder of the path to the secret in vault server:</p>
+<p>In <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm charts repository</a> in main branch but also in your working branch, you can find a secret using a vault placeholder in <strong>insert path to secret</strong>:</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">&lt;path:kv-v2/data/demo#ldap_bind_password&gt;</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">&lt;kv-v2/data/demo#password&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>So we need to modify existing applications sno-x-&lt;name&gt; to pull from this branch and use plugin:</p>
+<p>So we need to modify existing application sno-&lt;name&gt;-vault to use plugin:</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">project: default
-source:
-  repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
-  path: .
-  targetRevision: vault-secrets # branch with placeholder
-  plugin:
-    env:
-      - name: HELM_VALUES
-        value: &gt;-
-          -f &lt;values-file&gt;.yaml
-destination:
-  server: 'https://kubernetes.default.svc'
-syncPolicy:
-  automated:
-    prune: true
-    selfHeal: true</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: openshift-operators
+  name: sno-&lt;name&gt;-vault
+spec:
+  destination:
+    name: ''
+    namespace: dev
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    path: .
+    targetRevision: sno-&lt;name&gt;-setup
+    plugin:
+      env:
+        - name: HELM_VALUES
+          value: &gt;-
+            -f &lt;values-file&gt;.yaml
+  project: dev
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false</code></pre>
 </div>
 </div>
 <div class="paragraph">
