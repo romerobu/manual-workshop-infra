@@ -24,7 +24,7 @@ spec:
   source:
     helm:
       parameters:
-        - name: namespace.enabled: 
+        - name: namespace.enabled
           value: 'true'
         - name: namespace.networkpolicy.enabled
           value: 'true'  
