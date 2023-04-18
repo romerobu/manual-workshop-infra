@@ -52,7 +52,7 @@ This ApplicationSet render N configurations for N managed clusters to apply day 
 
 If you navigate to the charts folder, you will see you are not creating objects itself but Applications. Let's test it.
 
-Go back to your working branch (sno-<name>-setup) and merge it with *main-day2* branch. You must see this extra ApplicationSet plus a new day2 folder on charts.
+Go back to your working branch (*sno-<name>-setup*) and merge it with *main-day2* branch. You must see this extra ApplicationSet plus a new day2 folder on charts.
 
 Replaced with your cluster configuration data as required.
 
