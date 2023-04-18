@@ -106,6 +106,9 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="04-day2-vault.html#namespace">4.6 Vault configuration</a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-appset.html#appset">4.7 Day 2 with ApplicationSet</a>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
@@ -148,13 +151,40 @@
 <div class="paragraph">
 <p>We are going to deploy tekton, kiali, jaeger, servicemesh and nmstate operator. Furthermore we are going to deploy Service Mesh Control Plane and Member Roll and an example application called bookinfo for service mesh.</p>
 </div>
+<div class="paragraph">
+<p>Go to your working branch and create a file called <strong>values-operators.yaml</strong>:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">operators:
+  enabled: true
+  operators:
+    tekton:
+      enabled: true
+    knative:
+      enabled: true
+    kiali:
+      enabled: true
+    jaeger:
+      enabled: true
+    servicemesh:
+      enabled: true
+    nmstate:
+      enabled: true
+  istio:
+    enabled: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then create Application:</p>
+</div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: sno-&lt;name&gt;-operators
-  namespace: openshift-operators
+  namespace: openshift-gitops
 spec:
   destination:
     server: 'https://kubernetes.default.svc'
@@ -188,6 +218,34 @@ This is all set in values as parameters so we can use these charts for different
 <div class="imageblock">
 <div class="content">
 <img src="_images/operators-install-plan.png" alt="operators install plan">
+</div>
+</div>
+<div class="paragraph">
+<p>Then, deploy bookinfo app using argocd-apps instance. You will realize you only need to deploy apps components as namespace is already managed by argocd-infra instance:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-&lt;name&gt;-bookinfo
+  namespace: openshift-operators
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
+      parameters:
+        - name: bookinfo.enabled
+          value: 'true'
+    path: .
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    targetRevision: sno-&lt;name&gt;
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
 </div>
 </div>
 </div>

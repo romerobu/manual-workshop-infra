@@ -106,6 +106,9 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="04-day2-vault.html#namespace">4.6 Vault configuration</a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-appset.html#appset">4.7 Day 2 with ApplicationSet</a>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
@@ -154,10 +157,8 @@ git checkout -b sno-&lt;name&gt;-setup</code></pre>
 <div class="paragraph">
 <p>As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges.</p>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>Then you will have to replace &lt;name&gt; by your cluster and your repo url to your github account.</pre>
-</div>
+<div class="paragraph">
+<p>Then you will have to replace &lt;name&gt; by your cluster and your repo url to your github account.</p>
 </div>
 <div class="paragraph">
 <p>Make sure after cluster-definition, the following folder (sno-&lt;name&gt;) is named as your assigned cluster as this value will be used as a parameter for ApplicationSet.
@@ -169,7 +170,7 @@ Then update cluster.json values.</p>
   "environment": "dev",
   "cloud": "aws",
   "project": "project-sno-&lt;name&gt;",
-  "region": "eu-central-&lt;name&gt;",
+  "region": "&lt;region&gt;",
   "cluster": {
     "name": "sno-&lt;name&gt;",
     "address": "https://api.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com:6443"
@@ -239,22 +240,24 @@ we are using Git Files generator so cluster definition values are used as parame
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+---
+apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: setup-sno-&lt;name&gt;
+  name: gitops-setup-sno-&lt;name&gt;
   namespace: openshift-operators
 spec:
   generators:
   - git:
-      repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
-      revision: main
+      repoURL: <a href="https://github.com/romerobu/workshop-gitops-content-deploy.git" class="bare">https://github.com/romerobu/workshop-gitops-content-deploy.git</a>
+      revision: sno-&lt;name&gt;-setup
       files:
       - path: "cluster-definition/**/cluster.json"
   template:
     metadata:
-      name: 'setup-{{cluster.name}}-a'
+      name: 'gitops-setup-{{cluster.name}}-a'
     spec:
-      project: '{{cluster.project}}'
+      project: '{{project}}'
       source:
         repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
         targetRevision: sno-&lt;name&gt;-setup
@@ -268,10 +271,47 @@ spec:
 </div>
 </div>
 <div class="paragraph">
+<p>This first ApplicationSet deploys the operator and an initial non default cluster wide instance for day 2 and infra operations.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: bootstrap-sno-&lt;name&gt;
+  namespace: openshift-operators
+spec:
+  generators:
+  - git:
+      repoURL: <a href="https://github.com/romerobu/workshop-gitops-content-deploy.git" class="bare">https://github.com/romerobu/workshop-gitops-content-deploy.git</a>
+      revision: sno-&lt;name&gt;-setup
+      files:
+      - path: "cluster-definition/**/cluster.json"
+  template:
+    metadata:
+      name: 'bootstrap-{{cluster.name}}-a'
+    spec:
+      project: '{{project}}'
+      source:
+        repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
+        targetRevision: sno-&lt;name&gt;-setup
+        path: cluster-addons/charts/bootstrap-app
+      destination:
+        server: '{{cluster.address}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This ApplicationSet deploys and Application on the recently deployed instance on destination cluster to deploy and manage a second instance for applications.</p>
+</div>
+<div class="paragraph">
 <p>Then navigate under source path to take a look to the Helm charts used for deploying GitOps and setting up the initial config for managed clusters.</p>
 </div>
 <div class="paragraph">
-<p><strong>Disclaimer</strong>: ApplicationSet controller is not enabled by default and must be configured on argocd instance.</p>
+<p><strong>Reminder</strong>: ApplicationSet controller is not enabled by default and must be configured on argocd instance.</p>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="02-hub-setup.html">2. Deploy Hub setup</a></span>

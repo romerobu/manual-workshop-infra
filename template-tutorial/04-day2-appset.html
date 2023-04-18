@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Untitled :: Template Tutorial</title>
-    <link rel="canonical" href="https://github.com/romerobu/manual-workshop-infra/template-tutorial/04-day2-monitoring.html">
-    <link rel="prev" href="04-day2-operators.html#operators">
-    <link rel="next" href="04-day2-namespace.html#namespace">
+    <link rel="canonical" href="https://github.com/romerobu/manual-workshop-infra/template-tutorial/04-day2-appset.html">
+    <link rel="prev" href="04-day2-vault.html#namespace">
+    <link rel="next" href="05-challenges.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -95,7 +95,7 @@
     <a class="nav-link" href="04-day2-operators.html#operators">4.2 Deploy Operators</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#monitoring">4.3 Configure Monitoring</a>
+    <a class="nav-link" href="04-day2-monitoring.html#monitoring">4.3 Configure Monitoring</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="04-day2-namespace.html#namespace">4.4 Namespace configuration</a>
@@ -107,7 +107,7 @@
     <a class="nav-link" href="04-day2-vault.html#namespace">4.6 Vault configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-day2-appset.html#appset">4.7 Day 2 with ApplicationSet</a>
+    <a class="nav-link" href="#appset">4.7 Day 2 with ApplicationSet</a>
   </li>
 </ul>
   </li>
@@ -135,65 +135,87 @@
   <ul>
     <li><a href="index.html">Template Tutorial</a></li>
     <li><a href="04-day2-config.html">4. Day 2</a></li>
-    <li><a href="#monitoring">4.3 Configure Monitoring</a></li>
+    <li><a href="#appset">4.7 Day 2 with ApplicationSet</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/romerobu/manual-workshop-infra/edit/master/documentation/modules/ROOT/pages/04-day2-monitoring.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/romerobu/manual-workshop-infra/edit/master/documentation/modules/ROOT/pages/04-day2-appset.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
 <div class="sect1">
-<h2 id="_configure_monitoring"><a class="anchor" href="#_configure_monitoring"></a>Configure monitoring</h2>
+<h2 id="_render_applications_using_applicationset"><a class="anchor" href="#_render_applications_using_applicationset"></a>Render Applications using ApplicationSet</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Now we are going to deploy some basic configuration about monitoring.</p>
+<p>Until now you have applied day 2 operations by creating single Applications by hand. However there is an easier way to render those apps using ApplicationSets.</p>
 </div>
 <div class="paragraph">
-<p>In Openshift 4 monitoring is enabled by default however there are lots of configurations we can modify and configure non default user defined projects monitoring stack.</p>
-</div>
-<div class="paragraph">
-<p>You can take a look to the monitoring documentation <a href="https://docs.openshift.com/container-platform/4.12/monitoring/enabling-monitoring-for-user-defined-projects.html">here</a>.
-In the first place we are going to enable user-defined projects monitoring. Then we will create an example app, with a Service Monitor and a custom Prometheus Rule.</p>
+<p>Checkout to <strong>main-day2</strong> branch to take a look:</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
-kind: Application
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">git branch # main
+git checkout -b main-day2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Navigate to the ApplicationSet folder and take a look to the newly added day2-sno-as file.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
 metadata:
-  name: sno-&lt;name&gt;-monitoring
+  name: day2-sno-&lt;name&gt;
   namespace: openshift-operators
 spec:
-  destination:
-    server: 'https://kubernetes.default.svc'
-  project: default
-  source:
-    helm:
-      parameters:
-        - name: monitoring.enabled
-          value: 'true'
-    path: .
-    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
-    targetRevision: sno-&lt;name&gt;
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true</code></pre>
+  generators:
+  - git:
+      repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
+      revision: sno-&lt;name&gt;-setup
+      files:
+      - path: "cluster-definition/**/cluster.json"
+  template:
+    metadata:
+      name: 'day2-{{cluster.name}}-a'
+    spec:
+      project: '{{project}}'
+      source:
+        repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
+        targetRevision: sno-&lt;name&gt;-setup
+        path: cluster-addons/charts/day2
+      destination:
+        server: '{{cluster.address}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This is an easy configuration as sync waves are not a must because objects don&#8217;t have direct dependencies and they do not affect to existing configurations.</p>
+<p>This ApplicationSet render N configurations for N managed clusters to apply day 2 configurations by creating Application on argocd-infra instance on managed cluster.</p>
 </div>
 <div class="paragraph">
-<p>Then navigate to Openshift console to verify those objects exist on the cluster and if Service Monitor is scraping your metrics properly:</p>
+<p>If you navigate to the charts folder, you will see you are not creating objects itself but Applications. Let&#8217;s test it.</p>
 </div>
 <div class="paragraph">
-<p><strong>Add how to</strong></p>
+<p>Go back to your working branch (sno-&lt;name&gt;-setup) and merge it with <strong>main-day2</strong> branch. You must see this extra ApplicationSet plus a new day2 folder on charts.</p>
+</div>
+<div class="paragraph">
+<p>Replaced with your cluster configuration data as required.</p>
+</div>
+<div class="paragraph">
+<p>Then push to your working branch.</p>
+</div>
+<div class="paragraph">
+<p>Finally, navigate to argo hub instance and see the recently created ApplicationSet, then navigate to argocd-infra instance on managed cluster and see the Applications managed by the Application
+generated by ApplicationSet.</p>
 </div>
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="04-day2-operators.html#operators">4.2 Deploy Operators</a></span>
-  <span class="next"><a href="04-day2-namespace.html#namespace">4.4 Namespace configuration</a></span>
+  <span class="prev"><a href="04-day2-vault.html#namespace">4.6 Vault configuration</a></span>
+  <span class="next"><a href="05-challenges.html">5. Challenges</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

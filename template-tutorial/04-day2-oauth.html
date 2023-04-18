@@ -106,6 +106,9 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="04-day2-vault.html#namespace">4.6 Vault configuration</a>
   </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-appset.html#appset">4.7 Day 2 with ApplicationSet</a>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
@@ -186,7 +189,7 @@
 kind: Application
 metadata:
   name: sno-&lt;name&gt;-oauth
-  namespace: openshift-operators
+  namespace: openshift-gitops
 spec:
   destination:
     server: 'https://kubernetes.default.svc'
@@ -235,8 +238,8 @@ oc get oauth cluster -o yaml</code></pre>
 <p>You can try keycloack server with myuser-&lt;name&gt;/myuser-&lt;name&gt;.</p>
 </div>
 <div class="paragraph">
-<p>You can try login to LDAP server with user paul/"" who is an admin user.
-You can try login to LDAP server with user mark/"" who is an viewer user.</p>
+<p>You can try login to LDAP server with user paul/Passw0rd who is an admin user.
+You can try login to LDAP server with user mark/Passw0rd who is an viewer user.</p>
 </div>
 </div>
 </div>
