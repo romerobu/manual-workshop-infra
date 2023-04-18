@@ -515,7 +515,9 @@ image::cluster-wide.png[]
 
 - Existing Dev and Pro AppProject on argocd-apps instance.
 
-- Login as admin user and verify you can create apps on dev project (argocd-apps).
+- Login as admin and verify you can create apps on dev project (argocd-apps).
+
+*Pending to be replaced by the app used for vault exercise*
 
 [.lines_7]
 [.console-input]

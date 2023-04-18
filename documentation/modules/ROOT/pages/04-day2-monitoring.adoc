@@ -15,7 +15,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: sno-<name>-monitoring
-  namespace: openshift-operators
+  namespace: openshift-gitops
 spec:
   destination:
     server: 'https://kubernetes.default.svc'
