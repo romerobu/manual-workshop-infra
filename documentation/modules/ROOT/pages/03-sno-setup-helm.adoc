@@ -490,7 +490,7 @@ image::managed-setup.png[]
 
 Deep dive on *managed-setup-a-<name>* to check all the resources created. Next go back to the initial view and see how the Applications rendered by ApplicationSet are created.
 
-image::managed-setup-a-<name>.png[]
+image::managed-setup-a-name.png[]
 
 Then navigate to argo hub console using your user with view role, navigate to ArgoCD instance (Installed Operators -> Openshift GitOps -> ArgoCD), take a look to global rbac policies and then navigate to your AppProject
 to verify yor local permissions.
