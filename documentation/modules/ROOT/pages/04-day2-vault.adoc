@@ -1,4 +1,4 @@
-== Configure vault secrets
+== Configure vault secrets - Pending to define app for testing
 
 Vault by Hashicorp is a tool that allows to store and encrypt secrets to secure applications and protect sensitive data.
 Vault server stores the sensitive data while a special pluging for argo retrieves this information when creating objects thanks to the use of paths and 
