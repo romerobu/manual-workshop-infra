@@ -36,7 +36,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: day-2-sno-<name>
-  namespace: openshift-operators
+  namespace: openshift-gitops
 spec:
   destination:
     server: 'https://kubernetes.default.svc'
@@ -46,7 +46,7 @@ spec:
       valueFiles:
         - values.yaml
     path: .
-    repoURL: 'https://github.com/romerobu/helm-infra-gitops-workshop.git'
+    repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
     targetRevision: sno-<name>
   syncPolicy:
     automated:

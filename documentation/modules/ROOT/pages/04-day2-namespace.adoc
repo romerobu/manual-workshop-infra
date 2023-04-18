@@ -16,7 +16,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: sno-<name>-namespace
-  namespace: openshift-operators
+  namespace: openshift-gitops
 spec:
   destination:
     server: 'https://kubernetes.default.svc'
@@ -28,6 +28,35 @@ spec:
           value: 'true'
         - name: namespace.networkpolicy.enabled
           value: 'true'  
+    path: .
+    repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
+    targetRevision: sno-<name>
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true                                                       
+---- 
+
+Then deploy an example app on argocd-apps instance:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-<name>-app
+  namespace: openshift-operators
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
+      parameters:
+        - name: app.enabled
+          value: 'true' 
     path: .
     repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
     targetRevision: sno-<name>

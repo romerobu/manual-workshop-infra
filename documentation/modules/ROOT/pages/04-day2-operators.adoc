@@ -4,6 +4,33 @@ Once authentication is configured, we are going to deploy some operators. Operat
 
 We are going to deploy tekton, kiali, jaeger, servicemesh and nmstate operator. Furthermore we are going to deploy Service Mesh Control Plane and Member Roll and an example application called bookinfo for service mesh.
 
+Go to your working branch and create a file called *values-operators.yaml*:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+operators:
+  enabled: true
+  operators:
+    tekton:
+      enabled: true
+    knative:
+      enabled: true
+    kiali:
+      enabled: true
+    jaeger:
+      enabled: true
+    servicemesh:
+      enabled: true 
+    nmstate:
+      enabled: true  
+  istio:
+    enabled: true      
+---- 
+
+Then create Application:
+
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
@@ -12,7 +39,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: sno-<name>-operators
-  namespace: openshift-operators
+  namespace: openshift-gitops
 spec:
   destination:
     server: 'https://kubernetes.default.svc'
@@ -41,3 +68,31 @@ Once operators are installed you can view them as well with the Install Plan man
 
 image::operators-install-plan.png[]
 
+Then, deploy bookinfo app using argocd-apps instance. You will realize you only need to deploy apps components as namespace is already managed by argocd-infra instance:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-<name>-bookinfo
+  namespace: openshift-operators
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
+      parameters:
+        - name: bookinfo.enabled
+          value: 'true'
+    path: .
+    repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
+    targetRevision: sno-<name>
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true   
+---- 

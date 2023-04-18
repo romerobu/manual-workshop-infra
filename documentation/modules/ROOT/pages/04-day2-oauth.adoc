@@ -41,7 +41,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: sno-<name>-oauth
-  namespace: openshift-operators
+  namespace: openshift-gitops
 spec:
   destination:
     server: 'https://kubernetes.default.svc'
@@ -84,5 +84,5 @@ oc get oauth cluster -o yaml
 
 You can try keycloack server with myuser-<name>/myuser-<name>.
 
-You can try login to LDAP server with user paul/"" who is an admin user.
-You can try login to LDAP server with user mark/"" who is an viewer user.
+You can try login to LDAP server with user paul/Passw0rd who is an admin user.
+You can try login to LDAP server with user mark/Passw0rd who is an viewer user.
