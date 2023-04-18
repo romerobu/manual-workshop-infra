@@ -87,8 +87,6 @@ As we did before, we should update ApplicationSet name with your lab data.
 [source, shell,subs="+macros,+attributes"]
 ----
 apiVersion: argoproj.io/v1alpha1
----
-apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: gitops-setup-sno-<name>
