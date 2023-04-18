@@ -1,14 +1,3 @@
 == Challenges
 
 
-=== Upgrade Clusters
-
-
-=== Update Operators
-
-
-=== Enable Argo HA
-
-
-=== Work with ApplicationSet
-
