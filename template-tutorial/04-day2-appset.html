@@ -183,7 +183,7 @@ spec:
       source:
         repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
         targetRevision: sno-&lt;name&gt;-setup
-        path: cluster-addons/charts/day2
+        path: cluster-addons/charts/day2-as
       destination:
         server: '{{cluster.address}}'
       syncPolicy:
@@ -199,7 +199,46 @@ spec:
 <p>If you navigate to the charts folder, you will see you are not creating objects itself but Applications. Let&#8217;s test it.</p>
 </div>
 <div class="paragraph">
-<p>Go back to your working branch (<strong>sno-&lt;name&gt;-setup</strong>) and merge it with <strong>main-day2</strong> branch. You must see this extra ApplicationSet plus a new day2 folder on charts.</p>
+<p>Go back to your working branch (<strong>sno-&lt;name&gt;-setup</strong>) and merge it with <strong>main-day2</strong> branch. You must see this extra ApplicationSet plus a new day2-as folder on charts.</p>
+</div>
+<div class="paragraph">
+<p>If you take a look to this ApplicationSet which will be created in argocd-infra on destination cluster, you will see this generator iterates over config-definition folder on
+root directory and uses ever child folder name (day 2 operators) to name the Application template and it takes the values file from the config.json file.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: day2-as-sno-&lt;name&gt;
+  namespace: openshift-gitops
+spec:
+  generators:
+  - git:
+      repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
+      revision: sno-&lt;name&gt;-setup
+      files:
+      - path: "config-definition/**/config.json"
+  template:
+    metadata:
+      name: 'sno-&lt;name&gt;-{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: <a href="https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git" class="bare">https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git</a>
+        targetRevision: sno-&lt;name&gt;
+        path: .
+        helm:
+          valueFiles:
+            - '{{valuesFile}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: openshift-gitops
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Replaced with your cluster configuration data as required.</p>
