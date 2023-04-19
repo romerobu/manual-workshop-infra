@@ -1,4 +1,4 @@
-= Environment setup - PENDING
+= Environment setup
 include::_attributes.adoc[]
 
 [#prerequisite]
