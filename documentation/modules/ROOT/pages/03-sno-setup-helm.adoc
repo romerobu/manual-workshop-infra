@@ -471,7 +471,7 @@ Then on AppProject we can define restrictions like source repo, destination serv
 Last but not least are *namespaces*. Namespaces are created as part of the bootstrap process by the argo infra instance so the operator in charge of managing apps lifecycle does not 
 need to have cluster wide privileges. (Add link to some article about namespaces management)
 
-Finally push your changes to your working branch, login to argo hub cluster with user-<name> and deploy the bootstrap Application.
+Finally push your changes to your working branch, login to argocd instance (argo hub cluster) with user-<name> and deploy the bootstrap Application.
 
 [.lines_7]
 [.console-input]
@@ -483,6 +483,30 @@ git push origin sno-<name>-setup
 ----
 
 To create bootstrap application, navigate to Argo console, click on **New app**, then **Edit as Yaml**, **save** and finally **Create**.
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: managed-setup-a-<name>
+  namespace: openshift-operators
+spec:
+  destination:
+    namespace: openshift-operators
+    server: https://kubernetes.default.svc
+  project: project-sno-<name>
+  source:
+    repoURL: https://github.com/<your_user>/workshop-gitops-content-deploy.git
+    targetRevision: sno-<name>-setup
+    path: cluster-addons/cluster-addons-as/
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+----
 
 At this point you should see some applications on syncing on your argo console. You cannot see your colleagues deployments thanks to RBAC.
 
