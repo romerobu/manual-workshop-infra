@@ -188,7 +188,7 @@ In https://github.com/romerobu/helm-infra-gitops-workshop[helm charts repository
 <kv-v2/data/demo#password>
 ----
 
-If you take a look to the existing secret in vault-secrets namespace, as we are telling Application to use vault plugin, it is not replacing the sesitive information:
+If you take a look to the existing secret in vault-secrets namespace, as we are telling Application to use vault plugin, it is not replacing the sensitive information:
 
 image::secret-vault.png[]
 
