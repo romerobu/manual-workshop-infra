@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 == Lab overview
 
 In this lab we are covering a GitOps infrastructure configuration approach. 
-We are setting an argo of argo architecture to manage setup on destination clusters, while we are applying day 2 operations locally on managed clusters.
+We will set an argo of argos and app of apps architecture to manage setup on destination clusters, and will apply day 2 operations on managed clusters.
 
 This is the general overview of the lab. You will be able to connect to both argo-hub and managed clusters, and day 2 operations will setup based on gitops instance running on managed cluster.
 
@@ -15,14 +15,15 @@ which is deploying and managing a second argocd instance and its configuration.
  
 image::diagram-2.png[]
 
-Then as an user lab, you will access to the second argocd instance where you will have privileges enough thanks to RBAC to deploy an ApplicationSet to apply configuration on your managed cluster.
-This ApplicationSet will generate N Application to apply GitOps and RBAC setup on destination clusters.
+Then as an user lab, you will access to the second argo instance where you will have privileges enough thanks to RBAC configuration to deploy an Application for applying ApplicationSets to apply configuration on your managed cluster.
+Gitops-setup ApplicationSet will install the operator and the argocd-infra instance, while the second one will generate N Applications on managed clusters for bootrstrapping the argocd-apps instance and setup its configuration.
 
 image::diagram-3.png[]
+image::diagram-4.png[]
 
 Once GitOps is deployed on your managed cluster you can start configuring day 2 operations locally in your new provisioned argo instace.
 
-image::diagram-4.png[]
+image::diagram-5.png[]
 
 == Enviroment
 
