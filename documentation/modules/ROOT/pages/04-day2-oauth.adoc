@@ -85,4 +85,5 @@ oc get oauth cluster -o yaml
 You can try keycloack server with myuser-<name>/myuser-<name>.
 
 You can try login to LDAP server with user paul/Passw0rd who is an admin user.
+
 You can try login to LDAP server with user mark/Passw0rd who is an viewer user.
