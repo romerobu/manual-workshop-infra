@@ -50,12 +50,17 @@ spec:
 
 This ApplicationSet render N configurations for N managed clusters to apply day 2 configurations by creating Application on argocd-infra instance on managed cluster.
 
+image::diagram-6.png[]
+image::diagram-7.png[]
+
 If you navigate to the charts folder, you will see you are not creating objects itself but Applications. Let's test it.
 
 Go back to your working branch (*sno-<name>-setup*) and merge it with *main-day2* branch. You must see this extra ApplicationSet plus a new day2-as folder on charts.
 
 If you take a look to this ApplicationSet which will be created in argocd-infra on destination cluster, you will see this generator iterates over config-definition folder on
 root directory and uses ever child folder name (day 2 operators) to name the Application template and it takes the values file from the config.json file.
+
+image::diagram-8.png[]
 
 [.lines_7]
 [.console-input]
