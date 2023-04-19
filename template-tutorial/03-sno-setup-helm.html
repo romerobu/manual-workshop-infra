@@ -740,9 +740,6 @@ to verify yor local permissions.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p><strong>Pending to be replaced by the app used for vault exercise</strong></p>
-</div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
@@ -752,13 +749,13 @@ metadata:
   name: sno-&lt;name&gt;-vault
 spec:
   destination:
-    name: ''
-    namespace: dev
+    namespace: vault-secrets
     server: 'https://kubernetes.default.svc'
   source:
     helm:
-      valueFiles:
-        - &lt;values for vault app&gt;.yaml
+      parameters:
+        - name: vault.enabled
+          value: 'true'
     path: .
     repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
     targetRevision: sno-&lt;name&gt;
