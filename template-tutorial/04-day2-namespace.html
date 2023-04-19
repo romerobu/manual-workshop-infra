@@ -154,6 +154,9 @@
 <div class="paragraph">
 <p>Finally we are going to deploy a Network Policy to prevent traffic to the app. You can try enabling/disabling this feature to see how traffic is allowed and denied.</p>
 </div>
+<div class="paragraph">
+<p>Go to your working branch and create a file called <strong>values-namespace.yaml</strong>:</p>
+</div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">namespace:
@@ -161,6 +164,9 @@
   networkpolicy:
     enabled: true</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Then create the Application on argocd-infra instance:</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
@@ -228,7 +234,7 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>Deployment never progess to 5 replicas, and argo stays in Progressing trying to reconcile a not allowd valued of replicas. Finally set it back to 1 replica.</p>
+<p>Deployment never progess to 5 replicas, and argo stays in Progressing trying to reconcile a not allowed values of replicas. Finally set it back to 1 replica.</p>
 </div>
 <div class="paragraph">
 <p>Then if you try to navigate to app route you will see you are not allowed:</p>

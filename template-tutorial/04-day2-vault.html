@@ -322,15 +322,16 @@ stringData:
 </div>
 </div>
 <div class="paragraph">
-<p>In this case, this configuration is already running on your cluster. If you take a look to the configuration applied by ApplicationSet on your single node where those resources have been already created as part of bootstrapping.
+<p>In this case, this configuration is already running on your cluster. If you take a look to the configuration applied by the Application on your single node where those resources have been already created as part of bootstrapping.
 So the next step is testing this actually works.</p>
 </div>
 <div class="paragraph">
-<p>In <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm charts repository</a>, in vault chart in main branch but also in your working branch, you can find a secret using a vault placeholder in <strong>insert path to secret</strong>:</p>
+<p>In <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm charts repository</a>, in vault chart, you can find a secret using a vault placeholder in charts/vault/values.yaml:</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">&lt;kv-v2/data/demo#password&gt;</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">  placeholder: "&lt;password | base64encode&gt;"
+  path: "kv-v2/data/demo"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -342,19 +343,11 @@ So the next step is testing this actually works.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>So we need to modify existing application sno-&lt;name&gt;-vault (argocd-apps) to use plugin:</p>
+<p>So we need to modify existing application sno-&lt;name&gt;-vault (argocd-apps) to use plugin. Replace only the plugin section:</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  namespace: openshift-operators
-  name: sno-&lt;name&gt;-vault
-spec:
-  destination:
-    namespace: vault-secrets
-    server: 'https://kubernetes.default.svc'
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">...
   source:
     repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
     path: .
@@ -364,11 +357,7 @@ spec:
         - name: HELM_VALUES
           value: &gt;-
             --set vault.enabled=true
-  project: dev
-  syncPolicy:
-    automated:
-      prune: false
-      selfHeal: false</code></pre>
+...</code></pre>
 </div>
 </div>
 <div class="paragraph">
