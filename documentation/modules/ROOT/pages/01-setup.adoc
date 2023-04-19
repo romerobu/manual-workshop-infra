@@ -51,7 +51,7 @@ git branch # main
 git checkout -b sno-<name>-setup
 ----
 
-Fork this https://github.com/romerobu/helm-infra-gitops-workshop.git[repository] and checkout to your working branch.
+Fork this https://github.com/romerobu/helm-infra-gitops-workshop.git[repository]. Then checkout and create a new branch for your user. 
 
 [.lines_7]
 [.console-input]
