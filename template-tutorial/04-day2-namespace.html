@@ -159,6 +159,14 @@
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">namespace:
+  enabled: true # Enable dependency
+  networkpolicy:
+    enabled: true</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -170,11 +178,8 @@ spec:
   project: default
   source:
     helm:
-      parameters:
-        - name: namespace.enabled
-          value: 'true'
-        - name: namespace.networkpolicy.enabled
-          value: 'true'
+      valueFiles:
+        - values-namespace.yaml
     path: .
     repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
     targetRevision: sno-&lt;name&gt;

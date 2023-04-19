@@ -155,6 +155,15 @@
 <p>You can take a look to the monitoring documentation <a href="https://docs.openshift.com/container-platform/4.12/monitoring/enabling-monitoring-for-user-defined-projects.html">here</a>.
 In the first place we are going to enable user-defined projects monitoring. Then we will create an example app, with a Service Monitor and a custom Prometheus Rule.</p>
 </div>
+<div class="paragraph">
+<p>Go to your working branch and create a file called <strong>values-monitoring.yaml</strong>:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">monitoring:
+  enabled: true # Enable dependency</code></pre>
+</div>
+</div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
@@ -168,9 +177,8 @@ spec:
   project: default
   source:
     helm:
-      parameters:
-        - name: monitoring.enabled
-          value: 'true'
+      valueFiles:
+        - values-monitoring.yaml
     path: .
     repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
     targetRevision: sno-&lt;name&gt;
