@@ -1,6 +1,5 @@
 * xref:01-setup.adoc[1. Setup]
 ** xref:01-setup.adoc#prerequisite[Prerequisites]
-** xref:01-setup.adoc#minikube[Setup Minikube]
 
 * xref:02-hub-setup.adoc[2. Deploy Hub setup]
 ** xref:02-hub-setup.adoc#hub[2.1 Hub setup]
@@ -15,7 +14,7 @@
 ** xref:04-day2-monitoring.adoc#monitoring[4.3 Configure Monitoring]
 ** xref:04-day2-namespace.adoc#namespace[4.4 Namespace configuration]
 ** xref:04-day2-nmstate.adoc#namespace[4.5 NMstate configuration]
-** xref:04-day2-vault.adoc#namespace[4.6 Vault configuration]
+** xref:04-day2-vault.adoc#vault[4.6 Vault configuration]
 ** xref:04-day2-appset.adoc#appset[4.7 Day 2 with ApplicationSet]
 
 * xref:05-challenges.adoc[5. Challenges]
