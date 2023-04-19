@@ -192,6 +192,16 @@ spec:
 <div class="paragraph">
 <p>This ApplicationSet render N configurations for N managed clusters to apply day 2 configurations by creating Application on argocd-infra instance on managed cluster.</p>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/diagram-6.png" alt="diagram 6">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/diagram-7.png" alt="diagram 7">
+</div>
+</div>
 <div class="paragraph">
 <p>If you navigate to the charts folder, you will see you are not creating objects itself but Applications. Let&#8217;s test it.</p>
 </div>
@@ -201,6 +211,11 @@ spec:
 <div class="paragraph">
 <p>If you take a look to this ApplicationSet which will be created in argocd-infra on destination cluster, you will see this generator iterates over config-definition folder on
 root directory and uses ever child folder name (day 2 operators) to name the Application template and it takes the values file from the config.json file.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/diagram-8.png" alt="diagram 8">
+</div>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
