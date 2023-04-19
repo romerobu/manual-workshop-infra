@@ -65,7 +65,7 @@ The source path of this Application points to the https://argo-cd.readthedocs.io
 ApplicationSet is a CR that can be uset to genereate Applications to multiple cluster from multiple originis. ApplicationSet controller is installed alongside Argo CD 
 even though it must be explicitaly enabled. 
 
-ApplicationSet is a helpful approach for multi cluster management, and it "supplements Argo CD by adding aadditional features in support of cluster-administrator-focused scanerios". Some of those are:
+ApplicationSet is a helpful approach for multi cluster management, and it "supplements Argo CD by adding additional features in support of cluster-administrator-focused scanerios". Some of those are:
 
 - Ability to use a single Kubernetes manifest to target multiple Kubernetes clusters with Argo CD.
 
@@ -150,7 +150,25 @@ spec:
           selfHeal: true       
 ----     
 
-This ApplicationSet deploys and Application on the recently deployed instance on destination cluster to deploy and manage a second instance for applications.
+Then update bootstrap-app values.yaml file with your cluster data too:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+clusters:
+  sno-<name>:
+    applicationNamespace: openshift-gitops
+    namespace: ''
+    destination: 'https://kubernetes.default.svc'
+    project: default
+    code:
+      repo: https://github.com/<your_user>/workshop-gitops-content-deploy.git
+      path: cluster-addons/charts/bootstrap
+      target: sno-<name>-setup
+----
+
+This ApplicationSet deploys an Application on the recently deployed instance on destination cluster to deploy and manage a second instance for applications.
 
 Then navigate under source path to take a look to the Helm charts used for deploying GitOps and setting up the initial config for managed clusters.
 
