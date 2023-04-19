@@ -661,7 +661,7 @@ Once SSO or local users are configured, additional RBAC roles can be defined, an
 need to have cluster wide privileges. (Add link to some article about namespaces management)</p>
 </div>
 <div class="paragraph">
-<p>Finally push your changes to your working branch, login to argo hub cluster with user-&lt;name&gt; and deploy the bootstrap Application.</p>
+<p>Finally push your changes to your working branch, login to argocd instance (argo hub cluster) with user-&lt;name&gt; and deploy the bootstrap Application.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
@@ -672,6 +672,28 @@ git push origin sno-&lt;name&gt;-setup</code></pre>
 </div>
 <div class="paragraph">
 <p>To create bootstrap application, navigate to Argo console, click on <strong>New app</strong>, then <strong>Edit as Yaml</strong>, <strong>save</strong> and finally <strong>Create</strong>.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: managed-setup-a-&lt;name&gt;
+  namespace: openshift-operators
+spec:
+  destination:
+    namespace: openshift-operators
+    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
+  project: project-sno-&lt;name&gt;
+  source:
+    repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
+    targetRevision: sno-&lt;name&gt;-setup
+    path: cluster-addons/cluster-addons-as/
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>At this point you should see some applications on syncing on your argo console. You cannot see your colleagues deployments thanks to RBAC.</p>
