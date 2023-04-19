@@ -1,8 +1,8 @@
 == Configure vault secrets - Pending to define app for testing
 
 Vault by Hashicorp is a tool that allows to store and encrypt secrets to secure applications and protect sensitive data.
-Vault server stores the sensitive data while a special pluging for argo retrieves this information when creating objects thanks to the use of paths and 
-references so we do not leave sensitive information oc code repository. 
+Vault server stores the sensitive data while a special plugin for argo retrieves this information when creating objects thanks to the use of paths and 
+references so we do not leave sensitive information visible in the code repository. 
 
 First of all you can see a running instance of vault on argo-hub cluster. This server stores sensitive data for configuring secrets and config maps, while on your managed cluster you can see
 a secret containing credentials for authenticating with vault, a config map with plugin for using helm with vault and argo, and a special configuration on Argo CD instance.
@@ -177,9 +177,9 @@ Then you need to configure using this plugin on argo cd:
 ----
 
 In this case, this configuration is already running on your cluster. If you take a look to the configuration applied by ApplicationSet on your single node where those resources have been already created as part of bootstrapping.
-So the next is testing this actually works.
+So the next step is testing this actually works.
 
-In https://github.com/romerobu/helm-infra-gitops-workshop[helm charts repository] in main branch but also in your working branch, you can find a secret using a vault placeholder in *insert path to secret*:
+In https://github.com/romerobu/helm-infra-gitops-workshop[helm charts repository], in vault chart in main branch but also in your working branch, you can find a secret using a vault placeholder in *insert path to secret*:
 
 [.lines_7]
 [.console-input]
@@ -188,7 +188,11 @@ In https://github.com/romerobu/helm-infra-gitops-workshop[helm charts repository
 <kv-v2/data/demo#password>
 ----
 
-So we need to modify existing application sno-<name>-vault to use plugin:
+If you take a look to the existing secret in vault-secrets namespace, as we are telling Application to use vault plugin, it is not replacing the sesitive information:
+
+image::secret-vault.png[]
+
+So we need to modify existing application sno-<name>-vault (argocd-apps) to use plugin:
 
 [.lines_7]
 [.console-input]
@@ -201,18 +205,17 @@ metadata:
   name: sno-<name>-vault
 spec:
   destination:
-    name: ''
-    namespace: dev
+    namespace: vault-secrets
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
     path: .
-    targetRevision: sno-<name>-setup
+    targetRevision: sno-<name>
     plugin:
       env:
         - name: HELM_VALUES
           value: >-
-            -f <values-file>.yaml
+            --set vault.enabled=true
   project: dev
   syncPolicy:
     automated:
@@ -220,7 +223,7 @@ spec:
       selfHeal: false      
 ----
 
-As you can see this application is slightly different to the last one used. This is because we need to pass values files and parameters so argocd-vault-plugin-helm can used them
+As you can see this application is slightly different to the last one used. This is due to we need to pass values files and parameters so argocd-vault-plugin-helm can used them
 to render helm charts. This might looks slightly different depending on you repository structure. If you do not need to pass any plugin you can simply invoke "plugin: {}".
 
 After applying this new application, it will be out of sync for some seconds. Once it is synced, navigate to your Openshift cluster and verify vault has replaced secret data properly.

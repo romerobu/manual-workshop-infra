@@ -517,8 +517,6 @@ image::cluster-wide.png[]
 
 - Login as admin and verify you can create apps on dev project (argocd-apps).
 
-*Pending to be replaced by the app used for vault exercise*
-
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
@@ -530,13 +528,13 @@ metadata:
   name: sno-<name>-vault
 spec:
   destination:
-    name: ''
-    namespace: dev
+    namespace: vault-secrets
     server: 'https://kubernetes.default.svc'
   source:
     helm:
-      valueFiles:
-        - <values for vault app>.yaml
+      parameters:
+        - name: vault.enabled
+          value: 'true'
     path: .
     repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
     targetRevision: sno-<name>
