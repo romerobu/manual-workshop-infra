@@ -39,7 +39,7 @@ spec:
       source:
         repoURL: https://github.com/<your_user>/workshop-gitops-content-deploy.git
         targetRevision: sno-<name>-setup
-        path: cluster-addons/charts/day2-as
+        path: cluster-addons/day2-as
       destination:
         server: '{{cluster.address}}'
       syncPolicy:
