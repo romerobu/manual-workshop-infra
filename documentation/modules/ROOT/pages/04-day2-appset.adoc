@@ -2,14 +2,14 @@
 
 Until now you have applied day 2 operations by creating single Applications by hand. However there is an easier way to render those apps using ApplicationSets.
 
-Checkout to *main-day2* branch to take a look:
+Checkout to *main-day2* branch in this https://github.com/romerobu/workshop-gitops-content-deploy.git[repo] to take a look:
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
 git branch # main
-git checkout -b main-day2   
+git checkout main-day2   
 ----  
 
 Navigate to the ApplicationSet folder and take a look to the newly added day2-sno-as file.
@@ -56,6 +56,7 @@ image::diagram-7.png[]
 If you navigate to the charts folder, you will see you are not creating objects itself but Applications. Let's test it.
 
 Go back to your working branch (*sno-<name>-setup*) and merge it with *main-day2* branch. You must see this extra ApplicationSet plus a new day2-as folder on charts.
+You might need to resolve some conflicts, and make sure your lab data like repo username and branches name are properly replaced.
 
 If you take a look to this ApplicationSet which will be created in argocd-infra on destination cluster, you will see this generator iterates over config-definition folder on
 root directory and uses ever child folder name (day 2 operators) to name the Application template and it takes the values file from the config.json file.

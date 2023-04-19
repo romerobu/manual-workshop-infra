@@ -8,6 +8,8 @@ Therefore we are going to set some cluster and local roles.
 
 Finally we are going to deploy a Network Policy to prevent traffic to the app. You can try enabling/disabling this feature to see how traffic is allowed and denied.
 
+Go to your working branch and create a file called *values-namespace.yaml*:
+
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
@@ -16,8 +18,9 @@ namespace:
   enabled: true # Enable dependency
   networkpolicy:
     enabled: true
-     
 ---- 
+
+Then create the Application on argocd-infra instance:
 
 [.lines_7]
 [.console-input]
@@ -79,7 +82,7 @@ Once you update the Application you want be able to create more than 4 pods in n
 image::app-replicas.png[]
 image::quota-applied.png[]
 
-Deployment never progess to 5 replicas, and argo stays in Progressing trying to reconcile a not allowd valued of replicas. Finally set it back to 1 replica.
+Deployment never progess to 5 replicas, and argo stays in Progressing trying to reconcile a not allowed values of replicas. Finally set it back to 1 replica.
 
 Then if you try to navigate to app route you will see you are not allowed:
 

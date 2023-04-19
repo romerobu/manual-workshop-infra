@@ -5,14 +5,13 @@ At this point you have a cluster with an argo instance deployed and cluster admi
 As we might need to apply this configuration to multiple managed clusters, we need to be able to render multiple applications using helm charts, even though we are applying this configuration
 to our single scoped cluster.
 
-Fork this https://github.com/romerobu/helm-infra-gitops-workshop.git[repository] and checkout to your working branch.
+Go to this https://github.com/romerobu/helm-infra-gitops-workshop.git[repository] and checkout to your working branch.
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-git branch # main
-git checkout -b sno-<name>      
+git checkout sno-<name>      
 ----  
 
 Take a look to the code, this repo contains helm charts for configuring day 2 operations in our managed cluster. It contains several dependencies and its charts with some default values 

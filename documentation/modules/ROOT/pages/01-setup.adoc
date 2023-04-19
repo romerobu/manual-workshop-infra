@@ -41,3 +41,24 @@ Please have them installed and configured before you get started with any of the
 
 == Get tutorial sources
 
+Fork this https://github.com/romerobu/workshop-gitops-content-deploy[repository]. Then checkout and create a new branch for your user. 
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+git branch # main
+git checkout -b sno-<name>-setup
+----
+
+Fork this https://github.com/romerobu/helm-infra-gitops-workshop.git[repository] and checkout to your working branch.
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+git branch # main
+git checkout -b sno-<name>      
+----  
+
+

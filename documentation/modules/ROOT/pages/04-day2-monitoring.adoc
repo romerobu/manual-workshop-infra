@@ -14,9 +14,10 @@ Go to your working branch and create a file called *values-monitoring.yaml*:
 [source, shell,subs="+macros,+attributes"]
 ----
 monitoring:
-  enabled: true # Enable dependency
-     
+  enabled: true # Enable dependency   
 ---- 
+
+Then create the Application on argocd-infra instance:
 
 [.lines_7]
 [.console-input]

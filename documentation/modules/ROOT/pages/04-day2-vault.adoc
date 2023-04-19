@@ -176,37 +176,30 @@ Then you need to configure using this plugin on argo cd:
         args: ["generate", "./"] 
 ----
 
-In this case, this configuration is already running on your cluster. If you take a look to the configuration applied by ApplicationSet on your single node where those resources have been already created as part of bootstrapping.
+In this case, this configuration is already running on your cluster. If you take a look to the configuration applied by the Application on your single node where those resources have been already created as part of bootstrapping.
 So the next step is testing this actually works.
 
-In https://github.com/romerobu/helm-infra-gitops-workshop[helm charts repository], in vault chart in main branch but also in your working branch, you can find a secret using a vault placeholder in *insert path to secret*:
+In https://github.com/romerobu/helm-infra-gitops-workshop[helm charts repository], in vault chart, you can find a secret using a vault placeholder in charts/vault/values.yaml:
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-<kv-v2/data/demo#password>
+  placeholder: "<password | base64encode>"
+  path: "kv-v2/data/demo"
 ----
 
 If you take a look to the existing secret in vault-secrets namespace, as we are telling Application to use vault plugin, it is not replacing the sensitive information:
 
 image::secret-vault.png[]
 
-So we need to modify existing application sno-<name>-vault (argocd-apps) to use plugin:
+So we need to modify existing application sno-<name>-vault (argocd-apps) to use plugin. Replace only the plugin section:
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  namespace: openshift-operators
-  name: sno-<name>-vault
-spec:
-  destination:
-    namespace: vault-secrets
-    server: 'https://kubernetes.default.svc'
+...
   source:
     repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
     path: .
@@ -215,12 +208,8 @@ spec:
       env:
         - name: HELM_VALUES
           value: >-
-            --set vault.enabled=true
-  project: dev
-  syncPolicy:
-    automated:
-      prune: false
-      selfHeal: false      
+            --set vault.enabled=true 
+...            
 ----
 
 As you can see this application is slightly different to the last one used. This is due to we need to pass values files and parameters so argocd-vault-plugin-helm can used them

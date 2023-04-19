@@ -1,13 +1,13 @@
 = Managed cluster setup
 
-Then checkout and create a new branch for your user. 
+Then checkout to your working branch. 
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
 git branch # main
-git checkout -b sno-<name>-setup
+git checkout sno-<name>-setup
 ----
 
 Argo hub setup has been already performed, so you just need to focused on managed your single node cluster.

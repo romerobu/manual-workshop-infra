@@ -541,6 +541,8 @@ image::cluster-wide.png[]
 
 - Login as admin and verify you can create apps on dev project (argocd-apps).
 
+  Go to this https://github.com/romerobu/helm-infra-gitops-workshop.git[repo] and checkout to working branch, then push it.
+
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
