@@ -314,6 +314,18 @@ spec:
 </div>
 </div>
 <div class="paragraph">
+<p>And finally replace values in bootstrap values.yaml file;</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">...
+vault:
+  vault_addr: "http://vault-vault.apps.argo-hub.&lt;domain&gt;.opentlc.com"
+  avp_type: vault
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>This ApplicationSet deploys an Application on the recently deployed instance on destination cluster to deploy and manage a second instance for applications.</p>
 </div>
 <div class="paragraph">
