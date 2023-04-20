@@ -168,6 +168,19 @@ clusters:
       target: sno-<name>-setup
 ----
 
+And finally replace values in bootstrap values.yaml file;
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+...
+vault: 
+  vault_addr: "http://vault-vault.apps.argo-hub.<domain>.opentlc.com"
+  avp_type: vault
+...
+----
+
 This ApplicationSet deploys an Application on the recently deployed instance on destination cluster to deploy and manage a second instance for applications.
 
 Then navigate under source path to take a look to the Helm charts used for deploying GitOps and setting up the initial config for managed clusters.
