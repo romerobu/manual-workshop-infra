@@ -1,10 +1,8 @@
-= Environment setup
+= Environment Setup
 include::_attributes.adoc[]
 
 [#prerequisite]
 == Prerequisite CLI tools
-
-include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-common/master/versions.adoc[]
 
 The following CLI tools are required for running the exercises in this tutorial. 
 Please have them installed and configured before you get started with any of the tutorial chapters.
@@ -23,11 +21,6 @@ Please have them installed and configured before you get started with any of the
 | https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable-4.12/openshift-client-linux-4.12.10.tar.gz[Download]
 | https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable-4.12/openshift-client-windows-4.12.10.zip[Download]
 
-| `argocd`
-| https://argo-cd.readthedocs.io/en/stable/cli_installation/#download-with-curl[Download]
-| https://argo-cd.readthedocs.io/en/stable/cli_installation/#download-with-curl[Download]
-| https://argo-cd.readthedocs.io/en/stable/cli_installation/#windows[Download]
-
 | `helm`
 | https://helm.sh/docs/intro/install/#from-homebrew-macos[Download]
 | https://helm.sh/docs/intro/install/#from-dnfyum-fedora[Download]
@@ -39,6 +32,7 @@ Please have them installed and configured before you get started with any of the
 | https://code.visualstudio.com/docs/setup/windows[Download]
 |===
 
+[#gettutorialsources]
 == Get tutorial sources
 
 Fork this https://github.com/romerobu/workshop-gitops-content-deploy[repository]. Then checkout and create a new branch for your user. 
