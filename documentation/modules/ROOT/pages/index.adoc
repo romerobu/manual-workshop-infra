@@ -2,9 +2,6 @@
 :page-layout: home
 :!sectids:
 
-[.text-center.strong]
-== ArgoCD Managing Infrastructure
-
 A Red Hat GitOps Infrastructure Configuration Approach workshop.
 
 [.tiles.browse]
