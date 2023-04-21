@@ -313,7 +313,7 @@ Then navigate to Openshift console to verify those objects exist on the cluster 
 *Add how to*
 
 [#namespace]
-== Configure namespace
+== Namespace configuration
 
 Part of day 2 configurations are setting namespace scoped configurations for managing networking and quotas for apps, as well as setting RBAC.
 
@@ -413,7 +413,7 @@ Then disable network policy and verify how you have traffic access:
 image::traffic-allowed.png[]
 
 [#vault]
-== Configure vault secrets
+== Vault configuration
 
 Vault by Hashicorp is a tool that allows to store and encrypt secrets to secure applications and protect sensitive data.
 Vault server stores the sensitive data while a special plugin for argo retrieves this information when creating objects thanks to the use of paths and 

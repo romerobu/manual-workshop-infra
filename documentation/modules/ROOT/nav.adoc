@@ -7,7 +7,7 @@
 * xref:02-hub-setup.adoc[2. Deploy Hub Cluster Setup]
 ** xref:02-hub-setup.adoc#laboverview[2.1 Lab overview]
 ** xref:02-hub-setup.adoc#environment[2.2 Environment]
-** xref:02-hub-setup.adoc#hub[2.3 Hub setup]
+** xref:02-hub-setup.adoc#hubsetup[2.3 Hub setup]
 
 * xref:03-sno-setup.adoc[3. Deploy Managed Setup]
 ** xref:03-sno-setup.adoc#managedconfiguration[3.1. Managed configuration]
@@ -19,7 +19,6 @@
 ** xref:04-day2-config.adoc#monitoring[4.3 Configure Monitoring]
 ** xref:04-day2-config.adoc#namespace[4.4 Namespace configuration]
 ** xref:04-day2-config.adoc#vault[4.6 Vault configuration]
-** xref:04-day2-config.adoc#appset[4.7 Day-2 with ApplicationSet]
+** xref:04-day2-config.adoc#appset[4.7 Day 2 with ApplicationSet]
 
 * xref:05-challenges.adoc[5. Challenges]
-** xref:05-challenges.adoc#challenges[5.1 Challenges]
