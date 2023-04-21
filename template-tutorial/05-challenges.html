@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Untitled :: Lab GitOps infra</title>
+    <title>Challenges :: GitOps Infrastructure Configuration Workshop</title>
     <link rel="canonical" href="https://github.com/romerobu/manual-workshop-infra/template-tutorial/05-challenges.html">
-    <link rel="prev" href="04-day2-appset.html#appset">
+    <link rel="prev" href="04-day2-config.html#daytwooperations">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -14,7 +14,7 @@
   <nav class="navbar">
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" style="font-size: 24px; color: white" href="https://github.com/romerobu/manual-workshop-infra">Lab GitOps infra</a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://github.com/romerobu/manual-workshop-infra">GitOps Infrastructure Configuration Workshop</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
@@ -51,56 +51,68 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Table of Contents</a>
+  </li>
+  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="01-setup.html">1. Setup</a>
+    <a class="nav-link" href="01-setup.html">1. Environment Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="01-setup.html#prerequisite">Prerequisites</a>
+    <a class="nav-link" href="01-setup.html#prerequisite">1.1 Prerequisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#gettutorialsources">1.2 Get tutorial sources</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="02-hub-setup.html">2. Deploy Hub setup</a>
+    <a class="nav-link" href="02-hub-setup.html">2. Deploy Hub Cluster Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-hub-setup.html#hub">2.1 Hub setup</a>
+    <a class="nav-link" href="02-hub-setup.html#laboverview">2.1 Lab overview</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-hub-setup.html#environment">2.2 Environment</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-hub-setup.html#hub">2.3 Hub setup</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="03-sno-setup.html">3. Deploy Managed setup</a>
+    <a class="nav-link" href="03-sno-setup.html">3. Deploy Managed Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-sno-setup.html">3.1. Managed setup</a>
+    <a class="nav-link" href="03-sno-setup.html#managedconfiguration">3.1. Managed configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-sno-setup-helm.html#charts">3.2. Helm charts</a>
+    <a class="nav-link" href="03-sno-setup.html#helmcharts">3.2. Helm charts</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="04-day2-config.html">4. Day 2</a>
+    <a class="nav-link" href="04-day2-config.html#daytwooperations">4. Day-2 Operations</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-day2-oauth.html#oauth">4.1 Configure Identity Providers</a>
+    <a class="nav-link" href="04-day2-config.html#identityproviders">4.1 Configure Identity Providers</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-day2-operators.html#operators">4.2 Deploy Operators</a>
+    <a class="nav-link" href="04-day2-config.html#deployoperators">4.2 Deploy Operators</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-day2-monitoring.html#monitoring">4.3 Configure Monitoring</a>
+    <a class="nav-link" href="04-day2-config.html#monitoring">4.3 Configure Monitoring</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-day2-namespace.html#namespace">4.4 Namespace configuration</a>
+    <a class="nav-link" href="04-day2-config.html#namespace">4.4 Namespace configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-day2-vault.html#vault">4.6 Vault configuration</a>
+    <a class="nav-link" href="04-day2-config.html#vault">4.6 Vault configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-day2-appset.html#appset">4.7 Day 2 with ApplicationSet</a>
+    <a class="nav-link" href="04-day2-config.html#appset">4.7 Day-2 with ApplicationSet</a>
   </li>
 </ul>
   </li>
@@ -134,14 +146,12 @@
   </div>
   <div class="content">
 <article class="doc">
-<div class="sect1">
-<h2 id="_challenges"><a class="anchor" href="#_challenges"></a>Challenges</h2>
-<div class="sectionbody">
-
-</div>
+<h1 class="page">Challenges</h1>
+<div class="paragraph">
+<p>Update</p>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="04-day2-appset.html#appset">4.7 Day 2 with ApplicationSet</a></span>
+  <span class="prev"><a href="04-day2-config.html#daytwooperations">4. Day-2 Operations</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
