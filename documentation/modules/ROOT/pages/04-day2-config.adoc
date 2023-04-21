@@ -413,7 +413,7 @@ Then disable network policy and verify how you have traffic access:
 image::traffic-allowed.png[]
 
 [#vault]
-== Configure vault secrets
+== Vault configuration
 
 Vault by Hashicorp is a tool that allows to store and encrypt secrets to secure applications and protect sensitive data.
 Vault server stores the sensitive data while a special plugin for argo retrieves this information when creating objects thanks to the use of paths and 

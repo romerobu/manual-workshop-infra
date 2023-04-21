@@ -33,8 +33,7 @@ A Red Hat GitOps Infrastructure Configuration Approach workshop.
 ** xref:04-day2-config.adoc#monitoring[4.3 Configure Monitoring]
 ** xref:04-day2-config.adoc#namespace[4.4 Namespace configuration]
 ** xref:04-day2-config.adoc#vault[4.6 Vault configuration]
-** xref:04-day2-config.adoc#appset[4.7 Day-2 with ApplicationSet]
+** xref:04-day2-config.adoc#appset[4.7 Day 2 with ApplicationSet]
 
 [.tile]
 * xref:05-challenges.adoc[5. Challenges]
-** xref:05-challenges.adoc#challenges[5.1 Challenges]
