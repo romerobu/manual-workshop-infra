@@ -1,33 +1,40 @@
-= Let's start!
+= Welcome to Red Hat Workshop - ArgoCD Managing Infrastructure
 :page-layout: home
 :!sectids:
 
 A Red Hat GitOps Infrastructure Configuration Approach workshop.
 
 [.tiles.browse]
-== Browse modules
+== Workshop modules
 
 [.tile]
-* xref:01-setup.adoc[1. Setup]
-** xref:01-setup.adoc#prerequisite[Prerequisites]
+* xref:index.adoc[Table of Contents]
 
 [.tile]
-* xref:02-hub-setup.adoc[2. Deploy Hub setup]
-** xref:02-hub-setup.adoc#hub[2.1 Hub setup]
+* xref:01-setup.adoc[1. Environment Setup]
+** xref:01-setup.adoc#prerequisite[1.1 Prerequisites]
+** xref:01-setup.adoc#gettutorialsources[1.2 Get tutorial sources]
 
 [.tile]
-* xref:03-sno-setup.adoc[3. Deploy Managed setup]
-** xref:03-sno-setup.adoc[3.1. Managed setup]
-** xref:03-sno-setup-helm.adoc#charts[3.2. Helm charts]
+* xref:02-hub-setup.adoc[2. Deploy Hub Cluster Setup]
+** xref:02-hub-setup.adoc#laboverview[2.1 Lab overview]
+** xref:02-hub-setup.adoc#environment[2.2 Environment]
+** xref:02-hub-setup.adoc#hub[2.3 Hub setup]
 
 [.tile]
-* xref:04-day2-config.adoc[4. Day 2]
-** xref:04-day2-oauth.adoc#oauth[4.1 Configure Identity Providers]
-** xref:04-day2-operators.adoc#operators[4.2 Deploy Operators]
-** xref:04-day2-monitoring.adoc#monitoring[4.3 Configure Monitoring]
-** xref:04-day2-namespace.adoc#namespace[4.4 Namespace configuration]
-** xref:04-day2-vault.adoc#vault[4.6 Vault configuration]
-** xref:04-day2-appset.adoc#appset[4.7 Day 2 with ApplicationSet]
+* xref:03-sno-setup.adoc[3. Deploy Managed Setup]
+** xref:03-sno-setup.adoc#managedconfiguration[3.1. Managed configuration]
+** xref:03-sno-setup.adoc#helmcharts[3.2. Helm charts]
 
+[.tile]
+* xref:04-day2-config.adoc#daytwooperations[4. Day-2 Operations]
+** xref:04-day2-config.adoc#identityproviders[4.1 Configure Identity Providers]
+** xref:04-day2-config.adoc#deployoperators[4.2 Deploy Operators]
+** xref:04-day2-config.adoc#monitoring[4.3 Configure Monitoring]
+** xref:04-day2-config.adoc#namespace[4.4 Namespace configuration]
+** xref:04-day2-config.adoc#vault[4.6 Vault configuration]
+** xref:04-day2-config.adoc#appset[4.7 Day-2 with ApplicationSet]
+
+[.tile]
 * xref:05-challenges.adoc[5. Challenges]
 ** xref:05-challenges.adoc#challenges[5.1 Challenges]

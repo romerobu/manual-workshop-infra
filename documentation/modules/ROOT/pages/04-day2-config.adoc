@@ -1,4 +1,6 @@
-= Day 2
+= Day-2 Operations
+
+[#daytwooperations]
 
 At this point you have a cluster with an argo instance deployed and cluster admin permissions managed by an argo hub. So you can start configuring day 2 operations.
 

@@ -1,6 +1,7 @@
-= Argo hub setup
+= Deploy Hub Cluster Setup
 include::_attributes.adoc[]
 
+[#laboverview]
 == Lab overview
 
 In this lab we are covering a GitOps infrastructure configuration approach. 
@@ -25,6 +26,7 @@ Once GitOps is deployed on your managed cluster you can start configuring day 2 
 
 image::diagram-5.png[]
 
+[#environment]
 == Enviroment
 
 You have access to two clusters, *argo-hub* and your own *https://www.redhat.com/en/blog/meet-single-node-openshift-our-smallest-openshift-footprint-edge-architectures[single node]* (managed). You can login to argo-hub using *user-<name>* and to sno using *admin* user.
@@ -37,6 +39,7 @@ authentication token for this purpose or you can pass kubeconfig file to give fu
 
 image::cluster-api-sno.png[]
 
+[#hubsetup]
 == Hub setup
 
 Argo hub is a common cluster for every user in this workshop that will be used for deploying the basic infrastructure on managed clusters using ApplicationSet.
