@@ -313,7 +313,7 @@ Then navigate to Openshift console to verify those objects exist on the cluster 
 *Add how to*
 
 [#namespace]
-== Configure namespace
+== Namespace configuration
 
 Part of day 2 configurations are setting namespace scoped configurations for managing networking and quotas for apps, as well as setting RBAC.
 
