@@ -7,29 +7,45 @@ include::_attributes.adoc[]
 In this lab we are covering a GitOps infrastructure configuration approach. 
 We will set an argo of argos and app of apps architecture to manage setup on destination clusters, and will apply day 2 operations on managed clusters.
 
-This is the general overview of the lab. You will be able to connect to both argo-hub and managed clusters, and day 2 operations will setup based on gitops instance running on managed cluster.
+Argo hub is a common cluster for every user in this workshop that will be used for deploying the basic infrastructure on managed clusters using ApplicationSet. Managed clusters are a set of Single Node OpenShift available for every user and day 2 operations will setup based on gitops instance running on managed cluster.
 
+Take a look at the general overview of the lab. 
+
+NOTE: You will be able to connect to both argo-hub and managed clusters.
+
+.Laboratory overview
 image::diagram-1.png[]
 
 First of all, when you install GitOps operator, it will deploy a default argo instance which is intended for cluster configuration. So in this instance you will find an Application hub-setup
 which is deploying and managing a second argocd instance and its configuration.
- 
+
+.Argo Hub instances
 image::diagram-2.png[]
 
-Then as an user lab, you will access to the second argo instance where you will have privileges enough thanks to RBAC configuration to deploy an Application for applying ApplicationSets to apply configuration on your managed cluster.
-Gitops-setup ApplicationSet will install the operator and the argocd-infra instance, while the second one will generate N Applications on managed clusters for bootrstrapping the argocd-apps instance and setup its configuration.
+Then as an user lab, you will access to the second argo instance where you will have privileges enough thanks to RBAC configuration to deploy an Application for applying ApplicationSets to apply configuration on your managed cluster. In this instance you can expect two ApplicationSet: gitops-setup and bootstrap-sno.
 
+.Argo Hub configuration 
 image::diagram-3.png[]
+
+Gitops-setup ApplicationSet will install the operator and the argocd-infra instance, while the second one will generate 'N' Applications on managed clusters for bootrstrapping the argocd-apps instance and setup its configuration.
+
+.Argo Hub deploying on SNO
 image::diagram-4.png[]
 
 Once GitOps is deployed on your managed cluster you can start configuring day 2 operations locally in your new provisioned argo instace.
 
+.Day 2 operations and applications deploy
 image::diagram-5.png[]
 
 [#environment]
 == Enviroment
 
-You have access to two clusters, *argo-hub* and your own *https://www.redhat.com/en/blog/meet-single-node-openshift-our-smallest-openshift-footprint-edge-architectures[single node]* (managed). You can login to argo-hub using *user-<name>* and to sno using *admin* user.
+You have access to two clusters, *argo-hub* and your own SNO.
+
+NOTE: Learn more about *https://www.redhat.com/en/blog/meet-single-node-openshift-our-smallest-openshift-footprint-edge-architectures[Sigle Node OpenShift]*, our managed-cluster in this workshop. 
+
+IMPORTANT: Login to argo-hub using *user-<name>* and to sno using *admin* user.
+
 On top of that, if you login to argo console using your Openshift user, you will only have permissions over your project and destination cluster.
 
 The reason why argo hub has permissions over your managed cluster is because this is configured as a destination server, given an authentication method.
@@ -37,19 +53,19 @@ The reason why argo hub has permissions over your managed cluster is because thi
 In argo hub there is a secret in argo namespace for every managed cluster containing this information. There are several ways to implement this, you can generate an 
 authentication token for this purpose or you can pass kubeconfig file to give full control over the destination cluster.
 
+.Managed cluster secret in hub cluster
 image::cluster-api-sno.png[]
 
 [#hubsetup]
 == Hub setup
 
-Argo hub is a common cluster for every user in this workshop that will be used for deploying the basic infrastructure on managed clusters using ApplicationSet.
-In this cluster you can find two argo instances, openshift-gitops (default) and argocd. Default instance is intended to manage the hub itself, and it is in charge of
+In the hub cluster you can find two argo instances, openshift-gitops (default) and argocd. Default instance is intended to manage the hub itself, and it is in charge of
 deploying the argocd instance and its configuration. While argocd is dedicated for managed clusters setup and configuration.
 
 As argo hub setup should be done only once before this lab, you can login to openshift-gitops argo console with view permissions to take a look to the objects
 argo is managing for deploying the second instance.
 
-Then you can go to the code to take a look to the helm charts used. Fork this https://github.com/romerobu/workshop-gitops-content-deploy[repository] to start diving into the code.
+Then you can go to the code to take a look to the helm charts used.
 
 First take a look to the helm charts used for argo hub setup and then navigate to the console. As this configuration is already deployed you don't need to make any change, only observe the way it was done.
 
@@ -82,6 +98,7 @@ spec:
 Then go to openshift-gitops console and take a look to the objects managed by argo. As you can see, using range of values while rendering charts allows to create charts for
 multiple destinations without much complexity.
 
+.Hub setup in ArgoCD console
 image::hub-setup-app.png[]
 
 For this initial setup it is only required to create argocd instance, app projects, groups and role bindings and secrets for cluster destinations.
@@ -91,5 +108,3 @@ Then once this second instance is up and running, you can login with your user-<
 By using this instance you will be able to setup your own managed cluster.
 
 Ideally you could set up every managed with a single ApplicationSet by configuring multiple cluster-definition. However because of the workshop structure you need to perform cluster scoped configurations without affecting other users, but your repository could be easily adapted to perform actions on multiple clusters.
-
-

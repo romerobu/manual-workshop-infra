@@ -56,6 +56,7 @@ spec:
       selfHeal: true   
 ---- 
 
+.Day 2 initial app
 image::day-2-sno-initial-app.png[]
 
 This is because dependencies include conditions for enabling/disabling those charts. As every value is set to false it does not apply anything.
@@ -67,16 +68,17 @@ Then delete this Application.
 
 As you can see, there is already a local identity provider configured but we want to override current users and integrate with other identity providers like LDAP Free Ipa provider and Keycloak.
 
-For configuring Identity Providers on Openshift you just need to modify the existing https://docs.openshift.com/container-platform/4.12/authentication/identity_providers/configuring-htpasswd-identity-provider.html[Oauth] resource with the provider and its configuration data.
+For configuring Identity Providers on Openshift you just need to modify the existing oauth resource with the provider and its configuration data.
+
+NOTE: Learn more about https://docs.openshift.com/container-platform/4.12/authentication/identity_providers/configuring-htpasswd-identity-provider.html[Oauth].
 
 For some of them we just need to set up the integration while for others like LDAP apart from the integration agains the server we also need to synchronize groups and users.
 
 Lets deploy the oauth resources required and verify how groups are synchronized.
 
-*Reminder*: keycloak and FreeIPA server are running on argo hub cluster.
+NOTE: keycloak and FreeIPA server are running on argo hub cluster.
 
-First we need to take a look to *oauth* chart values. As you can see you need to define some missing values for each managed cluster. You can do this by setting those on chart values file,
- setting them as parametes or defining a new values file for your deployment.
+First we need to take a look to *oauth* chart values. As you can see you need to define some missing values for each managed cluster. You can do this by setting those on chart values file, setting them as parametes or defining a new values file for your deployment.
 
 Go to your working branch and create a file called *values-oauth.yaml*:
 
@@ -95,6 +97,8 @@ oauth:
       ldap_url: 'ldap://<ip>:<nodeport>'
      
 ---- 
+
+IMPORTANT: *Keycloack secret*: Login to argo-hub console, find keycloack url, login as admin/admin, navigate to your realm, then go to your client and  find your secret on Credentials tab.
 
 Then create a new Application to apply this operation:
 
@@ -124,8 +128,6 @@ spec:
       selfHeal: true   
 ---- 
 
-*Keycloack secret*: Login to argo-hub console, find keycloack url, login as admin/admin, navigate to your realm, then go to your client and  find your secret on Credentials tab.
-
 If you take a look to the helm charts you will notice we do not only need to update oauth but create others resources needed for integration like secrets, cm and cron job for syncying groups.
 
 Sync waves are needed to make sure those resources like secrets and cm for authentication exists when we update Oauth config, otherwise openshift-authentication will become Degraded.
@@ -134,7 +136,9 @@ When you update oauth values, and update existing Application you can notice how
 For groups syncying, cron job shows last 5 executions, including the state according to the result (failed or success).
 
 Furthermore you can notice some resources with no status (white fields). Those resources are created by Openshift for configuration issues but they are not managed by argo, that is why argo is not tracking them.
-https://argo-cd.readthedocs.io/en/stable/user-guide/resource_tracking/[Resource tracking] has been set to annotation+label on argo instance.
+Resource tracking has been set to annotation+label on argo instance.
+
+NOTE: Learn more about https://argo-cd.readthedocs.io/en/stable/user-guide/resource_tracking/[Resource tracking].
 
 Once every resource is deployed, verify authentication cluster operator is OK, logout and log in back. Then you should see new identity providers listed.
 
@@ -260,7 +264,8 @@ Now we are going to deploy some basic configuration about monitoring.
 
 In Openshift 4 monitoring is enabled by default however there are lots of configurations we can modify and configure non default user defined projects monitoring stack.
 
-You can take a look to the monitoring documentation https://docs.openshift.com/container-platform/4.12/monitoring/enabling-monitoring-for-user-defined-projects.html[here].
+NOTE: Take a look to the https://docs.openshift.com/container-platform/4.12/monitoring/enabling-monitoring-for-user-defined-projects.html[monitoring documentation].
+
 In the first place we are going to enable user-defined projects monitoring. Then we will create an example app, with a Service Monitor and a custom Prometheus Rule.
 
 Go to your working branch and create a file called *values-monitoring.yaml*:
@@ -389,17 +394,22 @@ spec:
 
 Once you update the Application you want be able to create more than 4 pods in namespace app. Try to update replicas deployment to see if quota has been correctly applied by argo.
 
+.Change Replica Count
 image::app-replicas.png[]
+
+.Quota
 image::quota-applied.png[]
 
 Deployment never progess to 5 replicas, and argo stays in Progressing trying to reconcile a not allowed values of replicas. Finally set it back to 1 replica.
 
 Then if you try to navigate to app route you will see you are not allowed:
 
+.Application not responsible
 image::traffic-not-allowed.png[]
 
 Then disable network policy and verify how you have traffic access:
 
+.Application available :)
 image::traffic-allowed.png[]
 
 [#vault]
@@ -415,9 +425,13 @@ a secret containing credentials for authenticating with vault, a config map with
 Those resources are required to implement Argo CD Vault plugin. This plugin allows using placeholders with path to secrets on yaml fields where the secret should be replaced, and the plugin is in 
 charge of this substitution.
 
-There are several ways of installing it, as sidecars plugin or as config map plugin, but this last one will be https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/#installing-a-config-management-plugin[deprecated] in the future.
+There are several ways of installing it, as sidecars plugin or as config map plugin.
 
-So this installation approach follows the method https://argocd-vault-plugin.readthedocs.io/en/stable/installation/#initcontainer-and-configuration-via-sidecar[initContainer + sidecar].
+NOTE: This last one will be https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/#installing-a-config-management-plugin[deprecated] in the future.
+
+So this installation approach follows the method initContainer + sidecar.
+
+NOTE: https://argocd-vault-plugin.readthedocs.io/en/stable/installation/#initcontainer-and-configuration-via-sidecar[initContainer + sidecar] documentation.
 
 Config map *cmp-plugin* defines the plugin that will be mounted in the sidecar container:
 
@@ -481,7 +495,7 @@ stringData:
   AVP_SECRET_ID: <your_secret_id>
 ----  
 
-There are several authentication method, you can take a look https://developer.hashicorp.com/vault/docs/concepts/auth[here].
+NOTE: There are several https://developer.hashicorp.com/vault/docs/concepts/auth[authentication method].
 
 Then you need to configure using this plugin on argo cd:
 
@@ -584,7 +598,7 @@ Then you need to configure using this plugin on argo cd:
 In this case, this configuration is already running on your cluster. If you take a look to the configuration applied by the Application on your single node where those resources have been already created as part of bootstrapping.
 So the next step is testing this actually works.
 
-In https://github.com/romerobu/helm-infra-gitops-workshop[helm charts repository], in vault chart, you can find a secret using a vault placeholder in charts/vault/values.yaml:
+In the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository, in vault chart, you can find a secret using a vault placeholder in charts/vault/values.yaml:
 
 [.lines_7]
 [.console-input]
@@ -596,6 +610,7 @@ In https://github.com/romerobu/helm-infra-gitops-workshop[helm charts repository
 
 If you take a look to the existing secret in vault-secrets namespace, as we are telling Application to use vault plugin, it is not replacing the sensitive information:
 
+.Encoded data
 image::secret-vault.png[]
 
 So we need to modify existing application sno-<name>-vault (argocd-apps) to use plugin. Replace only the plugin section:
@@ -674,9 +689,14 @@ spec:
           selfHeal: true   
 ----  
 
-This ApplicationSet render N configurations for N managed clusters to apply day 2 configurations by creating Application on argocd-infra instance on managed cluster.
+This ApplicationSet render 'N' configurations for 'N' managed clusters.
 
+.ApplicationSet
 image::diagram-6.png[]
+
+This ApplicationSet applies day 2 configurations by creating Application on argocd-infra instance on managed cluster.
+
+.Application
 image::diagram-7.png[]
 
 If you navigate to the charts folder, you will see you are not creating objects itself but Applications. Lets test it.
@@ -724,11 +744,11 @@ spec:
           selfHeal: true 
 ----  
 
-Replaced with your cluster configuration data as required.
+IMPORTANT: Replaced with your cluster configuration data as required.
 
 Then push to your working branch.
 
-Finally, navigate to argo hub instance and see the recently created ApplicationSet, then navigate to argocd-infra instance on managed cluster and see the Applications managed by the Application
-generated by ApplicationSet.
+Finally, navigate to argo hub instance and see the recently created ApplicationSet, then navigate to argocd-infra instance on managed cluster and see the Applications managed by the Application generated by ApplicationSet.
 
+.GitOps approach for infra and apps deployment
 image::diagram-8.png[]
