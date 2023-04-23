@@ -744,7 +744,7 @@ spec:
           selfHeal: true 
 ----  
 
-IMPORTANT: Replaced with your cluster configuration data as required.
+IMPORTANT: Replace with your cluster configuration data as required.
 
 Then push to your working branch.
 
