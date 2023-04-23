@@ -1,4 +1,4 @@
-= Day-2 Operations
+= Day 2 Operations
 
 [#daytwooperations]
 
@@ -158,7 +158,7 @@ You can try login to LDAP server with user paul/Passw0rd who is an admin user.
 You can try login to LDAP server with user mark/Passw0rd who is an viewer user.
 
 [#deployoperators]
-== Deploy operators
+== Deploy Operators
 
 Once authentication is configured, we are going to deploy some operators. Operatos helm charts use range values so we can define as many operators as we want on values section.
 
@@ -258,7 +258,7 @@ spec:
 ---- 
 
 [#monitoring]
-== Configure monitoring
+== Configure Monitoring
 
 Now we are going to deploy some basic configuration about monitoring.
 
@@ -313,7 +313,7 @@ Then navigate to Openshift console to verify those objects exist on the cluster 
 *Add how to*
 
 [#namespace]
-== Namespace configuration
+== Namespace Configuration
 
 Part of day 2 configurations are setting namespace scoped configurations for managing networking and quotas for apps, as well as setting RBAC.
 
@@ -413,7 +413,7 @@ Then disable network policy and verify how you have traffic access:
 image::traffic-allowed.png[]
 
 [#vault]
-== Vault configuration
+== Vault Configuration
 
 Vault by Hashicorp is a tool that allows to store and encrypt secrets to secure applications and protect sensitive data.
 Vault server stores the sensitive data while a special plugin for argo retrieves this information when creating objects thanks to the use of paths and 
@@ -639,7 +639,7 @@ After applying this new application, it will be out of sync for some seconds. On
 You can try to delete it and see how it is created. Finally you can ask your instructor to update this secret on vault server, try a hard refresh on argo and see how it is updated.
 
 [#appset]
-== Render Applications using ApplicationSet
+== Day 2 with ApplicationSet
 
 Until now you have applied day 2 operations by creating single Applications by hand. However there is an easier way to render those apps using ApplicationSets.
 

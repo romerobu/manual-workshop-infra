@@ -1,7 +1,7 @@
 = Deploy Managed Cluster Setup
 
 [#managedconfiguration]
-== Managed configuration
+== Managed Cluster Configuration
 
 Checkout to your working branch. 
 
@@ -198,7 +198,7 @@ Then navigate under source path to take a look to the Helm charts used for deplo
 NOTE: ApplicationSet controller is not enabled by default and must be configured on argocd instance.
 
 [#helmcharts]
-== Helm charts
+== Helm Charts
 
 A Helm chart is a set of YAML manifests and templates that describes Kubernetes resources (Deployments, Secrets, CRDs, etc.) and defined configurations needed for the Kubernetes application.
 
