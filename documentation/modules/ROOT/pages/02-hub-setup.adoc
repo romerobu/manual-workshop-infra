@@ -9,7 +9,7 @@ We will set an argo of argos and app of apps architecture to manage setup on des
 
 _Argo Hub_ is a common cluster for every user in this workshop that will be used for deploying the basic infrastructure on managed clusters using ApplicationSet. Managed clusters are a set of Single Node OpenShift, alias _SNO_, available for every user and day 2 operations will setup based on gitops instance running on managed cluster.
 
-NOTE: You will be able to connect to both argo-hub and managed clusters.
+NOTE: You will be able to connect to both _Argo Hub_ and _managed_ clusters.
 
 Take a look at the general overview of the lab. 
 
@@ -42,7 +42,7 @@ image::diagram-5.png[]
 
 You have access to two clusters: *_Argo Hub_* and your own *_SNO_*.
 
-NOTE: Learn more about *https://www.redhat.com/en/blog/meet-single-node-openshift-our-smallest-openshift-footprint-edge-architectures[Sigle Node OpenShift]*, our managed-cluster in this workshop. 
+NOTE: Learn more about *https://www.redhat.com/en/blog/meet-single-node-openshift-our-smallest-openshift-footprint-edge-architectures[Sigle Node OpenShift]*, our managed cluster in this workshop. 
 
 Let's start log in to *_Argo Hub_* cluster:
 
