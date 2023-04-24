@@ -3,7 +3,7 @@ runtime:
 
 site:
   title: GitOps Infrastructure Configuration Workshop
-  url: https://github.com/romerobu/manual-workshop-infra
+  url: https://github.com/jtovarro/manual-workshop-infra
   start_page: manual-workshop-infra::index.adoc
 
 content:
