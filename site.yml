@@ -3,7 +3,7 @@ runtime:
 
 site:
   title: GitOps Infrastructure Configuration Workshop
-  url: https://github.com/jtovarro/manual-workshop-infra
+  url: http://localhost:3000/rhs-build-course/index.html
   start_page: manual-workshop-infra::index.adoc
 
 content:
