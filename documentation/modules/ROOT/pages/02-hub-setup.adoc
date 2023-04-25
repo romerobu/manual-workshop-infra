@@ -65,7 +65,7 @@ IMPORTANT: Change _<domain>_ information, provided by the instructor at the begi
 .Argo Hub log in
 image::hub-login-1.png[]
 
-- Insert user _user-<name>_ and _<pass>_ provided by instructor and click *_Log in_* button.
+- Insert _user-<name>_ and _<pass>_ provided by instructor and click *_Log in_* button.
 
 .Insert Argo Hub crentials to log in
 image::hub-login-2.png[]
@@ -101,7 +101,7 @@ image::argo-login-1.png[]
 .OpenShift credentials for openshift-gitops instance
 image::hub-login-1.png[]
 
-- Insert user _user-<name>_ and _<pass>_ provided by instructor and click *_Log in_* button.
+- Insert _user-<name>_ and _<pass>_ provided by instructor and click *_Log in_* button.
 
 .openshift-gitops instance log in
 image::hub-login-2.png[]
