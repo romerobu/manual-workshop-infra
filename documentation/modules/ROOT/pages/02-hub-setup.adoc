@@ -1,8 +1,8 @@
-= Deploy Argo Hub Setup
+= 2. Deploy Argo Hub Setup
 include::_attributes.adoc[]
 
 [#laboverview]
-== Lab overview
+== 2.1 Lab overview
 
 In this workshop we are covering a GitOps infrastructure configuration approach. 
 We will set an argo of argos and app of apps architecture to manage setup on destination clusters, and will apply day 2 operations on managed clusters.
@@ -38,7 +38,7 @@ Once GitOps is deployed on your managed cluster you can start configuring day 2 
 image::diagram-5.png[]
 
 [#environment]
-== Environment
+== 2.2 Environment
 
 You have access to two clusters: *_Argo Hub_* and your own *_SNO_*.
 
@@ -81,7 +81,7 @@ authentication token for this purpose or you can pass _kubeconfig_ file to give 
 image::cluster-api-sno.png[]
 
 [#hubsetup]
-== Argo Hub Setup
+== 2.3 Argo Hub Setup
 
 In the _Argo Hub_ cluster you can find two argo instances, _openshift-gitops_ (default) and _argocd_. Default instance is intended to manage the hub itself, and it is in charge of
 deploying the _argocd_ instance and its configuration. While _argocd_ instance is dedicated for managed clusters setup and configuration.

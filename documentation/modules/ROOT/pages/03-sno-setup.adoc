@@ -1,7 +1,7 @@
-= Deploy Managed Cluster Setup
+= 3. Deploy Managed Cluster Setup
 
 [#managedconfiguration]
-== Managed Cluster Configuration
+== 3.1 Managed Cluster Configuration
 
 _Argo Hub_ setup has been already performed, so you just need to focused on managed your Single Node OpenShift.
 
@@ -286,7 +286,7 @@ image::workshop-content-deploy-folders-2.png[]
 NOTE: ApplicationSet controller is not enabled by default and must be configured on ArgoCD instance.
 
 [#helmcharts]
-== Helm Charts
+== 3.2 Helm Charts
 
 A *Helm chart* is a set of _YAML_ manifests and templates that describes Kubernetes resources (Deployments, Secrets, _CRDs_, etc.) and defined configurations needed for the Kubernetes application.
 
@@ -760,9 +760,7 @@ need to have _cluster-wide_ privileges.
 
 NOTE: (Add link to some article about namespaces management)
 
-=== *Push changes to your forked repository _/workshop-gitops-content-deploy_*
-
-Finally push your changes to your working branch, then we are going to deploy the _manage-setup-a-<name>_ Application in order to _bootstrap_ the managed cluster, _SNO_ in this case:
+Do not forget to *push your changes to your working branch!*, then we are going to deploy the _manage-setup-a-<name>_ Application in order to _bootstrap_ the _SNO_:
 
 NOTE: Make sure you are in the _sno-<name>-setup_ branch.
 
