@@ -758,7 +758,7 @@ Then on *_AppProject_* we can define restrictions like _source repo_, _destinati
 Last but not least are *_Namespaces_*. _Namespaces_ are created as part of the bootstrap process by the _argo-infra_ instance in the _SNO_ so the operator in charge of managing apps lifecycle does not 
 need to have _cluster-wide_ privileges. 
 
-NOTE: (Add link to some article about namespaces management)
+NOTE: *Add link to some article about namespaces management*
 
 Do not forget to *push your changes to your working branch!*, then we are going to deploy the _manage-setup-a-<name>_ Application in order to _bootstrap_ the _SNO_:
 
@@ -877,7 +877,7 @@ Once this is completed login to you managed cluster, _SNO_, and verify:
 
 IMPORTANT: Remember to use you <name> and <domain> :)
 
-- Open https://console-openshift-console.apps.sno-<name>.<domain>.opentlc.com/
+- Open the OpenShift _SNO_ console (E.g. https://console-openshift-console.apps.sno-<name>.<domain>.opentlc.com)
 
 .SNO log in
 image::hub-login-1.png[]
@@ -893,7 +893,7 @@ Verify that:
 
 - 2) *_argo-infra_* instance exists as _ArgoCD_ object and is _cluster-wide_.
 
-IMPORTANT: Log in _argocd-infra_ instance using OpenShift credentials, with user _admin_ and <pass> provided by intrctor.
+Now Log in _argocd-infra_ instance using OpenShift credentials, with user _admin_ and <pass> provided by intructor.
 
 Click *_Settings_* section  (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com/settings)
 
@@ -948,6 +948,15 @@ spec:
 
 Then hit *_Save_* -> *_Create_*
 
+First log in the _SNO_, replace *_<name>_*, *_<pass>_* and *_<domain>_*:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+oc login -u admin -p <pass> https://api.sno-<name>.<domain>.opentlc.com:6443
+----
+
 When the Application is created it deploys an app called _vault_ in namespace _vault-secrets_ that will encode a password and store it in _Vault_. If you access the application route you will not be able to see the password in plain text:
 
 [.lines_7]
@@ -955,7 +964,6 @@ When the Application is created it deploys an app called _vault_ in namespace _v
 [source, shell,subs="+macros,+attributes"]
 ----
 oc get route vault -n vault-secrets 
-
 curl vault-vault-secrets.apps.sno-<name>.<domain>.opentlc.com
 ----
 
@@ -963,7 +971,7 @@ curl vault-vault-secrets.apps.sno-<name>.<domain>.opentlc.com
 [.console-output]
 [source, shell,subs="+macros,+attributes"]
 ----
-The password value is: cGFzc3dvcmQxMjM=
+The password value is: <password | base64encode>
 ----
 
 Now that we have an application successfully deployed in the _argocd-apps_ instance, it is possible to check _RBAC_ configuration, for example try:

@@ -44,7 +44,7 @@ Regarding this workshop, there are two GitHub repositories you will need to fork
 .Fork workshop-gitops-content-deploy
 image::fork-1.png[]
 
-Now you have the workshop-gitops-content-deploy repository forked in your GitHub account, let's clone it in local and create a new branch.
+Now you have the *_workshop-gitops-content-deploy_* repository forked in your GitHub account, let's clone it in local and create a new branch.
 
 IMPORATNT: Replace *_<your_user>_* for your GitHub user account, and *_<name>_* for your assigned cluster in this workshop.
 
@@ -67,7 +67,7 @@ Replicate the same with the second reposiroty.
 .Fork helm-infra-gitops-workshop
 image::fork-2.png[]
 
-Now you have the helm-infra-gitops-workshop repository forked in your GitHub account, let's clone it in local and create a new branch.
+Now you have the *_helm-infra-gitops-workshop_* repository forked in your GitHub account, let's clone it in local and create a new branch.
 
 IMPORTANT: Replace *_<your_user>_* for your GitHub user account, and *_<name>_* for your assigned cluster in this workshop.
 
