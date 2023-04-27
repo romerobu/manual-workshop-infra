@@ -44,9 +44,9 @@ Regarding this workshop, there are two GitHub repositories you will need to fork
 .Fork workshop-gitops-content-deploy
 image::fork-1.png[]
 
-Now you have the *_workshop-gitops-content-deploy_* repository forked in your GitHub account, let's clone it in local and create a new branch.
+Now you have the *_workshop-gitops-content-deploy_* repository forked in your GitHub account, let´s clone it in local and create a new branch.
 
-IMPORATNT: Replace *_<your_user>_* for your GitHub user account, and *_<name>_* for your assigned cluster in this workshop.
+IMPORTANT: Replace *_<your_user>_* for your GitHub user account, and *_<name>_* for your assigned cluster in this workshop.
 
 [.lines_7]
 [.console-input]
@@ -59,7 +59,7 @@ cd ~/workshop-gitops-content-deploy
 git checkout -b sno-<name>-setup
 ----
 
-Replicate the same with the second reposiroty.
+Replicate the same with the second repository.
 
 - Access https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository.
 - Hit *_Fork_* available at the top right of the screen. Then click *_Create fork_* with the default configuration.
@@ -67,7 +67,7 @@ Replicate the same with the second reposiroty.
 .Fork helm-infra-gitops-workshop
 image::fork-2.png[]
 
-Now you have the *_helm-infra-gitops-workshop_* repository forked in your GitHub account, let's clone it in local and create a new branch.
+Now you have the *_helm-infra-gitops-workshop_* repository forked in your GitHub account, let´s clone it in local and create a new branch.
 
 IMPORTANT: Replace *_<your_user>_* for your GitHub user account, and *_<name>_* for your assigned cluster in this workshop.
 
@@ -76,7 +76,7 @@ IMPORTANT: Replace *_<your_user>_* for your GitHub user account, and *_<name>_* 
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~
-git clone https://github.com/<your_user>/https://github.com/romerobu/helm-infra-gitops-workshop.git
+git clone https://github.com/<your_user>/helm-infra-gitops-workshop.git
 
 cd ~/helm-infra-gitops-workshop
 git checkout -b sno-<name>  

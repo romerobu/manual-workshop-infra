@@ -1,1 +1,20 @@
-Check the build courseware https://redhat-scholars.github.io/build-course[documentation]  on how folder structure, how to use macros and other gotchas
+# Red Hat Workshop - ArgoCD Managing Infrastructure
+
+## Introduction
+
+_Manual Workshop Infra_ is a repository that includes a tutorial deployed on GitHub Pages. The goal of this tutorial is to learn how to deploy _day 2 operations_ and _applications_ through ArgoCD, with a focus on GitOps infrastructure configuration. Some of the contents you can expect in this tutorial include: 
+
+- Setting up an OpenShift _Argo Hub_ cluster. 
+
+- Configuring managed clusters, such as _Single Node OpenShift_ in this workshop.
+
+- Deploying day 2 operations and applications with ArgoCD. 
+
+- Automating the deployment of day 2 operations and applications through _ApplicationSet_ and _Application_.
+
+## Workshop Infraestructure
+To complete this tutorial, we recommend using the https://github.com/romerobu/workshop-gitops-infra-deploy[Workshop GitOps Infra Deploy] repository to deploy all the necessary infrastructure.
+
+## Courseware official documentation
+
+This tutorial has been developed using courseware. Please visit courseware https://redhat-scholars.github.io/build-course[documentation] for more information about this framework.

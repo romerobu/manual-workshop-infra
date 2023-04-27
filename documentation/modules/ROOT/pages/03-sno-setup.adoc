@@ -3,9 +3,11 @@
 [#managedconfiguration]
 == 3.1 Managed Cluster Configuration
 
-_Argo Hub_ setup has been already performed, so you just need to focused on managed your Single Node OpenShift.
+_Argo Hub_ setup has been already performed, so you just need to be focus on managed your Single Node OpenShift.
 
-Let's make some modifications in the code to start deploying _GitOps_ in the managed cluster. Open the _workshop-gitops-content-deploy_ folder and make sure all the changes are done in the correct branch _sno-<name>-setup_:
+Let´s make some modifications in the code to start deploying _GitOps_ in the managed cluster. Open the _workshop-gitops-content-deploy_ folder and make sure all the changes are done in the correct branch _sno-<name>-setup_:
+
+NOTE: What is https://www.redhat.com/en/topics/devops/what-is-gitops[GitOps]?
 
 [.lines_7]
 [.console-input]
@@ -17,7 +19,7 @@ git checkout sno-<name>-setup
 
 As every user is deploying its own bootstrap file, they must have an unique name and they should be deployed on your scoped project where your user has privileges.
 
-IMPORTANT: Change *cluster-definition/(sno-<name>)* folder as your assigned cluster as this value will be used as a parameter for ApplicationSet.
+IMPORTANT: Change *cluster-definition/sno-<name>* folder as your assigned cluster as this value will be used as a parameter for ApplicationSet.
 
 [.lines_7]
 [.console-input]
@@ -58,9 +60,9 @@ vi cluster-definition/sno-<name>/cluster.json
 }
 ----
 
-You must also update _global-config/bootstrap-a/managed-setup-<name>.yaml_. Note how this application deploys to a different namespace and argo instance compared to _hub-setup_ application.
+You must also update _global-config/bootstrap-a/managed-setup.yaml_. Note how this application deploys to a different namespace and argo instance compared to _hub-setup_ application.
 
-Update from _global-config/bootstrap-a/managed-setup-<name>.yaml_:
+Update from _global-config/bootstrap-a/managed-setup.yaml_:
 
 - *<name> -> Assigned cluster*
 - *<your_user> -> Your GitHub user account*
@@ -70,7 +72,7 @@ Update from _global-config/bootstrap-a/managed-setup-<name>.yaml_:
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/workshop-gitops-content-deploy
-vi global-config/bootstrap-a/managed-setup-a-<name>.yaml
+vi global-config/bootstrap-a/managed-setup.yaml
 ----
 
 [.lines_7]
@@ -99,19 +101,17 @@ spec:
 
 The source path of this Application points to the ApplicationSet used.
 
-NOTE: Learn more about https://argo-cd.readthedocs.io/en/stable/user-guide/application-set/[ApplicationSet]
-
 ApplicationSet is a Custom Resource that can be used to genereate Applications to multiple clusters from multiple originis. ApplicationSet controller is installed alongside ArgoCD even though it must be explicitaly enabled. 
 
 ApplicationSet is a helpful approach for multi cluster management, and it supplements ArgoCD by adding additional features in support of _cluster-administrator-focused_ scanerios. Some of those are:
 
-  1) Ability to use a single Kubernetes manifest to target multiple Kubernetes clusters with ArgoCD.
+- Ability to use a single Kubernetes manifest to target multiple Kubernetes clusters with ArgoCD.
 
-  2) Ability to use a single Kubernetes manifest to deploy multiple applications from one or multiple Git repositories with ArgoCD.
+- Ability to use a single Kubernetes manifest to deploy multiple applications from one or multiple Git repositories with ArgoCD.
 
-  3) Improved support for monorepos (multiple ArgoCD Application resources defined within a single Git repository).
+- Improved support for monorepos (multiple ArgoCD Application resources defined within a single Git repository).
 
-  4) Improves ability of individual cluster tenants to deploy applications using ArgoCD (without needing to involve privileged cluster admin in enabling the destination servers).
+- Improves ability of individual cluster tenants to deploy applications using ArgoCD (without needing to involve privileged cluster admin in enabling the destination servers).
 
 ApplicationSet uses generators to create Application with multiple origins and destinations using templating. 
 
@@ -120,14 +120,14 @@ we are using _Git Files_ generator so cluster definition values are used as para
 
 NOTE: Find more about https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators/[Generators]
 
-Now we are going to take a look at _cluster-addons/cluster-addons-as/ in this folder we can expect two AplicationSet:
+Now we are going to take a look at _cluster-addons/cluster-addons-as/_ in this folder we can expect two AplicationSet:
 
 .Folder structure
 image::workshop-content-deploy-folders-1.png[]
 
-The first ApplicationSet _cluster-addons/cluster-addons-as/gitops-setup-sno-<name>.yaml_ deploys the _openshift-gitops_ operator and an initial non default cluster wide instance for day 2 and infraestructure operations.
+The first ApplicationSet _cluster-addons/cluster-addons-as/gitops-setup-sno-as.yaml_ deploys the _openshift-gitops_ operator and an initial non default _cluster wide_ instance for infrastructure operations.
 
-Update from _cluster-addons/cluster-addons-as/gitops-setup-sno-<name>.yaml_:
+Update from _cluster-addons/cluster-addons-as/gitops-setup-sno-as.yaml_:
 
 - *<name> -> Assigned cluster*
 - *<your_user> -> Your GitHub user account*
@@ -137,7 +137,7 @@ Update from _cluster-addons/cluster-addons-as/gitops-setup-sno-<name>.yaml_:
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/workshop-gitops-content-deploy
-vi cluster-addons/cluster-addons-as/gitops-setup-sno-<name>.yaml
+vi cluster-addons/cluster-addons-as/gitops-setup-sno-as.yaml
 ----
 
 [.lines_7]
@@ -173,12 +173,12 @@ spec:
           selfHeal: true       
 ----    
 
-The second ApplicationSet _cluster-addons/cluster-addons-as/bootstrap-sno-<name>.yaml_ deploys an Application in the _argocd-infra_ instance on manged cluster, called _sno-setup_, with configuration like: _RBAC_, a second _argocd-apps_ instance, namespaces and vault.
+The second ApplicationSet _cluster-addons/cluster-addons-as/bootstrap-sno-as.yaml_ deploys an Application in the _argocd-infra_ instance on manged cluster, called _sno-setup_, with configuration like: _RBAC_, a second _argocd-apps_ instance, namespaces and vault.
 
 .sno-setup Application
 image::diagram-4.png[]
 
-Update from _cluster-addons/cluster-addons-as/bootstrap-sno-<name>.yaml_:
+Update from _cluster-addons/cluster-addons-as/bootstrap-sno-as.yaml_:
 
 - *<name> -> Assigned cluster*
 - *<your_user> -> Your GitHub user account*
@@ -188,7 +188,7 @@ Update from _cluster-addons/cluster-addons-as/bootstrap-sno-<name>.yaml_:
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/workshop-gitops-content-deploy
-vi cluster-addons/cluster-addons-as/bootstrap-sno-<name>.yaml
+vi cluster-addons/cluster-addons-as/bootstrap-sno-as.yaml
 ----
 
 [.lines_7]
@@ -365,6 +365,17 @@ Once the _openshift-gitops_ operator is running, we need to deploy the ArgoCD in
 
 *_Sync Waves_* are defined on each resource as annotations, and they tell Argo the order in which resources should be applied once the previous resource is already in healthy status.
 
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
+...
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+...
+----
+
 NOTE: You can take a look in detail to the https://argo-cd.readthedocs.io/en/stable/user-guide/sync-waves/[Sync Waves] documentation.
 
 For some specific resources they need a *_Custom Healthcheck_*. Most of the objects only require existing to work but others like _subscriptions_ may exists but not progress to a successful status so we need a _Custom Healthcheck_ to make sure the next _Sync Wave_ does not start till the operators are properly installed.
@@ -380,7 +391,7 @@ Next chart to take a look is _cluster-addons/charts/bootstrap-app_. This chart d
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/workshop-gitops-content-deploy
-vi cluster-addons/charts/bootstrap-app/templates/application.yaml
+cat cluster-addons/charts/bootstrap-app/templates/application.yaml
 ----
 
 [.lines_7]
@@ -425,7 +436,7 @@ cd ~/workshop-gitops-content-deploy/cluster-addons/charts/bootstrap/templates/
 .Bootstrap resources
 image::workshop-content-deploy-folders-3.png[]
 
-The _argocd-apps_ instance definition in _cluster-addons/charts/bootstrap/templates/argocd/argocd.yaml_ is slightly similar to _argocd-infra_ but it has some special customization, lets take a look:
+The _argocd-apps_ instance definition in _cluster-addons/charts/bootstrap/templates/argocd/argocd.yaml_ is slightly similar to _argocd-infra_ but it has some special customization, let´s take a look:
 
 NOTE: Take a look to the *_resourceCustomizations_* section to review the _Custom Healthcheck_.
 
@@ -434,24 +445,14 @@ NOTE: Take a look to the *_resourceCustomizations_* section to review the _Custo
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/workshop-gitops-content-deploy
-vi cluster-addons/charts/bootstrap/templates/argocd/argocd.yaml
+cat cluster-addons/charts/bootstrap/templates/argocd/argocd.yaml
 ----
 
 [.lines_7]
 [.console-output]
 [source, shell,subs="+macros,+attributes"]
 ----
-kind: ArgoCD
-apiVersion: argoproj.io/v1alpha1
-metadata:
-  name: {{ $.Values.argocd.name }}
-  namespace: {{ $.Values.operators.gitops.namespace }}
-  {{- if $.Values.global.argocd.enabled }}
-  annotations:
-    argocd.argoproj.io/sync-wave: "5"
-  {{- end }}  
-spec:
-  sso:
+...
     dex:  
       openShiftOAuth: true # 1
       resources:
@@ -464,24 +465,7 @@ spec:
     provider: dex
   resourceTrackingMethod: annotation+label # 2
   applicationSet: # 3
-    logLevel: info
-  controller:
-    resources:
-      limits:
-        cpu: 2000m
-        memory: 2048Mi
-      requests:
-        cpu: 250m
-        memory: 1024Mi
-  ha:
-    enabled: false
-    resources:
-      limits:
-        cpu: 500m
-        memory: 256Mi
-      requests:
-        cpu: 250m
-        memory: 128Mi
+...
   rbac: # 4
     defaultPolicy: ''
     policy: |-
@@ -493,44 +477,7 @@ spec:
       g, argo-operators, role:operator
       g, argo-dev-operators, role:operator-dev      
     scopes: '[groups]'
-  redis:
-    resources:
-      limits:
-        cpu: 500m
-        memory: 256Mi
-      requests:
-        cpu: 250m
-        memory: 128Mi
-  repo: 
-    resources:
-      limits:
-        cpu: 1000m
-        memory: 1024Mi
-      requests:
-        cpu: 250m
-        memory: 256Mi
-    env:
-        - name: AVP_AUTH_TYPE
-          valueFrom:
-            secretKeyRef:
-              key: AVP_AUTH_TYPE
-              name: argocd-vault-plugin-credentials
-        - name: AVP_TYPE
-          valueFrom:
-            secretKeyRef:
-              key: AVP_TYPE
-              name: argocd-vault-plugin-credentials
-        - name: VAULT_ADDR
-          valueFrom:
-            secretKeyRef:
-              key: VAULT_ADDR
-              name: argocd-vault-plugin-credentials
-        - name: AVP_K8S_ROLE
-          valueFrom:
-            secretKeyRef:
-              key: AVP_K8S_ROLE
-              name: argocd-vault-plugin-credentials       
-    mountsatoken: true
+...
     sidecarContainers: # 5
       - command:
           - /var/run/argocd/argocd-cmp-server
@@ -560,35 +507,7 @@ spec:
         name: custom-tools
       - emptyDir: {}
         name: tmp-dir                  
-    initContainers:
-      - args:
-          - >-
-            wget -O /custom-tools/argocd-vault-plugin
-            https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VERSION}/argocd-vault-plugin_${AVP_VERSION}_linux_amd64
-            && chmod +x /custom-tools/argocd-vault-plugin && ls -la
-            /custom-tools/
-        command:
-          - sh
-          - '-c'
-        env:
-          - name: AVP_VERSION
-            value: 1.11.0
-        image: 'alpine:3.8'
-        name: download-tools
-        volumeMounts:
-          - mountPath: /custom-tools
-            name: custom-tools               
-  resourceExclusions: "- apiGroups:\n  - tekton.dev\n  clusters:\n  - '*'\n  kinds:\n  - TaskRun\n  - PipelineRun        \n"
-  server:
-    resources:
-      limits:
-        cpu: 500m
-        memory: 256Mi
-      requests:
-        cpu: 125m
-        memory: 128Mi
-    route:
-      enabled: true
+...              
   configManagementPlugins: | # 6
     - name: argocd-vault-plugin
       generate:
@@ -635,21 +554,21 @@ spec:
 
 Also see:
 
-  1) Dex uses groups and users defined within Openshift by checking the Oauth server.
+- 1) Dex uses groups and users defined within Openshift by checking the Oauth server.
 
-  2) Overrides default tracking method by label to annotation+label.
+- 2) Overrides default tracking method by label to annotation+label.
 
-  3) Enable ApplicationSet controller.
+- 3) Enable ApplicationSet controller.
 
-  4) Configure argo RBAC.
+- 4) Configure argo RBAC.
 
-  5) Configure vault plugin as a sidecar container.
+- 5) Configure vault plugin as a sidecar container.
 
-  6) Configure new plugin for vault.
+- 6) Configure new plugin for vault.
 
-  7) Configure resource healthcheck for Subscription.
+- 7) Configure resource healthcheck for Subscription.
 
-As you may notice this instance contains some parametes for configuring _Vault Plugin_, which we will discuss later, and _RBAC_ model.
+As you may notice, this instance contains some parametes for configuring _Vault Plugin_, which we will discuss later, and _RBAC_ model.
 
 *_RBAC_* is defined on _cluster-addons/charts/bootstrap/templates/rbac/_ folder and includes the basic configuration for Argo _RBAC_ and projects.
 
@@ -670,9 +589,9 @@ NOTE: Find more in https://argo-cd.readthedocs.io/en/stable/operator-manual/rbac
 
 ArgoCD has two pre-defined roles but _RBAC_ configuration allows defining roles and groups. See below:
 
-  1) role:readonly - read-only access to all resources
+- 1) role:readonly - read-only access to all resources
 
-  2) role:admin - unrestricted access to all resources
+- 2) role:admin - unrestricted access to all resources
 
 Additionally to the defined roles, it is possible to create some specific roles to allow _argo-operators_ and _argo-dev-operators_ group members manage applications in ArgoCD. See the groups in _cluster-addons/charts/bootstrap/templates/values.yaml_ values file:
 
@@ -717,7 +636,7 @@ If you navigate to rbac section on _argo-apps_ instance, you will see some _RBAC
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/workshop-gitops-content-deploy
-vi cluster-addons/charts/bootstrap/templates/argocd/argocd.yaml
+cat cluster-addons/charts/bootstrap/templates/argocd/argocd.yaml
 ----
 
 [.lines_7]
@@ -875,9 +794,11 @@ image::projects-list.png[]
 
 Once this is completed login to you managed cluster, _SNO_, and verify:
 
-IMPORTANT: Remember to use you <name> and <domain> :)
+IMPORTANT: Remember to use your <name> and <domain>.
 
 - Open the OpenShift _SNO_ console (E.g. https://console-openshift-console.apps.sno-<name>.<domain>.opentlc.com)
+
+- Hit *_my_htpasswd_provider_*.
 
 .SNO log in
 image::hub-login-1.png[]
@@ -895,24 +816,24 @@ Verify that:
 
 Now Log in _argocd-infra_ instance using OpenShift credentials, with user _admin_ and <pass> provided by intructor.
 
-Click *_Settings_* section  (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com/settings)
+- 3) Click *_Settings_* section  (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com/settings)
 
 .Settings section
 image::settings-section-argocd.png[]
 
-Click *_Clusters_* to view your destination cluster, then click again in the destination cluster to view the _Namespace_ configuration, you should see _'All namespaces'_:
+- 4) Click *_Clusters_* to view your destination cluster, then click again in the destination cluster to view the _Namespace_ configuration, you should see _'All namespaces'_:
 
 .General overview argocd-infra instance
 image::cluster-wide.png[]
 
-- 3) Follow the same steps to verify that *_argocd-apps_* instance exists and is NOT _cluster-wide_.
+- 5) Follow the same steps to verify that *_argocd-apps_* instance exists and is NOT _cluster-wide_.
 
 .General overview argocd-apps instance
 image::argocd-apps-general-1.png[]
 
-- 4) Existing _'Dev'_ and _'Pro'_ _AppProject_ on argocd-apps instance.
+- 6) Both _'Dev'_ and _'Pro'_ _App Project_ exist on _argocd-apps_ instance.
 
-- 5) Verify you can create apliations on _'Dev'_ project for _argocd-apps_ instance.
+Verify you can create apliations on _'Dev'_ project for _argocd-apps_ instance.
 
 Click -> *_New app_* -> *_Edit as Yaml_* 
 
