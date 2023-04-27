@@ -677,7 +677,7 @@ Then on *_AppProject_* we can define restrictions like _source repo_, _destinati
 Last but not least are *_Namespaces_*. _Namespaces_ are created as part of the bootstrap process by the _argo-infra_ instance in the _SNO_ so the operator in charge of managing apps lifecycle does not 
 need to have _cluster-wide_ privileges. 
 
-NOTE: *Add link to some article about namespaces management*
+NOTE: *Add link to some article about namespaces management.*
 
 Do not forget to *push your changes to your working branch!*, then we are going to deploy the _manage-setup-a-<name>_ Application in order to _bootstrap_ the _SNO_:
 
