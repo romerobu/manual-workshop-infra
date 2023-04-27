@@ -35,6 +35,3 @@ A Red Hat GitOps infrastructure configuration approach workshop.
 ** xref:04-day2-config.adoc#vault[4.5 Vault Configuration]
 ** xref:04-day2-config.adoc#appset[4.6 Day 2 with ApplicationSet]
 ** xref:04-day2-config.adoc#summary[4.7 Summary]
-
-[.tile]
-* xref:05-challenges.adoc[5. Challenges]
