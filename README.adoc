@@ -2,7 +2,7 @@
 
 ## Introduction
 
-_Manual Workshop Infra_ is a repository that includes a tutorial deployed on GitHub Pages. The goal of this tutorial is to learn how to deploy _day 2 operations_ and _applications_ through ArgoCD, with a focus on GitOps infrastructure configuration. Some of the contents you can expect in this tutorial include: 
+_Manual Workshop Infra_ is a repository that includes a tutorial deployed on GitHub Pages. The goal of this tutorial is to learn how to deploy _Day 2 operations_ and _applications_ through ArgoCD, with a focus on GitOps infrastructure configuration. Some of the contents you can expect in this tutorial include: 
 
 - Setting up an OpenShift _Argo Hub_ cluster. 
 
