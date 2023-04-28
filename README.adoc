@@ -8,7 +8,7 @@ _Manual Workshop Infra_ is a repository that includes a tutorial deployed on Git
 
 - Configuring managed clusters, such as _Single Node OpenShift_ in this workshop.
 
-- Deploying day 2 operations and applications with ArgoCD. 
+- Deploying Day 2 operations and applications with ArgoCD. 
 
 - Automating the deployment of Day 2 operations and applications through _ApplicationSet_ and _Application_.
 
