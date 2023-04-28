@@ -10,7 +10,7 @@ _Manual Workshop Infra_ is a repository that includes a tutorial deployed on Git
 
 - Deploying day 2 operations and applications with ArgoCD. 
 
-- Automating the deployment of day 2 operations and applications through _ApplicationSet_ and _Application_.
+- Automating the deployment of Day 2 operations and applications through _ApplicationSet_ and _Application_.
 
 ## Workshop Infraestructure
 To complete this tutorial, we recommend using the https://github.com/romerobu/workshop-gitops-infra-deploy[Workshop GitOps Infra Deploy] repository to deploy all the necessary infrastructure.
