@@ -26,7 +26,7 @@ IMPORTANT: Change *cluster-definition/sno-<name>* folder as your assigned cluste
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/workshop-gitops-content-deploy
-E.g.: mv config-definition/sno-<name> config-definition/sno-1
+E.g.: mv cluster-definition/sno-<name> cluster-definition/sno-1
 ----
 
 IMPORTANT: Always replace _<name>_ and _<domain>_ by your assigned cluster. 
@@ -832,6 +832,8 @@ image::argocd-apps-general-1.png[]
 - 6) Both _'Dev'_ and _'Pro'_ _App Project_ exist on _argocd-apps_ instance.
 
 Verify you can create apliations on _'Dev'_ project for _argocd-apps_ instance.
+
+IMPORTANT: This app should be deployed as *prerequisite* of *_4.5 Vault Configuration subsection_*.
 
 Click -> *_New app_* -> *_Edit as Yaml_* 
 

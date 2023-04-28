@@ -596,7 +596,19 @@ Configuring the monitoring application is relatively straightforward since it do
 
 Then navigate to OpenShift _SNO_ console (E.g. https://console-openshift-console.apps.sno-<name>.<domain>.opentlc.com) to verify those objects deployed in the _argocd-infra_ instance exist on the _SNO_ and if _Service Monitor_ is scraping your metrics properly:
 
-*Add how to*
+Once the _Service Monitor_ is created, the respective metrics should be found in the _SNO_ OpenShift Console (*_Observe_* -> *_Metrics_*). For example, it is possible to find the *_tomcat_sessions_active_current_sessions metric_*:
+
+.Metrics
+image::service-monitor-1.png[]
+
+The respective alert to the _Prometheus rule_ created should be found in the OpenShift Console (*_Observe_* -> *_Alerting_*). For example, it is possible to find the *App1SessionsAlert* alert:
+
+.Prometheus rule
+image::promethus-alert-1.png[]
+
+In this case, it is possible to see that this alarm is firing because the metric *tomcat_sessions_alive_max_seconds* is equal to *0*.
+
+NOTE: Please pay special attention to alerting best practices included in the following https://docs.openshift.com/container-platform/4.11/monitoring/managing-alerts.html#Optimizing-alerting-for-user-defined-projects_managing-alerts[link].
 
 [#namespace]
 == 4.4 Namespace Configuration
@@ -751,10 +763,35 @@ spec:
 
 - Then hit *_Save_* -> *_Create_*
 
-Once you update the Application you want be able to create more than _4 pods_ in namespace _app_. Try to update replicas in _Deployment_ to see if _quota_ has been correctly applied by Argo.
+Once you update the Application you want be able to create more than _4 pods_ in namespace _app_. Try to update replicas to _5_ in _Deployment_ to see if _quota_ has been correctly applied by Argo.
 
-.Change Replica Count
-image::app-replicas.png[]
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+vi charts/app/values.yaml
+----
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
+app:
+...
+  replicas: 5
+...
+----
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "replicas scaled up"
+git push sno-<name>
+----
 
 Once you update the replicas in the _Deployment_ you should see _4 of 5 pods_:
 
@@ -762,6 +799,34 @@ Once you update the replicas in the _Deployment_ you should see _4 of 5 pods_:
 image::quota-applied.png[]
 
 Deployment never progess to _5 replicas_, and Argo stays in _Progressing_ trying to reconcile a not allowed values of replicas. Finally *set it back to _1 replica_*.
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+vi charts/app/values.yaml
+----
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
+app:
+...
+  replicas: 1
+...
+----
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "replicas scaled down"
+git push sno-<name>
+----
 
 Then if you try to navigate to _app_ route you will see you are not allowed:
 
@@ -813,13 +878,15 @@ oc get route app -n app
 curl app-app.apps.sno-<name>.<domain>.opentlc.com
 ----
 
-.app available :)
+.app available
 image::traffic-allowed.png[]
 
 NOTE: You will probably need to delete the _Network Policy_ *_deny-by-default_* in OpenShift in namespace _app_, as it already exists, Argo will not apply our latest changes. 
 
 [#vault]
 == 4.5 Vault Configuration
+
+IMPORTANT: As prerequisite make sure you have deployed the *Vault application* listed at the end of *_3.2 Helm Charts subsection_*.
 
 _Vault_ by _Hashicorp_ is a tool that allows to store and encrypt secrets to secure applications and protect sensitive data. Vault server stores the sensitive data while a special plugin for Argo retrieves this information when creating objects thanks to the use of paths and references so we do not leave sensitive information visible in the code repository. 
 
@@ -1054,6 +1121,8 @@ If you take a look to the existing secret in _vault-secrets_ namespace, as we ar
 image::secret-vault.png[]
 
 So we need to modify existing Application _sno-<name>-vault_ in _argocd-apps_ instance (E.g. https://argocd-apps-openshift-operators.apps.sno-<name>.<domain>.opentlc.com) to use *plugin*. 
+
+NOTE: This modification applies to *Vault application* deployed at the end of *_3.2 Helm Charts subsection_*.
 
 - Click *_sno-<name>-vault_* -> *_App details_* -> then *_Edit_*, and add:
 
