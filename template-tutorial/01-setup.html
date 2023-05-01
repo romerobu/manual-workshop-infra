@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Environment Setup :: GitOps Infrastructure Configuration Workshop</title>
-    <link rel="canonical" href="https://github.com/romerobu/manual-workshop-infra/template-tutorial/01-setup.html">
+    <title>1. Environment Setup :: GitOps Infrastructure Configuration Workshop</title>
+    <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/template-tutorial/01-setup.html">
     <link rel="prev" href="index.html">
     <link rel="next" href="02-hub-setup.html">
     <meta name="generator" content="Antora 3.0.0">
@@ -15,7 +15,7 @@
   <nav class="navbar">
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" style="font-size: 24px; color: white" href="https://github.com/romerobu/manual-workshop-infra">GitOps Infrastructure Configuration Workshop</a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="http://localhost:3000/rhs-build-course/index.html">GitOps Infrastructure Configuration Workshop</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
@@ -68,7 +68,7 @@
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="02-hub-setup.html">2. Deploy Hub Cluster Setup</a>
+    <a class="nav-link" href="02-hub-setup.html">2. Deploy Argo Hub Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="02-hub-setup.html#laboverview">2.1 Lab overview</a>
@@ -77,25 +77,25 @@
     <a class="nav-link" href="02-hub-setup.html#environment">2.2 Environment</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-hub-setup.html#hubsetup">2.3 Hub setup</a>
+    <a class="nav-link" href="02-hub-setup.html#hubsetup">2.3 Argo Hub Setup</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="03-sno-setup.html">3. Deploy Managed Setup</a>
+    <a class="nav-link" href="03-sno-setup.html">3. Deploy Managed Cluster Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-sno-setup.html#managedconfiguration">3.1. Managed configuration</a>
+    <a class="nav-link" href="03-sno-setup.html#managedconfiguration">3.1. Managed Cluster Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-sno-setup.html#helmcharts">3.2. Helm charts</a>
+    <a class="nav-link" href="03-sno-setup.html#helmcharts">3.2. Helm Charts</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="04-day2-config.html#daytwooperations">4. Day-2 Operations</a>
+    <a class="nav-link" href="04-day2-config.html#daytwooperations">4. Day 2 Operations</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="04-day2-config.html#identityproviders">4.1 Configure Identity Providers</a>
@@ -107,18 +107,18 @@
     <a class="nav-link" href="04-day2-config.html#monitoring">4.3 Configure Monitoring</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-day2-config.html#namespace">4.4 Namespace configuration</a>
+    <a class="nav-link" href="04-day2-config.html#namespace">4.4 Namespace Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-day2-config.html#vault">4.6 Vault configuration</a>
+    <a class="nav-link" href="04-day2-config.html#vault">4.5 Vault Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-day2-config.html#appset">4.7 Day 2 with ApplicationSet</a>
+    <a class="nav-link" href="04-day2-config.html#appset">4.6 Day 2 with ApplicationSet</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-config.html#summary">4.7 Summary</a>
   </li>
 </ul>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="05-challenges.html">5. Challenges</a>
   </li>
 </ul>
   </li>
@@ -141,9 +141,9 @@
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Environment Setup</h1>
+<h1 class="page">1. Environment Setup</h1>
 <div class="sect1">
-<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>Prerequisite CLI tools</h2>
+<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>1.1 Prerequisite CLI tools</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The following CLI tools are required for running the exercises in this tutorial.
@@ -194,23 +194,94 @@ Please have them installed and configured before you get started with any of the
 </div>
 </div>
 <div class="sect1">
-<h2 id="gettutorialsources"><a class="anchor" href="#gettutorialsources"></a>Get tutorial sources</h2>
+<h2 id="gettutorialsources"><a class="anchor" href="#gettutorialsources"></a>1.2 Get tutorial sources</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Fork this <a href="https://github.com/romerobu/workshop-gitops-content-deploy">repository</a>. Then checkout and create a new branch for your user.</p>
+<p>Regarding this workshop, there are two GitHub repositories you will need to fork. Follow the next steps in order to be able to start the workshop.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Login in <a href="https://github.com/">GitHub</a>.</p>
+</li>
+<li>
+<p>Access <a href="https://github.com/romerobu/workshop-gitops-content-deploy">workshop-gitops-content-deploy</a> repository.</p>
+</li>
+<li>
+<p>Hit <strong><em>Fork</em></strong> available at the top right of the screen. Then click <strong><em>Create fork</em></strong> with the default configuration.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/fork-1.png" alt="fork 1">
+</div>
+<div class="title">Figure 1. Fork workshop-gitops-content-deploy</div>
+</div>
+<div class="paragraph">
+<p>Now you have the <strong><em>workshop-gitops-content-deploy</em></strong> repository forked in your GitHub account, let´s clone it in local and create a new branch.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Replace <strong><em>&lt;your_user&gt;</em></strong> for your GitHub user account, and <strong><em>&lt;name&gt;</em></strong> for your assigned cluster in this workshop.
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">git branch # main
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~
+git clone <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
+
+cd ~/workshop-gitops-content-deploy
 git checkout -b sno-&lt;name&gt;-setup</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Fork this <a href="https://github.com/romerobu/helm-infra-gitops-workshop.git">repository</a>. Then checkout and create a new branch for your user.</p>
+<p>Replicate the same with the second repository.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Access <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm-infra-gitops-workshop</a> repository.</p>
+</li>
+<li>
+<p>Hit <strong><em>Fork</em></strong> available at the top right of the screen. Then click <strong><em>Create fork</em></strong> with the default configuration.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/fork-2.png" alt="fork 2">
+</div>
+<div class="title">Figure 2. Fork helm-infra-gitops-workshop</div>
+</div>
+<div class="paragraph">
+<p>Now you have the <strong><em>helm-infra-gitops-workshop</em></strong> repository forked in your GitHub account, let´s clone it in local and create a new branch.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Replace <strong><em>&lt;your_user&gt;</em></strong> for your GitHub user account, and <strong><em>&lt;name&gt;</em></strong> for your assigned cluster in this workshop.
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">git branch # main
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~
+git clone <a href="https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git" class="bare">https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git</a>
+
+cd ~/helm-infra-gitops-workshop
 git checkout -b sno-&lt;name&gt;</code></pre>
 </div>
 </div>
@@ -218,7 +289,7 @@ git checkout -b sno-&lt;name&gt;</code></pre>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="index.html">Table of Contents</a></span>
-  <span class="next"><a href="02-hub-setup.html">2. Deploy Hub Cluster Setup</a></span>
+  <span class="next"><a href="02-hub-setup.html">2. Deploy Argo Hub Setup</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

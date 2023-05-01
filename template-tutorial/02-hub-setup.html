@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Deploy Hub Cluster Setup :: GitOps Infrastructure Configuration Workshop</title>
-    <link rel="canonical" href="https://github.com/romerobu/manual-workshop-infra/template-tutorial/02-hub-setup.html">
+    <title>2. Deploy Argo Hub Setup :: GitOps Infrastructure Configuration Workshop</title>
+    <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/template-tutorial/02-hub-setup.html">
     <link rel="prev" href="01-setup.html">
     <link rel="next" href="03-sno-setup.html">
     <meta name="generator" content="Antora 3.0.0">
@@ -15,7 +15,7 @@
   <nav class="navbar">
     <div class="navbar-brand">
       <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
-      <a class="navbar-item" style="font-size: 24px; color: white" href="https://github.com/romerobu/manual-workshop-infra">GitOps Infrastructure Configuration Workshop</a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="http://localhost:3000/rhs-build-course/index.html">GitOps Infrastructure Configuration Workshop</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
         <span></span>
@@ -68,7 +68,7 @@
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="02-hub-setup.html">2. Deploy Hub Cluster Setup</a>
+    <a class="nav-link" href="02-hub-setup.html">2. Deploy Argo Hub Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="#laboverview">2.1 Lab overview</a>
@@ -77,25 +77,25 @@
     <a class="nav-link" href="#environment">2.2 Environment</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#hubsetup">2.3 Hub setup</a>
+    <a class="nav-link" href="#hubsetup">2.3 Argo Hub Setup</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="03-sno-setup.html">3. Deploy Managed Setup</a>
+    <a class="nav-link" href="03-sno-setup.html">3. Deploy Managed Cluster Setup</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-sno-setup.html#managedconfiguration">3.1. Managed configuration</a>
+    <a class="nav-link" href="03-sno-setup.html#managedconfiguration">3.1. Managed Cluster Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-sno-setup.html#helmcharts">3.2. Helm charts</a>
+    <a class="nav-link" href="03-sno-setup.html#helmcharts">3.2. Helm Charts</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="04-day2-config.html#daytwooperations">4. Day-2 Operations</a>
+    <a class="nav-link" href="04-day2-config.html#daytwooperations">4. Day 2 Operations</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="04-day2-config.html#identityproviders">4.1 Configure Identity Providers</a>
@@ -107,18 +107,18 @@
     <a class="nav-link" href="04-day2-config.html#monitoring">4.3 Configure Monitoring</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-day2-config.html#namespace">4.4 Namespace configuration</a>
+    <a class="nav-link" href="04-day2-config.html#namespace">4.4 Namespace Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-day2-config.html#vault">4.6 Vault configuration</a>
+    <a class="nav-link" href="04-day2-config.html#vault">4.5 Vault Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-day2-config.html#appset">4.7 Day 2 with ApplicationSet</a>
+    <a class="nav-link" href="04-day2-config.html#appset">4.6 Day 2 with ApplicationSet</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-config.html#summary">4.7 Summary</a>
   </li>
 </ul>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="05-challenges.html">5. Challenges</a>
   </li>
 </ul>
   </li>
@@ -134,26 +134,23 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Lab GitOps infra</a></li>
-    <li><a href="02-hub-setup.html">2. Deploy Hub Cluster Setup</a></li>
+    <li><a href="02-hub-setup.html">2. Deploy Argo Hub Setup</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/romerobu/manual-workshop-infra/edit/master/documentation/modules/ROOT/pages/02-hub-setup.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Deploy Hub Cluster Setup</h1>
+<h1 class="page">2. Deploy Argo Hub Setup</h1>
 <div class="sect1">
-<h2 id="laboverview"><a class="anchor" href="#laboverview"></a>Lab overview</h2>
+<h2 id="laboverview"><a class="anchor" href="#laboverview"></a>2.1 Lab overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In this lab we are covering a GitOps infrastructure configuration approach.
+<p>In this workshop we are covering a GitOps infrastructure configuration approach.
 We will set an argo of argos and app of apps architecture to manage setup on destination clusters, and will apply day 2 operations on managed clusters.</p>
 </div>
 <div class="paragraph">
-<p>Argo hub is a common cluster for every user in this workshop that will be used for deploying the basic infrastructure on managed clusters using ApplicationSet. Managed clusters are a set of Single Node OpenShift available for every user and day 2 operations will setup based on gitops instance running on managed cluster.</p>
-</div>
-<div class="paragraph">
-<p>Take a look at the general overview of the lab.</p>
+<p><em>Argo Hub</em> is a common OpenShift cluster for every user in this workshop that will be used for deploying the basic infrastructure on managed clusters using <a href="https://argo-cd.readthedocs.io/en/stable/user-guide/application-set/">ApplicationSet</a>. Managed clusters are a set of Single Node OpenShift, alias <em>SNO</em>, available for every user and day 2 operations will setup based on ArgoCD instance running on managed cluster.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -162,10 +159,13 @@ We will set an argo of argos and app of apps architecture to manage setup on des
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-You will be able to connect to both argo-hub and managed clusters.
+You will be able to connect to both <em>Argo Hub</em> and <em>managed</em> clusters.
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>Take a look at the general overview of the lab.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -184,16 +184,16 @@ which is deploying and managing a second argocd instance and its configuration.<
 <div class="title">Figure 2. Argo Hub instances</div>
 </div>
 <div class="paragraph">
-<p>Then as an user lab, you will access to the second argo instance where you will have privileges enough thanks to RBAC configuration to deploy an Application for applying ApplicationSets to apply configuration on your managed cluster. In this instance you can expect two ApplicationSet: gitops-setup and bootstrap-sno.</p>
+<p>Then as an user lab, you will access to the second argo instance where you will have privileges enough thanks to <em>RBAC</em> configuration to deploy an <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/">Application</a> for applying ApplicationSet to apply configuration on your managed cluster. In this instance you can expect two ApplicationSet: <em>gitops-setup</em> and <em>bootstrap-sno</em>.</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/diagram-3.png" alt="diagram 3">
 </div>
-<div class="title">Figure 3. Argo Hub configuration</div>
+<div class="title">Figure 3. Argo Hub ApplicationSet</div>
 </div>
 <div class="paragraph">
-<p>Gitops-setup ApplicationSet will install the operator and the argocd-infra instance, while the second one will generate 'N' Applications on managed clusters for bootrstrapping the argocd-apps instance and setup its configuration.</p>
+<p><em>gitops-setup</em> ApplicationSet will install the <em>openshift-gitops</em> operator and the <em>argocd-infra</em> instance, while the second one will generate <em>'N'</em> Applications on managed clusters for bootrstrapping the <em>argocd-apps</em> instance and setup its configuration.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -202,7 +202,7 @@ which is deploying and managing a second argocd instance and its configuration.<
 <div class="title">Figure 4. Argo Hub deploying on SNO</div>
 </div>
 <div class="paragraph">
-<p>Once GitOps is deployed on your managed cluster you can start configuring day 2 operations locally in your new provisioned argo instace.</p>
+<p>Once GitOps is deployed on your managed cluster you can start configuring day 2 operations locally in your new provisioned <em>argocd-infra</em> instace.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -213,10 +213,10 @@ which is deploying and managing a second argocd instance and its configuration.<
 </div>
 </div>
 <div class="sect1">
-<h2 id="environment"><a class="anchor" href="#environment"></a>Enviroment</h2>
+<h2 id="environment"><a class="anchor" href="#environment"></a>2.2 Environment</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You have access to two clusters, <strong>argo-hub</strong> and your own SNO.</p>
+<p>You have access to two clusters: <strong><em>Argo Hub</em></strong> and your own <strong><em>SNO</em></strong>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -225,10 +225,13 @@ which is deploying and managing a second argocd instance and its configuration.<
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Learn more about <strong><a href="https://www.redhat.com/en/blog/meet-single-node-openshift-our-smallest-openshift-footprint-edge-architectures">Sigle Node OpenShift</a></strong>, our managed-cluster in this workshop.
+Learn more about <strong><a href="https://www.redhat.com/en/blog/meet-single-node-openshift-our-smallest-openshift-footprint-edge-architectures">Sigle Node OpenShift</a></strong>, our managed cluster in this workshop.
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>Let´s start log in to <strong><em>Argo Hub</em></strong> cluster:</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -237,50 +240,180 @@ Learn more about <strong><a href="https://www.redhat.com/en/blog/meet-single-nod
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Login to argo-hub using <strong>user-&lt;name&gt;</strong> and to sno using <strong>admin</strong> user.
+Replace <strong><em>&lt;name&gt;</em></strong> for your assigned cluster in this workshop. <strong><em>&lt;pass&gt;</em></strong> and <strong><em>&lt;ocp-cluster-api&gt;</em></strong> provided by the instructor at the beginning of this workshop.
 </td>
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>On top of that, if you login to argo console using your Openshift user, you will only have permissions over your project and destination cluster.</p>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc login -u user-&lt;name&gt; -p &lt;pass&gt; &lt;ocp-cluster-api&gt;</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>The reason why argo hub has permissions over your managed cluster is because this is configured as a destination server, given an authentication method.</p>
+<p>It is possible to log in as well trough the web console, we recommend to do it because this way you will be able to jump between <em>Argo Hub</em> and <em>SNO</em> clusters easily.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Change <em>&lt;domain&gt;</em> information, provided by the instructor at the beginning of this workshop.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Open &lt;hub-ocp-cluster-console&gt; (E.g. <a href="https://console-openshift-console.apps.argo-hub.&lt;domain&gt;.opentlc.com/" class="bare">https://console-openshift-console.apps.argo-hub.&lt;domain&gt;.opentlc.com/</a>)</p>
+</li>
+<li>
+<p>Hit <strong><em>my_htpasswd_provider</em></strong>.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/hub-login-1.png" alt="hub login 1">
+</div>
+<div class="title">Figure 6. Argo Hub log in</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Insert <em>user-&lt;name&gt;</em> and <em>&lt;pass&gt;</em> provided by instructor and click <strong><em>Log in</em></strong> button.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/hub-login-2.png" alt="hub login 2">
+</div>
+<div class="title">Figure 7. Insert Argo Hub crentials to log in</div>
 </div>
 <div class="paragraph">
-<p>In argo hub there is a secret in argo namespace for every managed cluster containing this information. There are several ways to implement this, you can generate an
-authentication token for this purpose or you can pass kubeconfig file to give full control over the destination cluster.</p>
+<p>On top of that, once logged into <em>Argo Hub</em> you will only have permissions over your project and destination cluster.</p>
+</div>
+<div class="paragraph">
+<p>The reason why <em>Argo Hub</em> has permissions over your managed cluster is because it is configured as a destination server, given an authentication method.</p>
+</div>
+<div class="paragraph">
+<p>In <em>Argo Hub</em> there is a secret in <em>openshift-operators</em> namespace for every managed cluster containing this information. There are several ways to implement this, you can generate an
+authentication token for this purpose or you can pass <em>kubeconfig</em> file to give full control over the destination cluster.</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/cluster-api-sno.png" alt="cluster api sno">
 </div>
-<div class="title">Figure 6. Managed cluster secret in hub cluster</div>
+<div class="title">Figure 8. Managed cluster secret in Argo Hub</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="hubsetup"><a class="anchor" href="#hubsetup"></a>Hub setup</h2>
+<h2 id="hubsetup"><a class="anchor" href="#hubsetup"></a>2.3 Argo Hub Setup</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the hub cluster you can find two argo instances, openshift-gitops (default) and argocd. Default instance is intended to manage the hub itself, and it is in charge of
-deploying the argocd instance and its configuration. While argocd is dedicated for managed clusters setup and configuration.</p>
+<p>In the <em>Argo Hub</em> cluster you can find two argo instances, <em>openshift-gitops</em> (default) and <em>argocd</em>. Default instance is intended to manage the hub itself, and it is in charge of
+deploying the <em>argocd</em> instance and its configuration. While <em>argocd</em> instance is dedicated for managed clusters setup and configuration.</p>
 </div>
 <div class="paragraph">
-<p>As argo hub setup should be done only once before this lab, you can login to openshift-gitops argo console with view permissions to take a look to the objects
-argo is managing for deploying the second instance.</p>
+<p><em>Argo Hub</em> setup should be done only once before this workshop, you can log in to <em>openshift-gitops</em> instance console.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Change <em>&lt;domain&gt;</em> information, provided by the instructor at the beginning of this workshop.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Open &lt;openshift-gitops-instance-console&gt; (E.g. <a href="https://openshift-gitops-server-openshift-gitops.apps.argo-hub.&lt;domain&gt;.opentlc.com" class="bare">https://openshift-gitops-server-openshift-gitops.apps.argo-hub.&lt;domain&gt;.opentlc.com</a>)</p>
+</li>
+<li>
+<p>Click <strong><em>LOG IN VIA OPENSHIFT</em></strong>.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argo-login-1.png" alt="argo login 1">
+</div>
+<div class="title">Figure 9. Log in openshift-gitops console instance</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Hit <strong><em>my_htpasswd_provider</em></strong>.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/hub-login-1.png" alt="hub login 1">
+</div>
+<div class="title">Figure 10. OpenShift credentials for openshift-gitops instance</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Insert <em>user-&lt;name&gt;</em> and <em>&lt;pass&gt;</em> provided by instructor and click <strong><em>Log in</em></strong> button.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/hub-login-2.png" alt="hub login 2">
+</div>
+<div class="title">Figure 11. openshift-gitops instance log in</div>
+</div>
+<div class="paragraph">
+<p>This user has <em>view permissions</em> in <em>openshift-gitops</em> instance, you can take a look to the objects argo is managing for deploying the second instance.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/hub-setup-overview.png" alt="hub setup overview">
+</div>
+<div class="title">Figure 12. hub-setup overview</div>
 </div>
 <div class="paragraph">
 <p>Then you can go to the code to take a look to the helm charts used.</p>
 </div>
-<div class="paragraph">
-<p>First take a look to the helm charts used for argo hub setup and then navigate to the console. As this configuration is already deployed you don&#8217;t need to make any change, only observe the way it was done.</p>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+As this configuration is already deployed you do not need to make any change, only observe the way it was done.
+</td>
+</tr>
+</table>
 </div>
-<div class="paragraph">
-<p>Navigate to global-config/bootstrap-a/hub-setup-a.yaml application and see how this sets up env config on in-cluster (<a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>):</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Go to your <em>workshop-gitops-content-deploy</em> repository, navigate to the <em>hub-setup</em> Application code and see how this sets up env configuration on <em>in-cluster</em> (<a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>):</p>
+</li>
+</ul>
 </div>
 <div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/workshop-gitops-content-deploy
+cat global-config/bootstrap-a/hub-setup-a.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -293,7 +426,7 @@ spec:
     server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
   project: default
   source:
-    repoURL: <a href="https://github.com/romerobu/workshop-gitops-content-deploy.git" class="bare">https://github.com/romerobu/workshop-gitops-content-deploy.git</a>
+    repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
     targetRevision: setup-sno
     path: hub-setup/charts/gitops-setup
   syncPolicy:
@@ -303,32 +436,97 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>Then go to openshift-gitops console and take a look to the objects managed by argo. As you can see, using range of values while rendering charts allows to create charts for
-multiple destinations without much complexity.</p>
+<p>Check the <em>openshift-gitops</em> console and take a look to the objects managed by argo in the <em>hub-setup</em> Application. As you can see, using range of values while rendering charts allows to create charts for multiple destinations without much complexity.</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/hub-setup-app.png" alt="hub setup app">
 </div>
-<div class="title">Figure 7. Hub setup in ArgoCD console</div>
+<div class="title">Figure 13. hub-setup Application in openshift-gitops instance console</div>
 </div>
 <div class="paragraph">
-<p>For this initial setup it is only required to create argocd instance, app projects, groups and role bindings and secrets for cluster destinations.</p>
+<p>For this initial setup it is only required to create <em>argocd</em> instance, <em>App Projects</em>, <em>Groups</em>, <em>Role Bindings</em> and <em>Secrets</em> for cluster destinations.</p>
 </div>
 <div class="paragraph">
-<p>Then once this second instance is up and running, you can login with your user-&lt;name&gt; to argo console as admin user of your own project while you will only have cluster reader permissions when you login to Openshift console.</p>
+<p>Then once this second instance, <em>argocd</em>, is up and running, you can login to the argo console with your <strong><em>user-&lt;name&gt;</em></strong>:</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Change <em>&lt;domain&gt;</em> information, provided by the instructor at the beginning of this workshop.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Open &lt;argocd-instance-console&gt; (E.g. <a href="https://argocd-server-openshift-operators.apps.argo-hub.&lt;domain&gt;.opentlc.com" class="bare">https://argocd-server-openshift-operators.apps.argo-hub.&lt;domain&gt;.opentlc.com</a>)</p>
+</li>
+<li>
+<p>Click <strong><em>LOG IN VIA OPENSHIFT</em></strong>.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argo-login-1.png" alt="argo login 1">
+</div>
+<div class="title">Figure 14. Log in argocd console instance</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Hit <strong><em>my_htpasswd_provider</em></strong>.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/hub-login-1.png" alt="hub login 1">
+</div>
+<div class="title">Figure 15. OpenShift credentials for argocd instance</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Insert user <em>user-&lt;name&gt;</em> and <em>&lt;pass&gt;</em> provided by instructor and click <strong><em>Log in</em></strong> button.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/hub-login-2.png" alt="hub login 2">
+</div>
+<div class="title">Figure 16. argocd instance log in</div>
 </div>
 <div class="paragraph">
-<p>By using this instance you will be able to setup your own managed cluster.</p>
+<p>In this instance ,<em>argocd</em>, you will log in to the console as <strong><em>admin user</em></strong> of your own project while you will only have <strong><em>cluster reader</em></strong> permissions when you login to OpenShift <em>Argo Hub</em> console.</p>
 </div>
 <div class="paragraph">
-<p>Ideally you could set up every managed with a single ApplicationSet by configuring multiple cluster-definition. However because of the workshop structure you need to perform cluster scoped configurations without affecting other users, but your repository could be easily adapted to perform actions on multiple clusters.</p>
+<p>By using <em>argocd</em> instance you will be able to setup your own managed cluster.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Ideally you could set up every managed with a single ApplicationSet by configuring multiple cluster-definition. However because of the workshop structure you need to perform cluster scoped configurations without affecting other users, but your repository could be easily adapted to perform actions on multiple clusters.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="01-setup.html">1. Environment Setup</a></span>
-  <span class="next"><a href="03-sno-setup.html">3. Deploy Managed Setup</a></span>
+  <span class="next"><a href="03-sno-setup.html">3. Deploy Managed Cluster Setup</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
