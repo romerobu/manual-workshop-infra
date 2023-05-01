@@ -1,37 +1,98 @@
-= Day-2 Operations
-
 [#daytwooperations]
+= 4. Day 2 Operations
 
-At this point you have a cluster with an argo instance deployed and cluster admin permissions managed by an argo hub. So you can start configuring day 2 operations.
+At this point you have a _SNO_, with two ArgoCD instances deployed and _cluster-admin_ permissions managed by an _Argo Hub_. So you can start configuring day 2 operations.
 
-As we might need to apply this configuration to multiple managed clusters, we need to be able to render multiple applications using helm charts, even though we are applying this configuration
+As we might need to apply this configuration to multiple managed clusters, we need to be able to render multiple applications using Helm charts, even though we are applying this configuration
 to our single scoped cluster.
 
-Go to this https://github.com/romerobu/helm-infra-gitops-workshop.git[repository] and checkout to your working branch.
+Go to https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and checkout to your working branch.
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-git checkout sno-<name>      
+cd ~/helm-infra-gitops-workshop    
+git checkout sno-<name>  
 ----  
 
-Take a look to the code, this repo contains helm charts for configuring day 2 operations in our managed cluster. It contains several dependencies and its charts with some default values 
-that you might override by creating your own values.
+Take a look to the code, this repo contains Helm charts for configuring day 2 operations in our managed cluster. It contains several dependencies and its _Charts_ with some default _values_ 
+that you might override by creating your own _values_ file.
 
-You can test those charts rendering using this command.
+.helm-infra-gitops-workshop repository structure
+image::helm-folder-1.png[]
 
-----
-helm template . --debug -f values-<chartname>.yaml (optional)  
----- 
-
-You can apply charts, first by creating a single Application that applies charts all-in-one or creating a single Application per chart or kind of configuration to be applied.
-Do it on *argocd-infra*, the instance intended for infra management.
-
-If you try to deploy this Application on your cluster you will see it syncs, but it does not render objects as every value is disabled.
+At this point of the workshop, you will only have _values.yaml_. Try to render it, if you look at the _values.yaml_ file all the not _global_ fields are set to _false_, so you will be getting an empty output.
 
 [.lines_7]
 [.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+helm template .
+---- 
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cat values.yaml
+----
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
+oauth:
+  enabled: false
+bookinfo:
+  enabled: false
+operators: 
+  enabled: false
+monitoring: 
+  enabled: false
+namespace:
+  enabled: false
+nmstate: 
+  enabled: false
+app:
+  enabled: false
+vault:
+  enabled: false  
+global:
+  render: true
+  argocd:
+    enabled: true
+    controller: openshift-gitops #argocd
+----
+
+IMPORTANT: Each time you create a _values-example.yaml_ file in the following sections you can render it by specifying which _values_ file to use with *_-f_* flag.
+
+E.g:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+helm template . -f values-example.yaml
+---- 
+
+You can apply Charts, first by creating a single Application that applies Charts _all-in-one_, or creating a single Application per Chart, or kind of configuration to be applied.
+
+You will now deploy applications to our _SNO_ Argo console by hand, and then at the end of this section you will take a look at how these deployments can be automated.
+
+- Log in *_argocd-infra_* instance using OpenShift credentials, with user _admin_ and <pass> provided by intructor. 
+
+NOTE: Replace *_<name>_* and *_<domain>_*. (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
+
+- If you try to deploy this Application on your cluster you will see it _syncs_, but it does not render objects as every value is disabled.
+
+IMPORTANT: Replace _<name>_ and _<your_user>_ in the following Application.
+
+- Click on: -> *_New app_* -> *_Edit as Yaml_*
+
+[.lines_7]
+[.console-output]
 [source, shell,subs="+macros,+attributes"]
 ----
 apiVersion: argoproj.io/v1alpha1
@@ -44,9 +105,6 @@ spec:
     server: 'https://kubernetes.default.svc'
   project: default
   source:
-    helm:
-      valueFiles:
-        - values.yaml
     path: .
     repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
     targetRevision: sno-<name>
@@ -56,34 +114,52 @@ spec:
       selfHeal: true   
 ---- 
 
-.Day 2 initial app
+- Then hit *_Save_* -> *_Create_*
+
+.Day 2 initial app with values disabled
 image::day-2-sno-initial-app.png[]
 
-This is because dependencies include conditions for enabling/disabling those charts. As every value is set to false it does not apply anything.
+This is because dependencies include conditions for _enabling/disabling_ those Charts. As every _value_ is set to _false_ it does not apply anything.
 
-Then delete this Application.
+IMPORTANT: Once this subchapter is finished, delete the _day-2-sno-<name>_ Application.
 
 [#identityproviders]
-== Configure Identity Providers
+== 4.1 Configure Identity Providers
 
-As you can see, there is already a local identity provider configured but we want to override current users and integrate with other identity providers like LDAP Free Ipa provider and Keycloak.
+As you can see, there is already a local Identity Provider configured but we want to override current users and integrate with other Identity Providers like _LDAP Free Ipa_ provider and _Keycloak_.
 
-For configuring Identity Providers on Openshift you just need to modify the existing oauth resource with the provider and its configuration data.
+For configuring Identity Providers on OpenShift you just need to modify the existing _Oauth_ resource with the provider and its configuration data.
 
-NOTE: Learn more about https://docs.openshift.com/container-platform/4.12/authentication/identity_providers/configuring-htpasswd-identity-provider.html[Oauth].
+NOTE: Learn more about https://docs.openshift.com/container-platform/4.12/authentication/identity_providers/configuring-htpasswd-identity-provider.html[Configuring an htpasswd identity provider].
 
-For some of them we just need to set up the integration while for others like LDAP apart from the integration agains the server we also need to synchronize groups and users.
+For some of them, we just need to set up the integration while for others like _LDAP_ apart from the integration against the server we also need to synchronize groups and users.
 
-Lets deploy the oauth resources required and verify how groups are synchronized.
+NOTE: _Keycloak_ and _LDAP Free IPA_ server are running on _Argo Hub_ cluster.
 
-NOTE: keycloak and FreeIPA server are running on argo hub cluster.
+Let´s deploy the _Oauth_ resources required and verify how groups are synchronized.
 
-First we need to take a look to *oauth* chart values. As you can see you need to define some missing values for each managed cluster. You can do this by setting those on chart values file, setting them as parametes or defining a new values file for your deployment.
+First we need to take a look to _charts/oauth/values.yaml_. As you can see, you need to define some missing _values_ for each managed cluster. You can do this by setting those on this Chart values file, setting them as parametes or defining a new _values.yaml file_ for your deployment. We are going to be using this second approach.
 
-Go to your working branch and create a file called *values-oauth.yaml*:
+Go to your working branch in the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-oauth.yaml*:
 
 [.lines_7]
 [.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+vi values-oauth.yaml
+----
+
+Insert the following configuration, replacing:
+
+- *<name> -> Assigned cluster*
+- *<domain> -> Assigned domain cluster*
+- *<ip> -> LDAP Server IP*
+- *<nodeport> -> LDAP Server Port*
+- *<your_keycloak_secret_data> -> See how to get this secret data after the code*
+
+[.lines_7]
+[.console-output]
 [source, shell,subs="+macros,+attributes"]
 ----
 oauth:
@@ -98,12 +174,56 @@ oauth:
      
 ---- 
 
-IMPORTANT: *Keycloack secret*: Login to argo-hub console, find keycloack url, login as admin/admin, navigate to your realm, then go to your client and  find your secret on Credentials tab.
+IMPORTANT: *How to get _Keycloack_ secret*: 
 
-Then create a new Application to apply this operation:
+1) Login to _Argo Hub_ OpenShift console (E.g. https://console-openshift-console.apps.argo-hub.<domain>.opentlc.com/)
+
+- Hit *_my_htpasswd_provider_*. 
+
+.Log in Argo Hub OpenShift console
+image::hub-login-1.png[]
+
+- Insert _user-<name>_ and _<pass>_ provided by instructor and click *_Log in_* button.
+  
+2) Find _Keycloack_ URL, in OpenShift _Routes_ section, it should be something like: https://keycloak-keycloak.apps.argo-hub.<domain>.opentlc.com
+  
+3) Login in _Keycloack_ as _"admin/admin"_
+
+.Keycloack log in
+image::keycloack-login.png[]
+
+4) Navigate to your _realm-<name>_
+
+5) Then go to your _client-<name>_ 
+
+6) Click on _Credentials_ tab, you will see your _<your_keycloak_secret_data>_ there.
+
+Once the _values-oauth.yaml_ exists in your repository, make a push and create a new Application in the _argocd-infra_ instance:
 
 [.lines_7]
 [.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "identity providers"
+git push sno-<name>
+----
+
+Replace the following:
+
+- *<name> -> Assigned cluster*
+- *<domain> -> Assigned domain cluster*
+- *<your_user> -> Your GitHub user account*
+
+Log in the _argocd-infra_ instance (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
+
+To create _sno-<name>-oauth_ Application, once logged in, click on:
+
+- *_New app_* -> *_Edit as Yaml_* 
+
+[.lines_7]
+[.console-output]
 [source, shell,subs="+macros,+attributes"]
 ----
 apiVersion: argoproj.io/v1alpha1
@@ -128,46 +248,141 @@ spec:
       selfHeal: true   
 ---- 
 
-If you take a look to the helm charts you will notice we do not only need to update oauth but create others resources needed for integration like secrets, cm and cron job for syncying groups.
+- Then hit *_Save_* -> *_Create_*
 
-Sync waves are needed to make sure those resources like secrets and cm for authentication exists when we update Oauth config, otherwise openshift-authentication will become Degraded.
-When you update oauth values, and update existing Application you can notice how they are created in phases and not all at the same time.
+If you take a look to the Helm charts you will notice we do not only need to update _Oauth_ but create others resources needed for integration like _secrets_, _ConfigMaps_ and _Cron Job_ for syncying groups.
 
-For groups syncying, cron job shows last 5 executions, including the state according to the result (failed or success).
+.LDAP folder
+image::ldap-folder-1.png[]
 
-Furthermore you can notice some resources with no status (white fields). Those resources are created by Openshift for configuration issues but they are not managed by argo, that is why argo is not tracking them.
-Resource tracking has been set to annotation+label on argo instance.
+NOTE: _Sync Waves_ are needed to make sure those resources like _secrets_ and _ConfigMap_ for authentication exists when we update _Oauth_ configuration, otherwise *_openshift-authentication_* cluster operator will become *_Degraded_*.
+
+When you create the _values-oauth.yaml_ and update existing Application you can notice how they are created in phases and not all at the same time.
+
+For groups _syncying_, _Cron Job_ shows last 5 executions, including the state according to the result: _failed_ or _success_.
+
+Furthermore you can notice some resources with *_No status_* (_white fields_). Those resources are created by OpenShift for configuration issues but they are not managed by Argo, that is why Argo is not tracking them. _Resource tracking_ has been set to _annotation+label_ on _argocd-infra_ instance in the _SNO_.
+
+.LDAP not tracked resources
+image::ldap-resources.png[]
 
 NOTE: Learn more about https://argo-cd.readthedocs.io/en/stable/user-guide/resource_tracking/[Resource tracking].
 
-Once every resource is deployed, verify authentication cluster operator is OK, logout and log in back. Then you should see new identity providers listed.
+Once every resource is deployed, verify _authentication cluster operator_ is _OK_:
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-oc get co
-
-oc get oauth cluster -o yaml 
+oc get co 
 ----
 
-You can try keycloack server with myuser-<name>/myuser-<name>.
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
+NAME                                       VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE   MESSAGE
+authentication                             4.12.12   True        False         False      56s     
+baremetal                                  4.12.12   True        False         False      29h     
+cloud-controller-manager                   4.12.12   True        False         False      29h     
+cloud-credential                           4.12.12   True        False         False      29h     
+cluster-autoscaler                         4.12.12   True        False         False      29h     
+config-operator                            4.12.12   True        False         False      29h     
+console                                    4.12.12   True        False         False      29h     
+control-plane-machine-set                  4.12.12   True        False         False      29h     
+csi-snapshot-controller                    4.12.12   True        False         False      29h     
+dns                                        4.12.12   True        False         False      8h      
+etcd                                       4.12.12   True        False         False      29h     
+image-registry                             4.12.12   True        False         False      29h     
+ingress                                    4.12.12   True        False         False      8h      
+insights                                   4.12.12   True        False         False      29h     
+kube-apiserver                             4.12.12   True        False         False      29h     
+kube-controller-manager                    4.12.12   True        False         False      29h     
+kube-scheduler                             4.12.12   True        False         False      29h     
+kube-storage-version-migrator              4.12.12   True        False         False      29h     
+machine-api                                4.12.12   True        False         False      29h     
+machine-approver                           4.12.12   True        False         False      29h     
+machine-config                             4.12.12   True        False         False      29h     
+marketplace                                4.12.12   True        False         False      29h     
+monitoring                                 4.12.12   True        False         False      29h     
+network                                    4.12.12   True        False         False      29h     
+node-tuning                                4.12.12   True        False         False      29h     
+openshift-apiserver                        4.12.12   True        False         False      6h3m    
+openshift-controller-manager               4.12.12   True        False         False      8h      
+openshift-samples                          4.12.12   True        False         False      29h     
+operator-lifecycle-manager                 4.12.12   True        False         False      29h     
+operator-lifecycle-manager-catalog         4.12.12   True        False         False      29h     
+operator-lifecycle-manager-packageserver   4.12.12   True        False         False      29h     
+service-ca                                 4.12.12   True        False         False      29h     
+storage                                    4.12.12   True        False         False      29h 
+----
 
-You can try login to LDAP server with user paul/Passw0rd who is an admin user.
-
-You can try login to LDAP server with user mark/Passw0rd who is an viewer user.
-
-[#deployoperators]
-== Deploy operators
-
-Once authentication is configured, we are going to deploy some operators. Operatos helm charts use range values so we can define as many operators as we want on values section.
-
-We are going to deploy tekton, kiali, jaeger, servicemesh and nmstate operator. Furthermore we are going to deploy Service Mesh Control Plane and Member Roll and an example application called bookinfo for service mesh.
-
-Go to your working branch and create a file called *values-operators.yaml*:
+Take a look also to the _YAML_ definition:
 
 [.lines_7]
 [.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+oc get oauth cluster -o yaml 
+----
+
+- _Log out_ and _Log in_ back (E.g. https://console-openshift-console.apps.sno-<name>.<domain>.opentlc.com). 
+
+- Then you should see new Identity Providers listed in your _SNO_.
+
+- You can try _Log in_ _Keycloack_ server with credentials: 
+
+  myuser-<name>/myuser-<name>
+
+NOTE: _LDAP pods_ can take some minutes to restart.
+
+- You can try _Log in_ to _LDAP_ server with credentials:
+
+  paul/Passw0rd 
+
+NOTE: _paul_ is _admin_ user.
+
+- You can try _Log in_ to _LDAP_ server with credentials:
+
+  user mark/Passw0rd
+  
+NOTE: _mark_ is _viewer_ user.
+
+[#deployoperators]
+== 4.2 Deploy Operators
+
+Once authentication is configured, we are going to deploy some operators. Operators Helm charts use _range values_ so we can define as many operators as we want on _values_ section.
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cat ~/helm-infra-gitops-workshop/charts/operators/templates/operators/subscription.yaml
+----
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
+...
+{{- range $key, $val := $.Values.operators }}
+...
+----
+
+We are going to deploy *Tekton*, *Kiali*, *Jaeger*, *Service Mesh* and *Nmstate* operators. Furthermore we are going to deploy *_Service Mesh Control Plane_* and *_Service Mesh Member Roll_* instances and an example application called _Bookinfo_ for Service Mesh.
+
+Go to your working branch in the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-operators.yaml*:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+vi values-operators.yaml
+----
+
+[.lines_7]
+[.console-output]
 [source, shell,subs="+macros,+attributes"]
 ----
 operators:
@@ -189,7 +404,28 @@ operators:
     enabled: true      
 ---- 
 
-Then create Application:
+Once the _values-operators.yaml_ exists in your repository, make a push and create a new Application in the _argocd-infra_ instance:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "operators"
+git push sno-<name>
+----
+
+Log in the _argocd-infra_ instance (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
+
+To create _sno-<name>-operators_ Application, once logged in, click on:
+
+- *_New app_* -> *_Edit as Yaml_*
+
+Replace the following in the Application:
+
+- *<name> -> Assigned cluster*
+- *<your_user> -> Your GitHub user account*
 
 [.lines_7]
 [.console-input]
@@ -217,18 +453,35 @@ spec:
       selfHeal: true   
 ---- 
 
-Helm charts includes subcription definition for each operator in the last version available in stable channel, while Install Plan is set to Automatic so we do not need to manually approve installation.
-This is all set in values as parameters so we can use these charts for different installation methods by overriding those values.
+- Then hit *_Save_* -> *_Create_*
 
-In this case sync waves and healthchecks are very important as for being able to deploy bookinfo app, operator must be installed in the first place but also mesh should be configured.
+Helm charts includes _subcription_ definition for each operator in the last version available in stable channel, while _Install Plan_ is set to _Automatic_ so we do not need to manually approve installation. This is all set in _values.yaml_ file as parameters so we can use these Charts for different installation methods by overriding those values.
 
-If sync waves are not configured properly it will try to create resources whose api still does not exist in the cluster.
+In order to deploy the *_Bookinfo_* application successfully, several prerequisites must be met. These include the installation of the operator, as well as the proper configuration of the _Service Mesh Control Plane_ and _Service Mesh Member Roll_. To ensure that these prerequisites are met, *_Sync Waves_* and *_Health Checks_* play a crucial role in the deployment process.
 
-Once operators are installed you can view them as well with the Install Plan managed by argo:
+If _Sync Waves_ are not configured properly it will try to create resources whose _API_ still does not exists in the cluster.
 
+Once operators are installed, you can view them as well with the _Install Plan_ managed by Argo:
+
+- Log in _argocd-infra_ instance console: (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
+
+- Click on _sno-<name>-operators_ Application
+
+.Installed operators view in argocd-infra instance
 image::operators-install-plan.png[]
 
-Then, deploy bookinfo app using argocd-apps instance. You will realize you only need to deploy apps components as namespace is already managed by argocd-infra instance:
+Then, deploy _Bookinfo_ app using _argocd-apps_ instance. You will realize you only need to deploy apps components as namespace is already managed by _argocd-infra_ instance:
+
+- Log in *_argocd-apps_* instance console: (E.g. https://argocd-apps-openshift-operators.apps.sno-<name>.<domain>.opentlc.com)
+
+Deploy the _sno-<name>-bookinfo_ Application, once logged in, click on:
+
+- *_New app_* -> *_Edit as Yaml_*
+
+Replace the following in the Application:
+
+- *<name> -> Assigned cluster*
+- *<your_user> -> Your GitHub user account*
 
 [.lines_7]
 [.console-input]
@@ -257,31 +510,62 @@ spec:
       selfHeal: true   
 ---- 
 
+- Then hit *_Save_* -> *_Create_*
+
 [#monitoring]
-== Configure monitoring
+== 4.3 Configure Monitoring
 
 Now we are going to deploy some basic configuration about monitoring.
 
-In Openshift 4 monitoring is enabled by default however there are lots of configurations we can modify and configure non default user defined projects monitoring stack.
+In OpenShift 4, monitoring is enabled by default. However there are lots of configurations we can modify and configure non default _user-defined_ projects monitoring stack.
 
-NOTE: Take a look to the https://docs.openshift.com/container-platform/4.12/monitoring/enabling-monitoring-for-user-defined-projects.html[monitoring documentation].
+NOTE: Take a look to the https://docs.openshift.com/container-platform/4.12/monitoring/enabling-monitoring-for-user-defined-projects.html[Monitoring documentation].
 
-In the first place we are going to enable user-defined projects monitoring. Then we will create an example app, with a Service Monitor and a custom Prometheus Rule.
+In the first place, we are going to enable _user-defined_ projects monitoring. Then we will create an *_example-app_*, with a _Service Monitor_ and a custom _Prometheus Rule_ in order to gather metrics from the _example-app_ application and trigger an alarm based on an specific metric value.
 
-Go to your working branch and create a file called *values-monitoring.yaml*:
+Go to your working branch in the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-monitoring.yaml*:
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
+cd ~/helm-infra-gitops-workshop
+vi values-monitoring.yaml
+----
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
 monitoring:
-  enabled: true # Enable dependency   
+  enabled: true #Enable dependency   
 ---- 
 
-Then create the Application on argocd-infra instance:
+Once the _values-monitoring.yaml_ exists in your repository, make a push and create a new Application in the _argocd-infra_ instance:
 
 [.lines_7]
 [.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "monitoring"
+git push sno-<name>
+----
+
+Log in the _argocd-infra_ instance (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
+
+To create _sno-<name>-monitoring_ Application, once logged in, click on:
+
+- *_New app_* -> *_Edit as Yaml_*
+
+Replace the following in the Application:
+
+- *<name> -> Assigned cluster*
+- *<your_user> -> Your GitHub user account*
+
+[.lines_7]
+[.console-output]
 [source, shell,subs="+macros,+attributes"]
 ----
 apiVersion: argoproj.io/v1alpha1
@@ -306,36 +590,110 @@ spec:
       selfHeal: true                                                            
 ---- 
 
-This is an easy configuration as sync waves are not a must because objects do not have direct dependencies and they do not affect to existing configurations.
+- Then hit *_Save_* -> *_Create_*
 
-Then navigate to Openshift console to verify those objects exist on the cluster and if Service Monitor is scraping your metrics properly:
+Configuring the monitoring application is relatively straightforward since it does not have any direct dependencies on other objects. As such, you do not need to worry about setting up _Sync Waves_, which are typically used to manage the order in which objects are deployed to avoid issues with dependencies.
 
-*Add how to*
+Then navigate to OpenShift _SNO_ console (E.g. https://console-openshift-console.apps.sno-<name>.<domain>.opentlc.com) to verify those objects deployed in the _argocd-infra_ instance exist on the _SNO_ and if _Service Monitor_ is scraping your metrics properly:
+
+Once the _Service Monitor_ is created, the respective metrics should be found in the _SNO_ OpenShift Console (*_Observe_* -> *_Metrics_*). For example, it is possible to find the *_tomcat_sessions_active_current_sessions metric_*:
+
+.Metrics
+image::service-monitor-1.png[]
+
+The respective alert to the _Prometheus rule_ created should be found in the OpenShift Console (*_Observe_* -> *_Alerting_*). For example, it is possible to find the *App1SessionsAlert* alert:
+
+.Prometheus rule
+image::promethus-alert-1.png[]
+
+In this case, it is possible to see that this alarm is firing because the metric *tomcat_sessions_alive_max_seconds* is equal to *0*.
+
+NOTE: Please pay special attention to alerting best practices included in the following https://docs.openshift.com/container-platform/4.11/monitoring/managing-alerts.html#Optimizing-alerting-for-user-defined-projects_managing-alerts[link].
 
 [#namespace]
-== Namespace configuration
+== 4.4 Namespace Configuration
 
-Part of day 2 configurations are setting namespace scoped configurations for managing networking and quotas for apps, as well as setting RBAC.
+Part of day 2 configurations are setting _namespace scoped_ configurations for managing _networking_ and _quotas_ for apps, as well as setting _RBAC_.
 
-In this example, based on the last app deployment we are going to deploy some resources and objects quotas by namespace.
+In this example, based on the last application deployment, we are going to deploy some resources and objects quotas by namespace.
 
 Therefore we are going to set some cluster and local roles.
 
-Finally we are going to deploy a Network Policy to prevent traffic to the app. You can try enabling/disabling this feature to see how traffic is allowed and denied.
+Finally we are going to deploy a *_Network Policy_* to prevent traffic to the application. You can try _enabling/disabling_ this feature to see how traffic is allowed and denied.
 
-Go to your working branch and create a file called *values-namespace.yaml*:
+Take a look to the _Network Policy_ Helm chart: 
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
+cd ~/helm-infra-gitops-workshop
+cat charts/namespace/template/app/newtwork-policy.yaml
+----
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
+{{- if $.Values.global.render -}}
+{{- if $.Values.networkpolicy.enabled -}}
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ $.Values.networkpolicy.name }}
+  namespace: {{ $.Values.networkpolicy.namespace }}
+spec:
+  podSelector: {}
+  ingress: []
+{{- end -}}
+{{- end -}}  
+----
+
+The previous *_Network Policy_* blocks all incoming traffic by selecting all pods in the namespace and denying all ingress traffic. This is controlled by the *_networkpolicy.enabled_* value in the *_values-namespace.yaml_* file we are going to create bellow.
+
+
+Go to your working branch in the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-namespace.yaml*:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+vi values-namespace.yaml
+----
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
 namespace:
-  enabled: true # Enable dependency
+  enabled: true #Enable dependency
   networkpolicy:
     enabled: true
 ---- 
 
-Then create the Application on argocd-infra instance:
+Once the _values-namespace.yaml_ exists in your repository, make a push and create a new Application in the _argocd-infra_ instance:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "namespace configuration"
+git push sno-<name>
+----
+
+Log in the _argocd-infra_ instance (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
+
+To create _sno-<name>-namespace_ Application, once logged in, click on:
+
+- *_New app_* -> *_Edit as Yaml_*
+
+Replace the following in the Application:
+
+- *<name> -> Assigned cluster*
+- *<your_user> -> Your GitHub user account*
 
 [.lines_7]
 [.console-input]
@@ -361,9 +719,20 @@ spec:
     automated:
       prune: true
       selfHeal: true                                                       
----- 
+----
 
-Then deploy an example app on argocd-apps instance:
+- Then hit *_Save_* -> *_Create_*
+
+Then deploy an _example-app_ on *_argocd-apps_* instance (E.g. https://argocd-apps-openshift-operators.apps.sno-<name>.<domain>.opentlc.com)
+
+Deploy the _sno-<name>-app_ Application, once logged in, click on:
+
+- *_New app_* -> *_Edit as Yaml_*
+
+Replace the following in the Application:
+
+- *<name> -> Assigned cluster*
+- *<your_user> -> Your GitHub user account*
 
 [.lines_7]
 [.console-input]
@@ -392,57 +761,165 @@ spec:
       selfHeal: true                                                       
 ---- 
 
-Once you update the Application you want be able to create more than 4 pods in namespace app. Try to update replicas deployment to see if quota has been correctly applied by argo.
+- Then hit *_Save_* -> *_Create_*
 
-.Change Replica Count
-image::app-replicas.png[]
-
-.Quota
-image::quota-applied.png[]
-
-Deployment never progess to 5 replicas, and argo stays in Progressing trying to reconcile a not allowed values of replicas. Finally set it back to 1 replica.
-
-Then if you try to navigate to app route you will see you are not allowed:
-
-.Application not responsible
-image::traffic-not-allowed.png[]
-
-Then disable network policy and verify how you have traffic access:
-
-.Application available :)
-image::traffic-allowed.png[]
-
-[#vault]
-== Vault configuration
-
-Vault by Hashicorp is a tool that allows to store and encrypt secrets to secure applications and protect sensitive data.
-Vault server stores the sensitive data while a special plugin for argo retrieves this information when creating objects thanks to the use of paths and 
-references so we do not leave sensitive information visible in the code repository. 
-
-First of all you can see a running instance of vault on argo-hub cluster. This server stores sensitive data for configuring secrets and config maps, while on your managed cluster you can see
-a secret containing credentials for authenticating with vault, a config map with plugin for using helm with vault and argo, and a special configuration on Argo CD instance.
-
-Those resources are required to implement Argo CD Vault plugin. This plugin allows using placeholders with path to secrets on yaml fields where the secret should be replaced, and the plugin is in 
-charge of this substitution.
-
-There are several ways of installing it, as sidecars plugin or as config map plugin.
-
-NOTE: This last one will be https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/#installing-a-config-management-plugin[deprecated] in the future.
-
-So this installation approach follows the method initContainer + sidecar.
-
-NOTE: https://argocd-vault-plugin.readthedocs.io/en/stable/installation/#initcontainer-and-configuration-via-sidecar[initContainer + sidecar] documentation.
-
-Config map *cmp-plugin* defines the plugin that will be mounted in the sidecar container:
+Once you update the Application you want be able to create more than _4 pods_ in namespace _app_. Try to update replicas to _5_ in _Deployment_ to see if _quota_ has been correctly applied by Argo.
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
+cd ~/helm-infra-gitops-workshop
+vi charts/app/values.yaml
+----
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
+app:
+...
+  replicas: 5
+...
+----
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "replicas scaled up"
+git push sno-<name>
+----
+
+Once you update the replicas in the _Deployment_ you should see _4 of 5 pods_:
+
+.Quota
+image::quota-applied.png[]
+
+Deployment never progess to _5 replicas_, and Argo stays in _Progressing_ trying to reconcile a not allowed values of replicas. Finally *set it back to _1 replica_*.
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+vi charts/app/values.yaml
+----
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
+app:
+...
+  replicas: 1
+...
+----
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "replicas scaled down"
+git push sno-<name>
+----
+
+Then if you try to navigate to _app_ route you will see you are not allowed:
+
+IMPORTANT: Replace <name> and <domain> when needed.
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+oc get route app -n app 
+curl app-app.apps.sno-<name>.<domain>.opentlc.com
+----
+
+.app not responsible
+image::traffic-not-allowed.png[]
+
+Then disable _Network Policy_ and verify how you have traffic access:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+vi charts/namespace/templates/values.yaml
+----
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+...
+networkpolicy:
+  name: deny-by-default
+  namespace: app
+  enabled: false
+...
+----
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "network policy disabled"
+git push sno-<name>
+
+oc get route app -n app 
+curl app-app.apps.sno-<name>.<domain>.opentlc.com
+----
+
+.app available
+image::traffic-allowed.png[]
+
+NOTE: You will probably need to delete the _Network Policy_ *_deny-by-default_* in OpenShift in namespace _app_, as it already exists, Argo will not apply our latest changes. 
+
+[#vault]
+== 4.5 Vault Configuration
+
+IMPORTANT: As prerequisite make sure you have deployed the *Vault application* listed at the end of *_3.2 Helm Charts subsection_*.
+
+_Vault_ by _Hashicorp_ is a tool that allows to store and encrypt secrets to secure applications and protect sensitive data. Vault server stores the sensitive data while a special plugin for Argo retrieves this information when creating objects thanks to the use of paths and references so we do not leave sensitive information visible in the code repository. 
+
+First of all there is a running instance of Vault on _Argo Hub_ cluster. This server stores sensitive data for configuring _secrets_ and _ConfigMaps_, while on your _SNO_ you can see a secret containing credentials for authenticating with Vault, a _ConfigMap_ with plugin for using Helm with Vault and Argo, and a special configuration on ArgoCD instance.
+
+Those resources are required to implement _ArgoCD Vault plugin_. This plugin allows using _placeholders_ with path to secrets on _YAML_ fields where the secret should be replaced, and the plugin is in charge of this substitution.
+
+There are several ways of installing it, as *_sidecars plugin_* or as _ConfigMap plugin_.
+
+NOTE: https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/#installing-a-config-management-plugin[_ConfigMap plugin_] will be deplecated in the future.
+
+So this installation approach follows the method *_initContainer_ + _sidecar_*.
+
+NOTE: https://argocd-vault-plugin.readthedocs.io/en/stable/installation/#initcontainer-and-configuration-via-sidecar[initContainer + sidecar] documentation.
+
+ConfigMap *_cmp-plugin_* defines the plugin that will be mounted in the sidecar container:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+oc login -u admin -p <pass> https://api.sno-<name>.<domain>.opentlc.com:6443
+oc get -n openshift-operators configmap cmp-plugin -o yaml 
+----  
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cmp-plugin # To be defined parameters
+  name: cmp-plugin #To be defined parameters
   namespace: openshift-operators
 data:
   plugin.yaml: |
@@ -475,17 +952,24 @@ data:
       lockRepo: false
 ----      
 
-Secret *argocd-vault-plugin-credentials* defines vault server address, authentication type (approle) and role credentials:
+Secret *_argocd-vault-plugin-credentials_* defines Vault Server address, authentication type (_approle_) and role credentials:
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
+oc get -n openshift-operators secret argocd-vault-plugin-credentials -o yaml 
+----  
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
 kind: Secret
 apiVersion: v1
 metadata:
-  name: argocd-vault-plugin-credentials # To be defined parameters
-  namespace: openshift-operators # argocd namespace
+  name: argocd-vault-plugin-credentials #To be defined parameters
+  namespace: openshift-operators #argocd namespace
 type: Opaque
 stringData:
   VAULT_ADDR: "http://vault-vault.apps.argo-hub.sandbox1444.opentlc.com"
@@ -495,14 +979,19 @@ stringData:
   AVP_SECRET_ID: <your_secret_id>
 ----  
 
-NOTE: There are several https://developer.hashicorp.com/vault/docs/concepts/auth[authentication method].
+NOTE: Here you can take a look to several https://developer.hashicorp.com/vault/docs/concepts/auth[Authentication Methods].
 
-Then you need to configure using this plugin on argo cd:
+Then it is necessary to configure using this plugin on ArgoCD:
+
+IMPORTANT: In this case, this configuration is already running on your cluster. 
+
+Take a look to the configuration applied by the Application _sno-setup_ on your _SNO_  _argocd-infra_ instance where those resources have been already created as part of _bootstrapping_. Do not make any change.
 
 [.lines_7]
-[.console-input]
+[.console-output]
 [source, shell,subs="+macros,+attributes"]
 ----
+...
   repo:
     resources:
       limits:
@@ -593,30 +1082,54 @@ Then you need to configure using this plugin on argo cd:
       generate:
         command: ["argocd-vault-plugin"]
         args: ["generate", "./"] 
+...
 ----
 
-In this case, this configuration is already running on your cluster. If you take a look to the configuration applied by the Application on your single node where those resources have been already created as part of bootstrapping.
-So the next step is testing this actually works.
+So the next step is testing this actually works!
 
-In the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository, in vault chart, you can find a secret using a vault placeholder in charts/vault/values.yaml:
+In the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository, you can find a _secret_ using a Vault placeholder in _charts/vault/values.yaml_:
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-  placeholder: "<password | base64encode>"
-  path: "kv-v2/data/demo"
+cd ~/helm-infra-gitops-workshop
+cat charts/vault/values.yaml
 ----
 
-If you take a look to the existing secret in vault-secrets namespace, as we are telling Application to use vault plugin, it is not replacing the sensitive information:
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
+...
+  placeholder: "<password | base64encode>"
+  path: "kv-v2/data/demo"
+...
+----
 
-.Encoded data
+If you take a look to the existing secret in _vault-secrets_ namespace, as we are telling Application not to use Vault plugin, it is *NOT* replacing the sensitive information:
+
+- Log in OpenShift _SNO_ console (E.g. https://console-openshift-console.apps.sno-<name>.<domain>.opentlc.com)
+
+- Hit *_my_htpasswd_provider_*. 
+
+- Insert _admin_ and _<pass>_ provided by instructor and click *_Log in_* button.
+
+- Change to project *_vault-secrets_* -> In _Search_ bar type: *_secret_* -> Then click on the _secret_ called *_vault_*.
+
+.Vault plugin secret
 image::secret-vault.png[]
 
-So we need to modify existing application sno-<name>-vault (argocd-apps) to use plugin. Replace only the plugin section:
+So we need to modify existing Application _sno-<name>-vault_ in _argocd-apps_ instance (E.g. https://argocd-apps-openshift-operators.apps.sno-<name>.<domain>.opentlc.com) to use *plugin*. 
+
+NOTE: This modification applies to *Vault application* deployed at the end of *_3.2 Helm Charts subsection_*.
+
+- Click *_sno-<name>-vault_* -> *_App details_* -> then *_Edit_*, and add:
+
+IMPORTANT: Replace only the plugin section. And change _<your_user>_ for your GitHub user account.
 
 [.lines_7]
-[.console-input]
+[.console-output]
 [source, shell,subs="+macros,+attributes"]
 ----
 ...
@@ -632,31 +1145,63 @@ So we need to modify existing application sno-<name>-vault (argocd-apps) to use 
 ...            
 ----
 
-As you can see this application is slightly different to the last one used. This is due to we need to pass values files and parameters so argocd-vault-plugin-helm can used them
-to render helm charts. This might looks slightly different depending on you repository structure. If you do not need to pass any plugin you can simply invoke "plugin: {}".
+As you can see, this application is slightly different to the last one used. This is due to we need to pass _values_ files and parameters so *_argocd-vault-plugin-helm_* secret can used them
+to render Helm charts. This might looks slightly different depending on you repository structure. 
 
-After applying this new application, it will be out of sync for some seconds. Once it is synced, navigate to your Openshift cluster and verify vault has replaced secret data properly.
-You can try to delete it and see how it is created. Finally you can ask your instructor to update this secret on vault server, try a hard refresh on argo and see how it is updated.
+NOTE: If you do not need to pass any plugin you can simply invoke *"plugin: {}"*.
 
-[#appset]
-== Render Applications using ApplicationSet
-
-Until now you have applied day 2 operations by creating single Applications by hand. However there is an easier way to render those apps using ApplicationSets.
-
-Checkout to *main-day2* branch in this https://github.com/romerobu/workshop-gitops-content-deploy.git[repo] to take a look:
+After applying this new application, it will be _Out of Sync_ for some seconds. Once it is _Synced_, navigate to your OpenShift _SNO_ and verify Vault has replaced secret data properly.
+You can try to delete it and see how it is created. 
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-git branch # main
+oc get route vault -n vault-secrets 
+curl vault-vault-secrets.apps.sno-<name>.<domain>.opentlc.com
+----
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
+The password value is: cGFzc3dvcmQxMjM=
+----
+
+Finally you can ask your instructor to update this secret on Vault server, try a *_Hard refresh_* on _argocd-apps_ instance and see how it is updated.
+
+[#appset]
+== 4.6 Day 2 with ApplicationSet
+
+Until now, you have applied day 2 operations by creating single Applications by hand. However there is an easier way to render those apps using ApplicationSets.
+
+Checkout to *main-day2* branch in this https://github.com/romerobu/workshop-gitops-content-deploy.git[workshop-gitops-content-deploy] repository to take a look:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/workshop-gitops-content-deploy
 git checkout main-day2   
 ----  
 
 Navigate to the ApplicationSet folder and take a look to the newly added day2-sno-as file.
 
+Replace the following in the ApplicationSet and save it:
+
+- *<name> -> Assigned cluster*
+- *<your_user> -> Your GitHub user account*
+
 [.lines_7]
 [.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/workshop-gitops-content-deploy
+vi cluster-addons/cluster-addons-as/day2-sno-as.yaml
+----  
+
+[.lines_7]
+[.console-output]
 [source, shell,subs="+macros,+attributes"]
 ----
 ---
@@ -689,26 +1234,55 @@ spec:
           selfHeal: true   
 ----  
 
-This ApplicationSet render 'N' configurations for 'N' managed clusters.
+This ApplicationSet render _'N'_ configurations for _'N'_ managed clusters:
 
-.ApplicationSet
+.Day-2 ApplicationSet
 image::diagram-6.png[]
 
-This ApplicationSet applies day 2 configurations by creating Application on argocd-infra instance on managed cluster.
+This ApplicationSet applies day 2 configurations by creating Applications for *_Oauth_*, *_Monitoring_* and *_Operators_* on _argocd-infra_ instance on _SNO_.
 
-.Application
+.Deploy Application as part of Day-2 ApplicationSet
 image::diagram-7.png[]
 
-If you navigate to the charts folder, you will see you are not creating objects itself but Applications. Lets test it.
+If you navigate to the Charts folder, *_~/workshop-gitops-content-deploy/cluster-addons/day2-as/_*, you will see you are not creating objects itself but Applications. Let´s test it.
 
-Go back to your working branch (*sno-<name>-setup*) and merge it with *main-day2* branch. You must see this extra ApplicationSet plus a new day2-as folder on charts.
-You might need to resolve some conflicts, and make sure your lab data like repo username, domain and branches name are properly replaced.
-
-If you take a look to this ApplicationSet which will be created in argocd-infra on destination cluster, you will see this generator iterates over config-definition folder on
-root directory and uses ever child folder name (day 2 operators) to name the Application template and it takes the values file from the config.json file.
+Go back to your working branch *_sno-<name>-setup_* and merge it with *main-day2* branch. 
 
 [.lines_7]
 [.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/workshop-gitops-content-deploy
+git checkout sno-name-setup
+git merge main-day2
+----  
+
+IMPORTANT: As part of this *merge* action you will find file conflicts that has to be solved by hand. Take a look at them carefully and solve them one by one, make sure your workshop data like *_<your_user>_*, *_<name>_*, *_<domain>_*, folder *cluster-definition/sno-<name>* are properly replaced. 
+
+NOTE: Tools as _Visual Code Studio_ can make this step easier, if you are not already using it at this point of the workshop.
+
+Now, you must see this extra ApplicationSet in *_~/workshop-gitops-content-deploy/cluster-addons/cluster-addons-as/_*, plus a new *_~/workshop-gitops-content-deploy/cluster-addons/day2-as/_* folder on Charts.
+
+.Day-2 extra folder and ApplicationSet
+image::day2-folder-structure-1.png[]
+
+If you take a look to this ApplicationSet which will be created in _argocd-infra_ instance on destination cluster _SNO_, you will see that *_generators_* label iterates over _config-definition_ folder on root directory and uses every child folder name (day 2 operators) to name the Application template and it takes the values file from the *_cluster-definition/sno-<name>/config.json_* file:
+
+Remember to replace with your cluster configuration data as required.
+
+- *<name> -> Assigned cluster*
+- *<your_user> -> Your GitHub user account*
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/workshop-gitops-content-deploy
+vi cluster-addons/day2-as/application-set-day2.yaml
+----  
+
+[.lines_7]
+[.console-output]
 [source, shell,subs="+macros,+attributes"]
 ----
 apiVersion: argoproj.io/v1alpha1
@@ -744,11 +1318,26 @@ spec:
           selfHeal: true 
 ----  
 
-IMPORTANT: Replaced with your cluster configuration data as required.
+Then push to your changes to working branch *_sno-name-setup_*.
 
-Then push to your working branch.
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/workshop-gitops-content-deploy
+git add .
+git commit -m "day 2 with ApplicationSet"
+git push sno-name-setup
+----  
 
-Finally, navigate to argo hub instance and see the recently created ApplicationSet, then navigate to argocd-infra instance on managed cluster and see the Applications managed by the Application generated by ApplicationSet.
+Finally, navigate to _Argo Hub_ *_argocd_* instance and see the recently created ApplicationSet, then navigate to *_argocd-infra_* instance on _SNO_ and see the Applications managed by the Application generated by ApplicationSet.
 
-.GitOps approach for infra and apps deployment
+.Complete view of GitOps approach for infraestructure and application deployment
 image::diagram-8.png[]
+
+[#summary]
+== 4.7 Summary
+
+Throughout this workshop, we have covered the basics of deploying _Day 2 operations_ and _applications_ using ArgoCD, with a focus on GitOps infrastructure configuration. We have explored topics such as configuring an _Argo Hub_, setting up managed clusters, and automating deployment using ApplicationSet and Application resources.
+
+We hope that this workshop has provided you with a introduction to these concepts and given you the knowledge and tools to explore them further on your own.

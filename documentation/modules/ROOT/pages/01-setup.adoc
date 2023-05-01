@@ -1,8 +1,8 @@
-= Environment Setup
+= 1. Environment Setup
 include::_attributes.adoc[]
 
 [#prerequisite]
-== Prerequisite CLI tools
+== 1.1 Prerequisite CLI tools
 
 The following CLI tools are required for running the exercises in this tutorial. 
 Please have them installed and configured before you get started with any of the tutorial chapters.
@@ -33,26 +33,51 @@ Please have them installed and configured before you get started with any of the
 |===
 
 [#gettutorialsources]
-== Get tutorial sources
+== 1.2 Get tutorial sources
 
-Fork this https://github.com/romerobu/workshop-gitops-content-deploy[repository]. Then checkout and create a new branch for your user. 
+Regarding this workshop, there are two GitHub repositories you will need to fork. Follow the next steps in order to be able to start the workshop. 
+
+- Login in https://github.com/[GitHub].
+- Access https://github.com/romerobu/workshop-gitops-content-deploy[workshop-gitops-content-deploy] repository.
+- Hit *_Fork_* available at the top right of the screen. Then click *_Create fork_* with the default configuration.
+
+.Fork workshop-gitops-content-deploy
+image::fork-1.png[]
+
+Now you have the *_workshop-gitops-content-deploy_* repository forked in your GitHub account, let´s clone it in local and create a new branch.
+
+IMPORTANT: Replace *_<your_user>_* for your GitHub user account, and *_<name>_* for your assigned cluster in this workshop.
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-git branch # main
+cd ~
+git clone https://github.com/<your_user>/workshop-gitops-content-deploy.git
+
+cd ~/workshop-gitops-content-deploy
 git checkout -b sno-<name>-setup
 ----
 
-Fork this https://github.com/romerobu/helm-infra-gitops-workshop.git[repository]. Then checkout and create a new branch for your user. 
+Replicate the same with the second repository.
+
+- Access https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository.
+- Hit *_Fork_* available at the top right of the screen. Then click *_Create fork_* with the default configuration.
+
+.Fork helm-infra-gitops-workshop
+image::fork-2.png[]
+
+Now you have the *_helm-infra-gitops-workshop_* repository forked in your GitHub account, let´s clone it in local and create a new branch.
+
+IMPORTANT: Replace *_<your_user>_* for your GitHub user account, and *_<name>_* for your assigned cluster in this workshop.
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-git branch # main
-git checkout -b sno-<name>      
+cd ~
+git clone https://github.com/<your_user>/helm-infra-gitops-workshop.git
+
+cd ~/helm-infra-gitops-workshop
+git checkout -b sno-<name>  
 ----  
-
-
