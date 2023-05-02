@@ -1,0 +1,2036 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>4. Day 2 Operations :: GitOps Infrastructure Configuration Workshop</title>
+    <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/manual-workshop-infra/04-day2-config.html">
+    <link rel="prev" href="03-sno-setup.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="http://localhost:3000/rhs-build-course/index.html">GitOps Infrastructure Configuration Workshop</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="manual-workshop-infra" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Table of Contents</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">1. Environment Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#prerequisite">1.1 Prerequisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01-setup.html#gettutorialsources">1.2 Get tutorial sources</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-hub-setup.html">2. Deploy Argo Hub Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-hub-setup.html#laboverview">2.1 Lab overview</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-hub-setup.html#environment">2.2 Environment</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-hub-setup.html#hubsetup">2.3 Argo Hub Setup</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-sno-setup.html">3. Deploy Managed Cluster Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-sno-setup.html#managedconfiguration">3.1. Managed Cluster Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-sno-setup.html#helmcharts">3.2. Helm Charts</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="#daytwooperations">4. Day 2 Operations</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#identityproviders">4.1 Configure Identity Providers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#deployoperators">4.2 Deploy Operators</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#monitoring">4.3 Configure Monitoring</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#namespace">4.4 Namespace Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#vault">4.5 Vault Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#appset">4.6 Day 2 with ApplicationSet</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#summary">4.7 Summary</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Lab GitOps infra</a></li>
+    <li><a href="#daytwooperations">4. Day 2 Operations</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/romerobu/manual-workshop-infra/edit/master/documentation/modules/ROOT/pages/04-day2-config.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">4. Day 2 Operations</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>At this point you have a <em>SNO</em>, with two ArgoCD instances deployed and <em>cluster-admin</em> permissions managed by an <em>Argo Hub</em>. So you can start configuring day 2 operations.</p>
+</div>
+<div class="paragraph">
+<p>As we might need to apply this configuration to multiple managed clusters, we need to be able to render multiple applications using Helm charts, even though we are applying this configuration
+to our single scoped cluster.</p>
+</div>
+<div class="paragraph">
+<p>Go to <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm-infra-gitops-workshop</a> repository and checkout to your working branch.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+git checkout sno-&lt;name&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Take a look to the code, this repo contains Helm charts for configuring day 2 operations in our managed cluster. It contains several dependencies and its <em>Charts</em> with some default <em>values</em>
+that you might override by creating your own <em>values</em> file.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/helm-folder-1.png" alt="helm folder 1">
+</div>
+<div class="title">Figure 1. helm-infra-gitops-workshop repository structure</div>
+</div>
+<div class="paragraph">
+<p>At this point of the workshop, you will only have <em>values.yaml</em>. Try to render it, if you look at the <em>values.yaml</em> file all the not <em>global</em> fields are set to <em>false</em>, so you will be getting an empty output.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+helm template .</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cat values.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oauth:
+  enabled: false
+bookinfo:
+  enabled: false
+operators:
+  enabled: false
+monitoring:
+  enabled: false
+namespace:
+  enabled: false
+nmstate:
+  enabled: false
+app:
+  enabled: false
+vault:
+  enabled: false
+global:
+  render: true
+  argocd:
+    enabled: true
+    controller: openshift-gitops #argocd</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Each time you create a <em>values-example.yaml</em> file in the following sections you can render it by specifying which <em>values</em> file to use with <strong><em>-f</em></strong> flag.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>E.g:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">helm template . -f values-example.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can apply Charts, first by creating a single Application that applies Charts <em>all-in-one</em>, or creating a single Application per Chart, or kind of configuration to be applied.</p>
+</div>
+<div class="paragraph">
+<p>You will now deploy applications to our <em>SNO</em> Argo console by hand, and then at the end of this section you will take a look at how these deployments can be automated.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Log in <strong><em>argocd-infra</em></strong> instance using OpenShift credentials, with user <em>admin</em> and &lt;pass&gt; provided by intructor.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Replace <strong><em>&lt;name&gt;</em></strong> and <strong><em>&lt;domain&gt;</em></strong>. (E.g. <a href="https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>)
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If you try to deploy this Application on your cluster you will see it <em>syncs</em>, but it does not render objects as every value is disabled.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Replace <em>&lt;name&gt;</em> and <em>&lt;your_user&gt;</em> in the following Application.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Click on: &#8594; <strong><em>New app</em></strong> &#8594; <strong><em>Edit as Yaml</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: day-2-sno-&lt;name&gt;
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    path: .
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    targetRevision: sno-&lt;name&gt;
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Then hit <strong><em>Save</em></strong> &#8594; <strong><em>Create</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/day-2-sno-initial-app.png" alt="day 2 sno initial app">
+</div>
+<div class="title">Figure 2. Day 2 initial app with values disabled</div>
+</div>
+<div class="paragraph">
+<p>This is because dependencies include conditions for <em>enabling/disabling</em> those Charts. As every <em>value</em> is set to <em>false</em> it does not apply anything.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Once this subchapter is finished, delete the <em>day-2-sno-&lt;name&gt;</em> Application.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="identityproviders"><a class="anchor" href="#identityproviders"></a>4.1 Configure Identity Providers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As you can see, there is already a local Identity Provider configured but we want to override current users and integrate with other Identity Providers like <em>LDAP Free Ipa</em> provider and <em>Keycloak</em>.</p>
+</div>
+<div class="paragraph">
+<p>For configuring Identity Providers on OpenShift you just need to modify the existing <em>Oauth</em> resource with the provider and its configuration data.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Learn more about <a href="https://docs.openshift.com/container-platform/4.12/authentication/identity_providers/configuring-htpasswd-identity-provider.html">Configuring an htpasswd identity provider</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For some of them, we just need to set up the integration while for others like <em>LDAP</em> apart from the integration against the server we also need to synchronize groups and users.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<em>Keycloak</em> and <em>LDAP Free IPA</em> server are running on <em>Argo Hub</em> cluster.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let´s deploy the <em>Oauth</em> resources required and verify how groups are synchronized.</p>
+</div>
+<div class="paragraph">
+<p>First we need to take a look to <em>charts/oauth/values.yaml</em>. As you can see, you need to define some missing <em>values</em> for each managed cluster. You can do this by setting those on this Chart values file, setting them as parametes or defining a new <em>values.yaml file</em> for your deployment. We will follow the second approach.</p>
+</div>
+<div class="paragraph">
+<p>Go to your working branch in the <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm-infra-gitops-workshop</a> repository and create a file called <strong>values-oauth.yaml</strong>:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+vi values-oauth.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Insert the following configuration, replacing:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>&lt;name&gt; &#8594; Assigned cluster</strong></p>
+</li>
+<li>
+<p><strong>&lt;domain&gt; &#8594; Assigned domain cluster</strong></p>
+</li>
+<li>
+<p><strong>&lt;ip&gt; &#8594; LDAP Server IP</strong></p>
+</li>
+<li>
+<p><strong>&lt;nodeport&gt; &#8594; LDAP Server Port</strong></p>
+</li>
+<li>
+<p><strong>&lt;your_keycloak_secret_data&gt; &#8594; See how to get this secret data after the code</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oauth:
+  enabled: true # Enable dependency
+  keycloak: # Update chart values
+    clientid: myclient-&lt;name&gt;
+    issuer: <a href="https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;.opentlc.com/realms/myrealm-&lt;name&gt" class="bare">https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;.opentlc.com/realms/myrealm-&lt;name&gt</a>;
+    data: &lt;your_keycloak_secret_data&gt;
+  ldap:
+    sync:
+      ldap_url: 'ldap://&lt;ip&gt;:&lt;nodeport&gt;'</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<strong>How to get <em>Keycloack</em> secret</strong>:
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>1) Login to <em>Argo Hub</em> OpenShift console (E.g. <a href="https://console-openshift-console.apps.argo-hub.&lt;domain&gt;.opentlc.com/" class="bare">https://console-openshift-console.apps.argo-hub.&lt;domain&gt;.opentlc.com/</a>)</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Hit <strong><em>my_htpasswd_provider</em></strong>.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/hub-login-1.png" alt="hub login 1">
+</div>
+<div class="title">Figure 3. Log in Argo Hub OpenShift console</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Insert <em>user-&lt;name&gt;</em> and <em>&lt;pass&gt;</em> provided by instructor and click <strong><em>Log in</em></strong> button.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>2) Find <em>Keycloack</em> URL, in OpenShift <em>Routes</em> section, it should be something like: <a href="https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;.opentlc.com" class="bare">https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;.opentlc.com</a></p>
+</div>
+<div class="paragraph">
+<p>3) Login in <em>Keycloack</em> as <em>"admin/admin"</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/keycloack-login.png" alt="keycloack login">
+</div>
+<div class="title">Figure 4. Keycloack log in</div>
+</div>
+<div class="paragraph">
+<p>4) Navigate to your <em>realm-&lt;name&gt;</em></p>
+</div>
+<div class="paragraph">
+<p>5) Then go to your <em>client-&lt;name&gt;</em></p>
+</div>
+<div class="paragraph">
+<p>6) Click on <em>Credentials</em> tab, you will see your <em>&lt;your_keycloak_secret_data&gt;</em> there.</p>
+</div>
+<div class="paragraph">
+<p>Once the <em>values-oauth.yaml</em> exists in your repository, push it and create a new Application in the <em>argocd-infra</em> instance:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "identity providers"
+git push origin sno-&lt;name&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replace the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>&lt;name&gt; &#8594; Assigned cluster</strong></p>
+</li>
+<li>
+<p><strong>&lt;domain&gt; &#8594; Assigned domain cluster</strong></p>
+</li>
+<li>
+<p><strong>&lt;your_user&gt; &#8594; Your GitHub user account</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Log in the <em>argocd-infra</em> instance (E.g. <a href="https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>)</p>
+</div>
+<div class="paragraph">
+<p>To create <em>sno-&lt;name&gt;-oauth</em> Application, once logged in, click on:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><em>New app</em></strong> &#8594; <strong><em>Edit as Yaml</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-&lt;name&gt;-oauth
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
+      valueFiles:
+        - values-oauth.yaml
+    path: .
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    targetRevision: sno-&lt;name&gt;
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Then hit <strong><em>Save</em></strong> &#8594; <strong><em>Create</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If you take a look to the Helm charts you will notice we do not only need to update <em>Oauth</em> but create others resources needed for integration like <em>secrets</em>, <em>ConfigMaps</em> and <em>Cron Job</em> for syncying groups.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ldap-folder-1.png" alt="ldap folder 1">
+</div>
+<div class="title">Figure 5. LDAP folder</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<em>Sync Waves</em> are needed to make sure those resources like <em>secrets</em> and <em>ConfigMap</em> for authentication exists when we update <em>Oauth</em> configuration, otherwise <strong><em>openshift-authentication</em></strong> cluster operator will become <strong><em>Degraded</em></strong>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When you create the <em>values-oauth.yaml</em> and update existing Application you can notice how they are created in phases and not all at the same time.</p>
+</div>
+<div class="paragraph">
+<p>For groups <em>syncying</em>, <em>Cron Job</em> shows last 5 executions, including the state according to the result: <em>failed</em> or <em>success</em>.</p>
+</div>
+<div class="paragraph">
+<p>Furthermore you can notice some resources with <strong><em>No status</em></strong> (<em>white fields</em>). Those resources are created by OpenShift for configuration issues but they are not managed by Argo, that is why Argo is not tracking them. <em>Resource tracking</em> has been set to <em>annotation+label</em> on <em>argocd-infra</em> instance in the <em>SNO</em>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ldap-resources.png" alt="ldap resources">
+</div>
+<div class="title">Figure 6. LDAP not tracked resources</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Learn more about <a href="https://argo-cd.readthedocs.io/en/stable/user-guide/resource_tracking/">Resource tracking</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Once every resource is deployed, verify <em>authentication cluster operator</em> is <em>OK</em>:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get co</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">NAME                                       VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE   MESSAGE
+authentication                             4.12.12   True        False         False      56s
+baremetal                                  4.12.12   True        False         False      29h
+cloud-controller-manager                   4.12.12   True        False         False      29h
+cloud-credential                           4.12.12   True        False         False      29h
+cluster-autoscaler                         4.12.12   True        False         False      29h
+config-operator                            4.12.12   True        False         False      29h
+console                                    4.12.12   True        False         False      29h
+control-plane-machine-set                  4.12.12   True        False         False      29h
+csi-snapshot-controller                    4.12.12   True        False         False      29h
+dns                                        4.12.12   True        False         False      8h
+etcd                                       4.12.12   True        False         False      29h
+image-registry                             4.12.12   True        False         False      29h
+ingress                                    4.12.12   True        False         False      8h
+insights                                   4.12.12   True        False         False      29h
+kube-apiserver                             4.12.12   True        False         False      29h
+kube-controller-manager                    4.12.12   True        False         False      29h
+kube-scheduler                             4.12.12   True        False         False      29h
+kube-storage-version-migrator              4.12.12   True        False         False      29h
+machine-api                                4.12.12   True        False         False      29h
+machine-approver                           4.12.12   True        False         False      29h
+machine-config                             4.12.12   True        False         False      29h
+marketplace                                4.12.12   True        False         False      29h
+monitoring                                 4.12.12   True        False         False      29h
+network                                    4.12.12   True        False         False      29h
+node-tuning                                4.12.12   True        False         False      29h
+openshift-apiserver                        4.12.12   True        False         False      6h3m
+openshift-controller-manager               4.12.12   True        False         False      8h
+openshift-samples                          4.12.12   True        False         False      29h
+operator-lifecycle-manager                 4.12.12   True        False         False      29h
+operator-lifecycle-manager-catalog         4.12.12   True        False         False      29h
+operator-lifecycle-manager-packageserver   4.12.12   True        False         False      29h
+service-ca                                 4.12.12   True        False         False      29h
+storage                                    4.12.12   True        False         False      29h</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Take a look also to the <em>YAML</em> definition:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get oauth cluster -o yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It might take a while till authentication pods restart, if you see oauth is not progressing manually restart openshift-authentication pods.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Log out</em> and <em>Log in</em> back (E.g. <a href="https://console-openshift-console.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://console-openshift-console.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>).</p>
+</li>
+<li>
+<p>Then you should see new Identity Providers listed in your <em>SNO</em>.</p>
+</li>
+<li>
+<p>You can try <em>Log in</em> <em>Keycloack</em> server with credentials:</p>
+<div class="literalblock">
+<div class="content">
+<pre>myuser-&lt;name&gt;/myuser-&lt;name&gt;</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<em>LDAP pods</em> can take some minutes to restart.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You can try <em>Log in</em> to <em>LDAP</em> server with credentials:</p>
+<div class="literalblock">
+<div class="content">
+<pre>paul/Passw0rd</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<em>paul</em> is <em>admin</em> user.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You can try <em>Log in</em> to <em>LDAP</em> server with credentials:</p>
+<div class="literalblock">
+<div class="content">
+<pre>user mark/Passw0rd</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<em>mark</em> is <em>viewer</em> user.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="deployoperators"><a class="anchor" href="#deployoperators"></a>4.2 Deploy Operators</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once authentication is configured, we are going to deploy some operators. Operators Helm charts use <em>range values</em> so we can define as many operators as we want on <em>values</em> section.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cat ~/helm-infra-gitops-workshop/charts/operators/templates/operators/subscription.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">...
+{{- range $key, $val := $.Values.operators }}
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We are going to deploy <strong>Tekton</strong>, <strong>Kiali</strong>, <strong>Jaeger</strong>, <strong>Service Mesh</strong> and <strong>Nmstate</strong> operators. Furthermore we are going to deploy <strong><em>Service Mesh Control Plane</em></strong> and <strong><em>Service Mesh Member Roll</em></strong> instances and an example application called <em>Bookinfo</em> for Service Mesh.</p>
+</div>
+<div class="paragraph">
+<p>Go to your working branch in the <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm-infra-gitops-workshop</a> repository and create a file called <strong>values-operators.yaml</strong>:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+vi values-operators.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">operators:
+  enabled: true
+  operators:
+    tekton:
+      enabled: true
+    knative:
+      enabled: true
+    kiali:
+      enabled: true
+    jaeger:
+      enabled: true
+    servicemesh:
+      enabled: true
+    nmstate:
+      enabled: true
+  istio:
+    enabled: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once the <em>values-operators.yaml</em> exists in your repository, push it and create a new Application in the <em>argocd-infra</em> instance:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "operators"
+git push origin sno-&lt;name&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Log in the <em>argocd-infra</em> instance (E.g. <a href="https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>)</p>
+</div>
+<div class="paragraph">
+<p>To create <em>sno-&lt;name&gt;-operators</em> Application, once logged in, click on:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><em>New app</em></strong> &#8594; <strong><em>Edit as Yaml</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Replace the following in the Application:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>&lt;name&gt; &#8594; Assigned cluster</strong></p>
+</li>
+<li>
+<p><strong>&lt;your_user&gt; &#8594; Your GitHub user account</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-&lt;name&gt;-operators
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
+      valueFiles:
+        - values-operators.yaml
+    path: .
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    targetRevision: sno-&lt;name&gt;
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Then hit <strong><em>Save</em></strong> &#8594; <strong><em>Create</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Helm charts includes <em>subcription</em> definition for each operator in the last version available in stable channel, while <em>Install Plan</em> is set to <em>Automatic</em> so we do not need to manually approve installation. This is all set in <em>values.yaml</em> file as parameters so we can use these Charts for different installation methods by overriding those values.</p>
+</div>
+<div class="paragraph">
+<p>In order to deploy the <strong><em>Bookinfo</em></strong> application successfully, several prerequisites must be met. These include the installation of the operator, as well as the proper configuration of the <em>Service Mesh Control Plane</em> and <em>Service Mesh Member Roll</em>. To ensure that these prerequisites are met, <strong><em>Sync Waves</em></strong> and <strong><em>Health Checks</em></strong> play a crucial role in the deployment process.</p>
+</div>
+<div class="paragraph">
+<p>If <em>Sync Waves</em> are not configured properly it will try to create resources whose <em>API</em> still does not exists in the cluster.</p>
+</div>
+<div class="paragraph">
+<p>Once operators are installed, you can view them as well with the <em>Install Plan</em> managed by Argo:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Log in <em>argocd-infra</em> instance console: (E.g. <a href="https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>)</p>
+</li>
+<li>
+<p>Click on <em>sno-&lt;name&gt;-operators</em> Application</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/operators-install-plan.png" alt="operators install plan">
+</div>
+<div class="title">Figure 7. Installed operators view in argocd-infra instance</div>
+</div>
+<div class="paragraph">
+<p>Then, deploy <em>Bookinfo</em> app using <em>argocd-apps</em> instance. You will realize you only need to deploy apps components as namespace is already managed by <em>argocd-infra</em> instance:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Log in <strong><em>argocd-apps</em></strong> instance console: (E.g. <a href="https://argocd-apps-openshift-operators.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://argocd-apps-openshift-operators.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Deploy the <em>sno-&lt;name&gt;-bookinfo</em> Application, once logged in, click on:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><em>New app</em></strong> &#8594; <strong><em>Edit as Yaml</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Replace the following in the Application:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>&lt;name&gt; &#8594; Assigned cluster</strong></p>
+</li>
+<li>
+<p><strong>&lt;your_user&gt; &#8594; Your GitHub user account</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-&lt;name&gt;-bookinfo
+  namespace: openshift-operators
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
+      parameters:
+        - name: bookinfo.enabled
+          value: 'true'
+    path: .
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    targetRevision: sno-&lt;name&gt;
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Then hit <strong><em>Save</em></strong> &#8594; <strong><em>Create</em></strong></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="namespace"><a class="anchor" href="#namespace"></a>4.3 Namespace Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Part of day 2 configurations are setting <em>namespace scoped</em> configurations for managing <em>networking</em> and <em>quotas</em> for apps, as well as setting <em>RBAC</em>.</p>
+</div>
+<div class="paragraph">
+<p>In this example, based on the last application deployment, we are going to deploy some resources and objects quotas by namespace.</p>
+</div>
+<div class="paragraph">
+<p>Therefore we are going to set some cluster and local roles.</p>
+</div>
+<div class="paragraph">
+<p>Finally we are going to deploy a <strong><em>Network Policy</em></strong> to prevent traffic to the application. You can try <em>enabling/disabling</em> this feature to see how traffic is allowed and denied.</p>
+</div>
+<div class="paragraph">
+<p>Take a look to the <em>Network Policy</em> Helm chart:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+cat charts/namespace/template/app/newtwork-policy.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">{{- if $.Values.global.render -}}
+{{- if $.Values.networkpolicy.enabled -}}
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ $.Values.networkpolicy.name }}
+  namespace: {{ $.Values.networkpolicy.namespace }}
+spec:
+  podSelector: {}
+  ingress: []
+{{- end -}}
+{{- end -}}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The previous <strong><em>Network Policy</em></strong> blocks all incoming traffic by selecting all pods in the namespace and denying all ingress traffic. This is controlled by the <strong><em>networkpolicy.enabled</em></strong> value in the <strong><em>values-namespace.yaml</em></strong> file we are going to create bellow.</p>
+</div>
+<div class="paragraph">
+<p>Go to your working branch in the <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm-infra-gitops-workshop</a> repository and create a file called <strong>values-namespace.yaml</strong>:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+vi values-namespace.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">namespace:
+  enabled: true #Enable dependency
+  networkpolicy:
+    enabled: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once the <em>values-namespace.yaml</em> exists in your repository, push it and create a new Application in the <em>argocd-infra</em> instance:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "namespace configuration"
+git push origin sno-&lt;name&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Log in the <em>argocd-infra</em> instance (E.g. <a href="https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>)</p>
+</div>
+<div class="paragraph">
+<p>To create <em>sno-&lt;name&gt;-namespace</em> Application, once logged in, click on:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><em>New app</em></strong> &#8594; <strong><em>Edit as Yaml</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Replace the following in the Application:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>&lt;name&gt; &#8594; Assigned cluster</strong></p>
+</li>
+<li>
+<p><strong>&lt;your_user&gt; &#8594; Your GitHub user account</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-&lt;name&gt;-namespace
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
+      valueFiles:
+        - values-namespace.yaml
+    path: .
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    targetRevision: sno-&lt;name&gt;
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Then hit <strong><em>Save</em></strong> &#8594; <strong><em>Create</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Then deploy an <em>example-app</em> on <strong><em>argocd-apps</em></strong> instance (E.g. <a href="https://argocd-apps-openshift-operators.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://argocd-apps-openshift-operators.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>)</p>
+</div>
+<div class="paragraph">
+<p>Deploy the <em>sno-&lt;name&gt;-app</em> Application, once logged in, click on:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><em>New app</em></strong> &#8594; <strong><em>Edit as Yaml</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Replace the following in the Application:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>&lt;name&gt; &#8594; Assigned cluster</strong></p>
+</li>
+<li>
+<p><strong>&lt;your_user&gt; &#8594; Your GitHub user account</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-&lt;name&gt;-app
+  namespace: openshift-operators
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
+      parameters:
+        - name: app.enabled
+          value: 'true'
+    path: .
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    targetRevision: sno-&lt;name&gt;
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Then hit <strong><em>Save</em></strong> &#8594; <strong><em>Create</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Once you update the Application you want be able to create more than <em>4 pods</em> in namespace <em>app</em>. Try to update replicas to <em>5</em> in <em>Deployment</em> to see if <em>quota</em> has been correctly applied by Argo.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+vi charts/app/values.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">app:
+...
+  replicas: 5
+...</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "replicas scaled up"
+git push origin sno-&lt;name&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once you update the replicas in the <em>Deployment</em> you should see <em>4 of 5 pods</em>:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/quota-applied.png" alt="quota applied">
+</div>
+<div class="title">Figure 8. Quota</div>
+</div>
+<div class="paragraph">
+<p>Deployment never progess to <em>5 replicas</em>, and Argo stays in <em>Progressing</em> trying to reconcile a not allowed values of replicas. Finally <strong>set it back to <em>1 replica</em></strong>.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+vi charts/app/values.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">app:
+...
+  replicas: 1
+...</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "replicas scaled down"
+git push origin sno-&lt;name&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then if you try to navigate to <em>app</em> route you will see you are not allowed:</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Replace &lt;name&gt; and &lt;domain&gt; when needed.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get route app -n app
+curl app-app.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/traffic-not-allowed.png" alt="traffic not allowed">
+</div>
+<div class="title">Figure 9. app not responsible</div>
+</div>
+<div class="paragraph">
+<p>Then disable <em>Network Policy</em> and verify how you have traffic access:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+vi charts/namespace/templates/values.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">...
+namespace:
+  enabled: true #Enable dependency
+  networkpolicy:
+    enabled: false
+...</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "network policy disabled"
+git push origin sno-&lt;name&gt;
+
+oc get route app -n app
+curl app-app.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/traffic-allowed.png" alt="traffic allowed">
+</div>
+<div class="title">Figure 10. app available</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="monitoring"><a class="anchor" href="#monitoring"></a>4.4 Configure Monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now we are going to deploy some basic configuration about monitoring.</p>
+</div>
+<div class="paragraph">
+<p>In OpenShift 4, monitoring is enabled by default. However there are lots of configurations we can modify and configure non default <em>user-defined</em> projects monitoring stack.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Take a look to the <a href="https://docs.openshift.com/container-platform/4.12/monitoring/enabling-monitoring-for-user-defined-projects.html">Monitoring documentation</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In the first place, we are going to enable <em>user-defined</em> projects monitoring. Then we will create an <strong><em>example-app</em></strong>, with a <em>Service Monitor</em> and a custom <em>Prometheus Rule</em> in order to gather metrics from the <em>example-app</em> application and trigger an alarm based on an specific metric value.</p>
+</div>
+<div class="paragraph">
+<p>Go to your working branch in the <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm-infra-gitops-workshop</a> repository and create a file called <strong>values-monitoring.yaml</strong>:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+vi values-monitoring.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">monitoring:
+  enabled: true #Enable dependency</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once the <em>values-monitoring.yaml</em> exists in your repository, push it and create a new Application in the <em>argocd-infra</em> instance:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "monitoring"
+git push origin sno-&lt;name&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Log in the <em>argocd-infra</em> instance (E.g. <a href="https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>)</p>
+</div>
+<div class="paragraph">
+<p>To create <em>sno-&lt;name&gt;-monitoring</em> Application, once logged in, click on:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><em>New app</em></strong> &#8594; <strong><em>Edit as Yaml</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Replace the following in the Application:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>&lt;name&gt; &#8594; Assigned cluster</strong></p>
+</li>
+<li>
+<p><strong>&lt;your_user&gt; &#8594; Your GitHub user account</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-&lt;name&gt;-monitoring
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
+      valueFiles:
+        - values-monitoring.yaml
+    path: .
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    targetRevision: sno-&lt;name&gt;
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Then hit <strong><em>Save</em></strong> &#8594; <strong><em>Create</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Configuring the monitoring application is quite straightforward since it does not have any direct dependencies on other objects. As such, you do not need to worry about setting up <em>Sync Waves</em>, which are typically used to manage the order in which objects are deployed to avoid issues with dependencies.</p>
+</div>
+<div class="paragraph">
+<p>Then navigate to OpenShift <em>SNO</em> console (E.g. <a href="https://console-openshift-console.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://console-openshift-console.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>) to verify those objects deployed in the <em>argocd-infra</em> instance exist on the <em>SNO</em> and if <em>Service Monitor</em> is scraping your metrics properly:</p>
+</div>
+<div class="paragraph">
+<p>Once the <em>Service Monitor</em> is created, the respective metrics should be found in the <em>SNO</em> OpenShift Console (<strong><em>Observe</em></strong> &#8594; <strong><em>Metrics</em></strong>). For example, it is possible to find the <strong><em>tomcat_sessions_active_current_sessions metric</em></strong>:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/service-monitor-1.png" alt="service monitor 1">
+</div>
+<div class="title">Figure 11. Metrics</div>
+</div>
+<div class="paragraph">
+<p>The respective alert to the <em>Prometheus rule</em> created should be found in the OpenShift Console (<strong><em>Observe</em></strong> &#8594; <strong><em>Alerting</em></strong>). For example, it is possible to find the <strong>App1SessionsAlert</strong> alert:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/promethus-alert-1.png" alt="promethus alert 1">
+</div>
+<div class="title">Figure 12. Prometheus rule</div>
+</div>
+<div class="paragraph">
+<p>In this case, it is possible to see that this alarm is firing because the metric <strong>tomcat_sessions_alive_max_seconds</strong> is equal to <strong>0</strong>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Please pay special attention to alerting best practices included in the following <a href="https://docs.openshift.com/container-platform/4.11/monitoring/managing-alerts.html#Optimizing-alerting-for-user-defined-projects_managing-alerts">link</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="vault"><a class="anchor" href="#vault"></a>4.5 Vault Configuration</h2>
+<div class="sectionbody">
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+As prerequisite make sure you have deployed the <strong>Vault application</strong> listed at the end of <strong><em>3.2 Helm Charts subsection</em></strong>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><em>Vault</em> by <em>Hashicorp</em> is a tool that allows to store and encrypt secrets to secure applications and protect sensitive data. Vault server stores the sensitive data while a special plugin for Argo retrieves this information when creating objects thanks to the use of paths and references so we do not leave sensitive information visible in the code repository.</p>
+</div>
+<div class="paragraph">
+<p>First of all there is a running instance of Vault on <em>Argo Hub</em> cluster. This server stores sensitive data for configuring <em>secrets</em> and <em>ConfigMaps</em>, while on your <em>SNO</em> you can see a secret containing credentials for authenticating with Vault, a <em>ConfigMap</em> with plugin for using Helm with Vault and Argo, and a special configuration on ArgoCD instance.</p>
+</div>
+<div class="paragraph">
+<p>Those resources are required to implement <em>ArgoCD Vault plugin</em>. This plugin allows using <em>placeholders</em> with path to secrets on <em>YAML</em> fields where the secret should be replaced, and the plugin is in charge of this substitution.</p>
+</div>
+<div class="paragraph">
+<p>There are several ways of installing it, as <strong><em>sidecars plugin</em></strong> or as <em>ConfigMap plugin</em>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/#installing-a-config-management-plugin"><em>ConfigMap plugin</em></a> will be deplecated in the future.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>So this installation approach follows the method <strong><em>initContainer</em> + <em>sidecar</em></strong>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<a href="https://argocd-vault-plugin.readthedocs.io/en/stable/installation/#initcontainer-and-configuration-via-sidecar">initContainer + sidecar</a> documentation.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>ConfigMap <strong><em>cmp-plugin</em></strong> defines the plugin that will be mounted in the sidecar container:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc login -u admin -p &lt;pass&gt; <a href="https://api.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com:6443" class="bare">https://api.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com:6443</a>
+oc get -n openshift-operators configmap cmp-plugin -o yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cmp-plugin #To be defined parameters
+  namespace: openshift-operators
+data:
+  plugin.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: argocd-vault-plugin-helm
+    spec:
+      allowConcurrency: true
+      discover:
+        find:
+          command:
+            - sh
+            - "-c"
+            - "find . -name 'Chart.yaml' &amp;&amp; find . -name 'values.yaml'"
+      init:
+       command:
+          - bash
+          - "-c"
+          - |
+            helm repo add bitnami <a href="https://charts.bitnami.com/bitnami" class="bare">https://charts.bitnami.com/bitnami</a>
+            helm dependency build
+      generate:
+        command:
+          - bash
+          - "-c"
+          - |
+            helm template . $ARGOCD_ENV_HELM_VALUES | # values passed in Application
+            argocd-vault-plugin generate -s openshift-operators:argocd-vault-plugin-credentials - # generate using plugin + credentials
+      lockRepo: false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Secret <strong><em>argocd-vault-plugin-credentials</em></strong> defines Vault Server address, authentication type (<em>approle</em>) and role credentials:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get -n openshift-operators secret argocd-vault-plugin-credentials -o yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">kind: Secret
+apiVersion: v1
+metadata:
+  name: argocd-vault-plugin-credentials #To be defined parameters
+  namespace: openshift-operators #argocd namespace
+type: Opaque
+stringData:
+  VAULT_ADDR: "http://vault-vault.apps.argo-hub.sandbox1444.opentlc.com"
+  AVP_TYPE: vault
+  AVP_AUTH_TYPE: approle
+  AVP_ROLE_ID: &lt;your_role_id&gt;
+  AVP_SECRET_ID: &lt;your_secret_id&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Here you can take a look to several <a href="https://developer.hashicorp.com/vault/docs/concepts/auth">Authentication Methods</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Then it is necessary to configure using this plugin on ArgoCD:</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+In this case, this configuration is already running on your cluster.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Take a look to the configuration applied by the Application <em>sno-&lt;name&gt;-bootstrap on your _SNO</em>  <em>argocd-infra</em> instance where those resources have been already created as part of <em>bootstrapping</em>. Do not make any change.</p>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">...
+  repo:
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1024Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+    env:
+        - name: AVP_AUTH_TYPE # Field from argocd-vault-plugin-credentials secret
+          valueFrom:
+            secretKeyRef:
+              key: AVP_AUTH_TYPE
+              name: argocd-vault-plugin-credentials
+        - name: AVP_TYPE
+          valueFrom:
+            secretKeyRef:
+              key: AVP_TYPE
+              name: argocd-vault-plugin-credentials
+        - name: VAULT_ADDR
+          valueFrom:
+            secretKeyRef:
+              key: VAULT_ADDR
+              name: argocd-vault-plugin-credentials
+        - name: AVP_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              key: AVP_ROLE_ID
+              name: argocd-vault-plugin-credentials
+        - name: AVP_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              key: AVP_SECRET_ID
+              name: argocd-vault-plugin-credentials
+    mountsatoken: true
+    serviceaccount: argocd-repo-server # sa to be used
+    sidecarContainers: # sidecar container running plugin
+      - command:
+          - /var/run/argocd/argocd-cmp-server
+        image: 'quay.io/argoproj/argocd:v2.4.8'
+        name: avp-helm
+        volumeMounts:
+          - mountPath: /var/run/argocd
+            name: var-files
+          - mountPath: /home/argocd/cmp-server/plugins
+            name: plugins
+          - mountPath: /tmp
+            name: tmp-dir
+          - mountPath: /home/argocd/cmp-server/config
+            name: cmp-plugin
+          - mountPath: /usr/local/bin/argocd-vault-plugin
+            name: custom-tools
+            subPath: argocd-vault-plugin
+    volumeMounts:
+      - mountPath: /usr/local/bin/argocd-vault-plugin
+        name: custom-tools
+        subPath: argocd-vault-plugin
+    volumes:
+      - configMap:
+          name: cmp-plugin
+        name: cmp-plugin
+      - emptyDir: {}
+        name: custom-tools
+      - emptyDir: {}
+        name: tmp-dir
+    initContainers: # init container
+      - args:
+          - &gt;-
+            wget -O /custom-tools/argocd-vault-plugin
+            <a href="https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VERSION}/argocd-vault-plugin_${AVP_VERSION}_linux_amd64" class="bare">https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VERSION}/argocd-vault-plugin_${AVP_VERSION}_linux_amd64</a>
+            &amp;&amp; chmod +x /custom-tools/argocd-vault-plugin &amp;&amp; ls -la
+            /custom-tools/
+        command:
+          - sh
+          - '-c'
+        env:
+          - name: AVP_VERSION
+            value: 1.14.0
+        image: 'alpine:3.8'
+        name: download-tools
+        volumeMounts:
+          - mountPath: /custom-tools
+            name: custom-tools
+
+
+  configManagementPlugins: | # register plugin
+    - name: argocd-vault-plugin
+      generate:
+        command: ["argocd-vault-plugin"]
+        args: ["generate", "./"]
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So the next step is testing this actually works!</p>
+</div>
+<div class="paragraph">
+<p>In the <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm-infra-gitops-workshop</a> repository, you can find a <em>secret</em> using a Vault placeholder in <em>charts/vault/values.yaml</em>:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+cat charts/vault/values.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">...
+  placeholder: "&lt;password | base64encode&gt;"
+  path: "kv-v2/data/demo"
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you take a look to the existing secret in <em>vault-secrets</em> namespace, as we are telling Application not to use Vault plugin, it is <strong>NOT</strong> replacing the sensitive information:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Log in OpenShift <em>SNO</em> console (E.g. <a href="https://console-openshift-console.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://console-openshift-console.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>)</p>
+</li>
+<li>
+<p>Hit <strong><em>my_htpasswd_provider</em></strong>.</p>
+</li>
+<li>
+<p>Insert <em>admin</em> and <em>&lt;pass&gt;</em> provided by instructor and click <strong><em>Log in</em></strong> button.</p>
+</li>
+<li>
+<p>Change to project <strong><em>vault-secrets</em></strong> &#8594; In <em>Search</em> bar type: <strong><em>secret</em></strong> &#8594; Then click on the <em>secret</em> called <strong><em>vault</em></strong>.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/secret-vault.png" alt="secret vault">
+</div>
+<div class="title">Figure 13. Vault plugin secret</div>
+</div>
+<div class="paragraph">
+<p>So we need to modify existing Application <em>sno-&lt;name&gt;-vault</em> in <em>argocd-apps</em> instance (E.g. <a href="https://argocd-apps-openshift-operators.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://argocd-apps-openshift-operators.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>) to use <strong>plugin</strong>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This modification applies to <strong>Vault application</strong> deployed at the end of <strong><em>3.2 Helm Charts subsection</em></strong>.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Click <strong><em>sno-&lt;name&gt;-vault</em></strong> &#8594; <strong><em>App details</em></strong> &#8594; then <strong><em>Edit</em></strong>, and add:</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Replace only the plugin section. And change <em>&lt;your_user&gt;</em> for your GitHub user account.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">...
+  source:
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    path: .
+    targetRevision: sno-&lt;name&gt;
+    plugin:
+      env:
+        - name: HELM_VALUES
+          value: &gt;-
+            --set vault.enabled=true
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, this application is slightly different to the last one used. This is due to we need to pass <em>values</em> files and parameters so <strong><em>argocd-vault-plugin-helm</em></strong> secret can used them
+to render Helm charts. This might looks slightly different depending on you repository structure.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you do not need to pass any values you can simply invoke <strong>"plugin: {}"</strong>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>After applying this new application, it will be <em>Out of Sync</em> for some seconds. Once it is <em>Synced</em>, navigate to your OpenShift <em>SNO</em> and verify Vault has replaced secret data properly.
+You can try to delete it and see how it is created.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get route vault -n vault-secrets
+curl vault-vault-secrets.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">The password value is: cGFzc3dvcmQxMjM=</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It might take a while, if you keep on seeing plain text, navigate to the SNO console and check it there.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/data-secret.png" alt="data secret">
+</div>
+</div>
+<div class="paragraph">
+<p>Finally you can ask your instructor to update this secret on Vault server, try a <strong><em>Hard refresh</em></strong> on <em>argocd-apps</em> instance and see how it is updated.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="appset"><a class="anchor" href="#appset"></a>4.6 Day 2 with ApplicationSet</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Until now, you have applied day 2 operations by creating single Applications by hand. However there is an easier way to render those apps using ApplicationSets.</p>
+</div>
+<div class="paragraph">
+<p>Checkout to <strong>main-day2</strong> branch in this <a href="https://github.com/romerobu/workshop-gitops-content-deploy.git">workshop-gitops-content-deploy</a> repository to take a look:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/workshop-gitops-content-deploy
+git checkout main-day2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Navigate to the ApplicationSet folder and take a look to the newly added day2-sno-as file.</p>
+</div>
+<div class="paragraph">
+<p>Replace the following in the ApplicationSet and save it:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>&lt;name&gt; &#8594; Assigned cluster</strong></p>
+</li>
+<li>
+<p><strong>&lt;your_user&gt; &#8594; Your GitHub user account</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/workshop-gitops-content-deploy
+vi cluster-addons/cluster-addons-as/day2-sno-as.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: day2-sno-&lt;name&gt;
+  namespace: openshift-operators
+spec:
+  generators:
+  - git:
+      repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
+      revision: sno-&lt;name&gt;-setup
+      files:
+      - path: "cluster-definition/**/cluster.json"
+  template:
+    metadata:
+      name: 'day2-{{cluster.name}}-a'
+    spec:
+      project: '{{project}}'
+      source:
+        repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
+        targetRevision: sno-&lt;name&gt;-setup
+        path: cluster-addons/day2-as
+      destination:
+        server: '{{cluster.address}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This ApplicationSet render <em>'N'</em> configurations for <em>'N'</em> managed clusters:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/diagram-6.png" alt="diagram 6">
+</div>
+<div class="title">Figure 14. Day-2 ApplicationSet</div>
+</div>
+<div class="paragraph">
+<p>This ApplicationSet applies day 2 configurations by creating Applications for <strong><em>Oauth</em></strong>, <strong><em>Monitoring</em></strong> and <strong><em>Operators</em></strong> on <em>argocd-infra</em> instance on <em>SNO</em>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/diagram-7.png" alt="diagram 7">
+</div>
+<div class="title">Figure 15. Deploy Application as part of Day-2 ApplicationSet</div>
+</div>
+<div class="paragraph">
+<p>If you navigate to the Charts folder, <strong><em>~/workshop-gitops-content-deploy/cluster-addons/day2-as/</em></strong>, you will see you are not creating objects itself but Applications. Let´s test it.</p>
+</div>
+<div class="paragraph">
+<p>Go back to your working branch <strong><em>sno-&lt;name&gt;-setup</em></strong> and merge it with <strong>main-day2</strong> branch.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/workshop-gitops-content-deploy
+git checkout sno-name-setup
+git merge main-day2</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+As part of this <strong>merge</strong> action you will find file conflicts that has to be solved by hand. Take a look at them carefully and solve them one by one, make sure your workshop data like <strong><em>&lt;your_user&gt;</em></strong>, <strong><em>&lt;name&gt;</em></strong>, <strong><em>&lt;domain&gt;</em></strong>, folder <strong>cluster-definition/sno-&lt;name&gt;</strong> are properly replaced.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Tools as <em>Visual Code Studio</em> can make this step easier, if you are not already using it at this point of the workshop.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Now, you must see this extra ApplicationSet in <strong><em>~/workshop-gitops-content-deploy/cluster-addons/cluster-addons-as/</em></strong>, plus a new <strong><em>~/workshop-gitops-content-deploy/cluster-addons/day2-as/</em></strong> folder on Charts.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/day2-folder-structure-1.png" alt="day2 folder structure 1">
+</div>
+<div class="title">Figure 16. Day-2 extra folder and ApplicationSet</div>
+</div>
+<div class="paragraph">
+<p>If you take a look to this ApplicationSet which will be created in <em>argocd-infra</em> instance on destination cluster <em>SNO</em>, you will see that <strong><em>generators</em></strong> label iterates over <em>config-definition</em> folder on root directory and uses every child folder name (day 2 operators) to name the Application template and it takes the values file from the <strong><em>cluster-definition/sno-&lt;name&gt;/config.json</em></strong> file:</p>
+</div>
+<div class="paragraph">
+<p>Remember to replace with your cluster configuration data as required.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>&lt;name&gt; &#8594; Assigned cluster</strong></p>
+</li>
+<li>
+<p><strong>&lt;your_user&gt; &#8594; Your GitHub user account</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/workshop-gitops-content-deploy
+vi cluster-addons/day2-as/application-set-day2.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: day2-as-sno-&lt;name&gt;
+  namespace: openshift-gitops
+spec:
+  generators:
+  - git:
+      repoURL: <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
+      revision: sno-&lt;name&gt;-setup
+      files:
+      - path: "config-definition/**/config.json"
+  template:
+    metadata:
+      name: 'sno-&lt;name&gt;-{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: <a href="https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git" class="bare">https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git</a>
+        targetRevision: sno-&lt;name&gt;
+        path: .
+        helm:
+          valueFiles:
+            - '{{valuesFile}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: openshift-gitops
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then push to your changes to working branch <strong><em>sno-name-setup</em></strong>.</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/workshop-gitops-content-deploy
+git add .
+git commit -m "day 2 with ApplicationSet"
+git push origin sno-name-setup</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, navigate to <em>Argo Hub</em> <strong><em>argocd</em></strong> instance and see the recently created ApplicationSet, then navigate to <strong><em>argocd-infra</em></strong> instance on <em>SNO</em> and see the Applications managed by the Application generated by ApplicationSet.</p>
+</div>
+<div class="paragraph">
+<p>It might take a while till it syncs all the resources affected by the changes. Once everything is synced, you can try deleting <em>sno-&lt;name&gt;-monitoring</em> Application on argocd-infra instance to verify ApplicationSet recreates it.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/diagram-8.png" alt="diagram 8">
+</div>
+<div class="title">Figure 17. Complete view of GitOps approach for infraestructure and application deployment</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="summary"><a class="anchor" href="#summary"></a>4.7 Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Throughout this workshop, we have covered the basics of deploying <em>Day 2 operations</em> and <em>applications</em> using ArgoCD, with a focus on GitOps infrastructure configuration. We have explored topics such as configuring an <em>Argo Hub</em>, setting up managed clusters, and automating deployment using ApplicationSet and Application resources.</p>
+</div>
+<div class="paragraph">
+<p>We hope that this workshop has provided you with a introduction to these concepts and given you the knowledge and tools to explore them further on your own.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="03-sno-setup.html">3. Deploy Managed Cluster Setup</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

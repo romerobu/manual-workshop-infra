@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>1. Environment Setup :: GitOps Infrastructure Configuration Workshop</title>
+    <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/manual-workshop-infra/01-setup.html">
+    <link rel="prev" href="index.html">
+    <link rel="next" href="02-hub-setup.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="http://localhost:3000/rhs-build-course/index.html">GitOps Infrastructure Configuration Workshop</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="manual-workshop-infra" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Table of Contents</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="01-setup.html">1. Environment Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#prerequisite">1.1 Prerequisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#gettutorialsources">1.2 Get tutorial sources</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-hub-setup.html">2. Deploy Argo Hub Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-hub-setup.html#laboverview">2.1 Lab overview</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-hub-setup.html#environment">2.2 Environment</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-hub-setup.html#hubsetup">2.3 Argo Hub Setup</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-sno-setup.html">3. Deploy Managed Cluster Setup</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-sno-setup.html#managedconfiguration">3.1. Managed Cluster Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-sno-setup.html#helmcharts">3.2. Helm Charts</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="04-day2-config.html#daytwooperations">4. Day 2 Operations</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-config.html#identityproviders">4.1 Configure Identity Providers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-config.html#deployoperators">4.2 Deploy Operators</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-config.html#monitoring">4.3 Configure Monitoring</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-config.html#namespace">4.4 Namespace Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-config.html#vault">4.5 Vault Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-config.html#appset">4.6 Day 2 with ApplicationSet</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04-day2-config.html#summary">4.7 Summary</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Lab GitOps infra</a></li>
+    <li><a href="01-setup.html">1. Environment Setup</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/romerobu/manual-workshop-infra/edit/master/documentation/modules/ROOT/pages/01-setup.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">1. Environment Setup</h1>
+<div class="sect1">
+<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>1.1 Prerequisite CLI tools</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following CLI tools are required for running the exercises in this tutorial.
+Please have them installed and configured before you get started with any of the tutorial chapters.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top"><strong>Tool</strong></th>
+<th class="tableblock halign-center valign-top"><strong>macOS</strong></th>
+<th class="tableblock halign-center valign-top"><strong>Fedora</strong></th>
+<th class="tableblock halign-center valign-top"><strong>windows</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Git</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://git-scm.com/download/mac">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://git-scm.com/download/linux">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://git-scm.com/download/win">Download</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>oc</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable-4.12/openshift-client-mac-4.12.10.tar.gz">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable-4.12/openshift-client-linux-4.12.10.tar.gz">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable-4.12/openshift-client-windows-4.12.10.zip">Download</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>helm</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://helm.sh/docs/intro/install/#from-homebrew-macos">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://helm.sh/docs/intro/install/#from-dnfyum-fedora">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://helm.sh/docs/intro/install/#from-scoop-windows">Download</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>Visual Studio Code</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://code.visualstudio.com/docs/setup/mac">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://code.visualstudio.com/docs/setup/linux">Download</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://code.visualstudio.com/docs/setup/windows">Download</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gettutorialsources"><a class="anchor" href="#gettutorialsources"></a>1.2 Get tutorial sources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Regarding this workshop, there are two GitHub repositories you will need to fork. Follow the next steps in order to be able to start the workshop.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Login in <a href="https://github.com/">GitHub</a>.</p>
+</li>
+<li>
+<p>Access <a href="https://github.com/romerobu/workshop-gitops-content-deploy">workshop-gitops-content-deploy</a> repository.</p>
+</li>
+<li>
+<p>Hit <strong><em>Fork</em></strong> available at the top right of the screen. Then click <strong><em>Create fork</em></strong> with the default configuration.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/fork-1.png" alt="fork 1">
+</div>
+<div class="title">Figure 1. Fork workshop-gitops-content-deploy</div>
+</div>
+<div class="paragraph">
+<p>Now you have the <strong><em>workshop-gitops-content-deploy</em></strong> repository forked in your GitHub account, let´s clone it in local and create a new branch.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Replace <strong><em>&lt;your_user&gt;</em></strong> for your GitHub user account, and <strong><em>&lt;name&gt;</em></strong> for your assigned cluster in this workshop.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~
+git clone <a href="https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git" class="bare">https://github.com/&lt;your_user&gt;/workshop-gitops-content-deploy.git</a>
+
+cd ~/workshop-gitops-content-deploy
+git checkout -b sno-&lt;name&gt;-setup</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replicate the same with the second repository.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Access <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm-infra-gitops-workshop</a> repository.</p>
+</li>
+<li>
+<p>Hit <strong><em>Fork</em></strong> available at the top right of the screen. Then click <strong><em>Create fork</em></strong> with the default configuration.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/fork-2.png" alt="fork 2">
+</div>
+<div class="title">Figure 2. Fork helm-infra-gitops-workshop</div>
+</div>
+<div class="paragraph">
+<p>Now you have the <strong><em>helm-infra-gitops-workshop</em></strong> repository forked in your GitHub account, let´s clone it in local and create a new branch.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Replace <strong><em>&lt;your_user&gt;</em></strong> for your GitHub user account, and <strong><em>&lt;name&gt;</em></strong> for your assigned cluster in this workshop.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~
+git clone <a href="https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git" class="bare">https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git</a>
+
+cd ~/helm-infra-gitops-workshop
+git checkout -b sno-&lt;name&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="index.html">Table of Contents</a></span>
+  <span class="next"><a href="02-hub-setup.html">2. Deploy Argo Hub Setup</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
