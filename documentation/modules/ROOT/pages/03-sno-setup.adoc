@@ -688,7 +688,7 @@ NOTE: Make sure you are in the _sno-<name>-setup_ branch.
 cd ~/workshop-gitops-content-deploy
 git add .
 git commit -m "bootstrap application for SNO"
-git push sno-<name>-setup
+git push origin sno-<name>-setup
 ----
 
 - Now login to _argocd_ instance in _Argo Hub_ (https://argocd-server-openshift-operators.apps.argo-hub.<domain>.opentlc.com) 
@@ -844,7 +844,7 @@ Make sure you push content to your working branch:
 cd ~/helm-infra-gitops-workshop
 git add .
 git commit -m "initial commit for testing app"
-git push sno-<name>
+git push origin sno-<name>
 ----
 
 Click -> *_New app_* -> *_Edit as Yaml_* 
