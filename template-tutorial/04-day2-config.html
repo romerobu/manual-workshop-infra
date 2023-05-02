@@ -370,7 +370,7 @@ Learn more about <a href="https://docs.openshift.com/container-platform/4.12/aut
 <p>Let´s deploy the <em>Oauth</em> resources required and verify how groups are synchronized.</p>
 </div>
 <div class="paragraph">
-<p>First we need to take a look to <em>charts/oauth/values.yaml</em>. As you can see, you need to define some missing <em>values</em> for each managed cluster. You can do this by setting those on this Chart values file, setting them as parametes or defining a new <em>values.yaml file</em> for your deployment. We are going to be using this second approach.</p>
+<p>First we need to take a look to <em>charts/oauth/values.yaml</em>. As you can see, you need to define some missing <em>values</em> for each managed cluster. You can do this by setting those on this Chart values file, setting them as parametes or defining a new <em>values.yaml file</em> for your deployment. We will follow the second approach.</p>
 </div>
 <div class="paragraph">
 <p>Go to your working branch in the <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm-infra-gitops-workshop</a> repository and create a file called <strong>values-oauth.yaml</strong>:</p>
@@ -473,7 +473,7 @@ vi values-oauth.yaml</code></pre>
 <p>6) Click on <em>Credentials</em> tab, you will see your <em>&lt;your_keycloak_secret_data&gt;</em> there.</p>
 </div>
 <div class="paragraph">
-<p>Once the <em>values-oauth.yaml</em> exists in your repository, make a push and create a new Application in the <em>argocd-infra</em> instance:</p>
+<p>Once the <em>values-oauth.yaml</em> exists in your repository, push it and create a new Application in the <em>argocd-infra</em> instance:</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
@@ -645,6 +645,9 @@ storage                                    4.12.12   True        False         F
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get oauth cluster -o yaml</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>It might take a while till authentication pods restart, if you see oauth is not progressing manually restart openshift-authentication pods.</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -777,7 +780,7 @@ vi values-operators.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Once the <em>values-operators.yaml</em> exists in your repository, make a push and create a new Application in the <em>argocd-infra</em> instance:</p>
+<p>Once the <em>values-operators.yaml</em> exists in your repository, push it and create a new Application in the <em>argocd-infra</em> instance:</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
@@ -940,155 +943,7 @@ spec:
 </div>
 </div>
 <div class="sect1">
-<h2 id="monitoring"><a class="anchor" href="#monitoring"></a>4.3 Configure Monitoring</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Now we are going to deploy some basic configuration about monitoring.</p>
-</div>
-<div class="paragraph">
-<p>In OpenShift 4, monitoring is enabled by default. However there are lots of configurations we can modify and configure non default <em>user-defined</em> projects monitoring stack.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Take a look to the <a href="https://docs.openshift.com/container-platform/4.12/monitoring/enabling-monitoring-for-user-defined-projects.html">Monitoring documentation</a>.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>In the first place, we are going to enable <em>user-defined</em> projects monitoring. Then we will create an <strong><em>example-app</em></strong>, with a <em>Service Monitor</em> and a custom <em>Prometheus Rule</em> in order to gather metrics from the <em>example-app</em> application and trigger an alarm based on an specific metric value.</p>
-</div>
-<div class="paragraph">
-<p>Go to your working branch in the <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm-infra-gitops-workshop</a> repository and create a file called <strong>values-monitoring.yaml</strong>:</p>
-</div>
-<div class="listingblock lines_7 console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
-vi values-monitoring.yaml</code></pre>
-</div>
-</div>
-<div class="listingblock lines_7 console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">monitoring:
-  enabled: true #Enable dependency</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Once the <em>values-monitoring.yaml</em> exists in your repository, make a push and create a new Application in the <em>argocd-infra</em> instance:</p>
-</div>
-<div class="listingblock lines_7 console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
-git add .
-git commit -m "monitoring"
-git push sno-&lt;name&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Log in the <em>argocd-infra</em> instance (E.g. <a href="https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>)</p>
-</div>
-<div class="paragraph">
-<p>To create <em>sno-&lt;name&gt;-monitoring</em> Application, once logged in, click on:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong><em>New app</em></strong> &#8594; <strong><em>Edit as Yaml</em></strong></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Replace the following in the Application:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>&lt;name&gt; &#8594; Assigned cluster</strong></p>
-</li>
-<li>
-<p><strong>&lt;your_user&gt; &#8594; Your GitHub user account</strong></p>
-</li>
-</ul>
-</div>
-<div class="listingblock lines_7 console-output">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: sno-&lt;name&gt;-monitoring
-  namespace: openshift-gitops
-spec:
-  destination:
-    server: 'https://kubernetes.default.svc'
-  project: default
-  source:
-    helm:
-      valueFiles:
-        - values-monitoring.yaml
-    path: .
-    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
-    targetRevision: sno-&lt;name&gt;
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Then hit <strong><em>Save</em></strong> &#8594; <strong><em>Create</em></strong></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Configuring the monitoring application is relatively straightforward since it does not have any direct dependencies on other objects. As such, you do not need to worry about setting up <em>Sync Waves</em>, which are typically used to manage the order in which objects are deployed to avoid issues with dependencies.</p>
-</div>
-<div class="paragraph">
-<p>Then navigate to OpenShift <em>SNO</em> console (E.g. <a href="https://console-openshift-console.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://console-openshift-console.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>) to verify those objects deployed in the <em>argocd-infra</em> instance exist on the <em>SNO</em> and if <em>Service Monitor</em> is scraping your metrics properly:</p>
-</div>
-<div class="paragraph">
-<p>Once the <em>Service Monitor</em> is created, the respective metrics should be found in the <em>SNO</em> OpenShift Console (<strong><em>Observe</em></strong> &#8594; <strong><em>Metrics</em></strong>). For example, it is possible to find the <strong><em>tomcat_sessions_active_current_sessions metric</em></strong>:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/service-monitor-1.png" alt="service monitor 1">
-</div>
-<div class="title">Figure 8. Metrics</div>
-</div>
-<div class="paragraph">
-<p>The respective alert to the <em>Prometheus rule</em> created should be found in the OpenShift Console (<strong><em>Observe</em></strong> &#8594; <strong><em>Alerting</em></strong>). For example, it is possible to find the <strong>App1SessionsAlert</strong> alert:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/promethus-alert-1.png" alt="promethus alert 1">
-</div>
-<div class="title">Figure 9. Prometheus rule</div>
-</div>
-<div class="paragraph">
-<p>In this case, it is possible to see that this alarm is firing because the metric <strong>tomcat_sessions_alive_max_seconds</strong> is equal to <strong>0</strong>.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Please pay special attention to alerting best practices included in the following <a href="https://docs.openshift.com/container-platform/4.11/monitoring/managing-alerts.html#Optimizing-alerting-for-user-defined-projects_managing-alerts">link</a>.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="namespace"><a class="anchor" href="#namespace"></a>4.4 Namespace Configuration</h2>
+<h2 id="namespace"><a class="anchor" href="#namespace"></a>4.3 Namespace Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Part of day 2 configurations are setting <em>namespace scoped</em> configurations for managing <em>networking</em> and <em>quotas</em> for apps, as well as setting <em>RBAC</em>.</p>
@@ -1148,7 +1003,7 @@ vi values-namespace.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Once the <em>values-namespace.yaml</em> exists in your repository, make a push and create a new Application in the <em>argocd-infra</em> instance:</p>
+<p>Once the <em>values-namespace.yaml</em> exists in your repository, push it and create a new Application in the <em>argocd-infra</em> instance:</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
@@ -1305,7 +1160,7 @@ git push sno-&lt;name&gt;</code></pre>
 <div class="content">
 <img src="_images/quota-applied.png" alt="quota applied">
 </div>
-<div class="title">Figure 10. Quota</div>
+<div class="title">Figure 8. Quota</div>
 </div>
 <div class="paragraph">
 <p>Deployment never progess to <em>5 replicas</em>, and Argo stays in <em>Progressing</em> trying to reconcile a not allowed values of replicas. Finally <strong>set it back to <em>1 replica</em></strong>.</p>
@@ -1357,7 +1212,7 @@ curl app-app.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</code></pre>
 <div class="content">
 <img src="_images/traffic-not-allowed.png" alt="traffic not allowed">
 </div>
-<div class="title">Figure 11. app not responsible</div>
+<div class="title">Figure 9. app not responsible</div>
 </div>
 <div class="paragraph">
 <p>Then disable <em>Network Policy</em> and verify how you have traffic access:</p>
@@ -1371,10 +1226,10 @@ vi charts/namespace/templates/values.yaml</code></pre>
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">...
-networkpolicy:
-  name: deny-by-default
-  namespace: app
-  enabled: false
+namespace:
+  enabled: true #Enable dependency
+  networkpolicy:
+    enabled: false
 ...</code></pre>
 </div>
 </div>
@@ -1393,7 +1248,18 @@ curl app-app.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</code></pre>
 <div class="content">
 <img src="_images/traffic-allowed.png" alt="traffic allowed">
 </div>
-<div class="title">Figure 12. app available</div>
+<div class="title">Figure 10. app available</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="monitoring"><a class="anchor" href="#monitoring"></a>4.4 Configure Monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now we are going to deploy some basic configuration about monitoring.</p>
+</div>
+<div class="paragraph">
+<p>In OpenShift 4, monitoring is enabled by default. However there are lots of configurations we can modify and configure non default <em>user-defined</em> projects monitoring stack.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1402,7 +1268,132 @@ curl app-app.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</code></pre>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-You will probably need to delete the <em>Network Policy</em> <strong><em>deny-by-default</em></strong> in OpenShift in namespace <em>app</em>, as it already exists, Argo will not apply our latest changes.
+Take a look to the <a href="https://docs.openshift.com/container-platform/4.12/monitoring/enabling-monitoring-for-user-defined-projects.html">Monitoring documentation</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In the first place, we are going to enable <em>user-defined</em> projects monitoring. Then we will create an <strong><em>example-app</em></strong>, with a <em>Service Monitor</em> and a custom <em>Prometheus Rule</em> in order to gather metrics from the <em>example-app</em> application and trigger an alarm based on an specific metric value.</p>
+</div>
+<div class="paragraph">
+<p>Go to your working branch in the <a href="https://github.com/romerobu/helm-infra-gitops-workshop">helm-infra-gitops-workshop</a> repository and create a file called <strong>values-monitoring.yaml</strong>:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+vi values-monitoring.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">monitoring:
+  enabled: true #Enable dependency</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once the <em>values-monitoring.yaml</em> exists in your repository, push it and create a new Application in the <em>argocd-infra</em> instance:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "monitoring"
+git push sno-&lt;name&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Log in the <em>argocd-infra</em> instance (E.g. <a href="https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>)</p>
+</div>
+<div class="paragraph">
+<p>To create <em>sno-&lt;name&gt;-monitoring</em> Application, once logged in, click on:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><em>New app</em></strong> &#8594; <strong><em>Edit as Yaml</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Replace the following in the Application:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>&lt;name&gt; &#8594; Assigned cluster</strong></p>
+</li>
+<li>
+<p><strong>&lt;your_user&gt; &#8594; Your GitHub user account</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock lines_7 console-output">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-&lt;name&gt;-monitoring
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
+      valueFiles:
+        - values-monitoring.yaml
+    path: .
+    repoURL: 'https://github.com/&lt;your_user&gt;/helm-infra-gitops-workshop.git'
+    targetRevision: sno-&lt;name&gt;
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Then hit <strong><em>Save</em></strong> &#8594; <strong><em>Create</em></strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Configuring the monitoring application is quite straightforward since it does not have any direct dependencies on other objects. As such, you do not need to worry about setting up <em>Sync Waves</em>, which are typically used to manage the order in which objects are deployed to avoid issues with dependencies.</p>
+</div>
+<div class="paragraph">
+<p>Then navigate to OpenShift <em>SNO</em> console (E.g. <a href="https://console-openshift-console.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com" class="bare">https://console-openshift-console.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</a>) to verify those objects deployed in the <em>argocd-infra</em> instance exist on the <em>SNO</em> and if <em>Service Monitor</em> is scraping your metrics properly:</p>
+</div>
+<div class="paragraph">
+<p>Once the <em>Service Monitor</em> is created, the respective metrics should be found in the <em>SNO</em> OpenShift Console (<strong><em>Observe</em></strong> &#8594; <strong><em>Metrics</em></strong>). For example, it is possible to find the <strong><em>tomcat_sessions_active_current_sessions metric</em></strong>:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/service-monitor-1.png" alt="service monitor 1">
+</div>
+<div class="title">Figure 11. Metrics</div>
+</div>
+<div class="paragraph">
+<p>The respective alert to the <em>Prometheus rule</em> created should be found in the OpenShift Console (<strong><em>Observe</em></strong> &#8594; <strong><em>Alerting</em></strong>). For example, it is possible to find the <strong>App1SessionsAlert</strong> alert:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/promethus-alert-1.png" alt="promethus alert 1">
+</div>
+<div class="title">Figure 12. Prometheus rule</div>
+</div>
+<div class="paragraph">
+<p>In this case, it is possible to see that this alarm is firing because the metric <strong>tomcat_sessions_alive_max_seconds</strong> is equal to <strong>0</strong>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Please pay special attention to alerting best practices included in the following <a href="https://docs.openshift.com/container-platform/4.11/monitoring/managing-alerts.html#Optimizing-alerting-for-user-defined-projects_managing-alerts">link</a>.
 </td>
 </tr>
 </table>
@@ -1562,7 +1553,7 @@ In this case, this configuration is already running on your cluster.
 </table>
 </div>
 <div class="paragraph">
-<p>Take a look to the configuration applied by the Application <em>sno-setup</em> on your <em>SNO</em>  <em>argocd-infra</em> instance where those resources have been already created as part of <em>bootstrapping</em>. Do not make any change.</p>
+<p>Take a look to the configuration applied by the Application <em>sno-&lt;name&gt;-bootstrap on your _SNO</em>  <em>argocd-infra</em> instance where those resources have been already created as part of <em>bootstrapping</em>. Do not make any change.</p>
 </div>
 <div class="listingblock lines_7 console-output">
 <div class="content">
@@ -1765,7 +1756,7 @@ to render Helm charts. This might looks slightly different depending on you repo
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you do not need to pass any plugin you can simply invoke <strong>"plugin: {}"</strong>.
+If you do not need to pass any values you can simply invoke <strong>"plugin: {}"</strong>.
 </td>
 </tr>
 </table>
@@ -1783,6 +1774,14 @@ curl vault-vault-secrets.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</code>
 <div class="listingblock lines_7 console-output">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">The password value is: cGFzc3dvcmQxMjM=</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It might take a while, if you keep on seeing plain text, navigate to the SNO console and check it there.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/data-secret.png" alt="data secret">
 </div>
 </div>
 <div class="paragraph">
@@ -1993,6 +1992,9 @@ git push sno-name-setup</code></pre>
 </div>
 <div class="paragraph">
 <p>Finally, navigate to <em>Argo Hub</em> <strong><em>argocd</em></strong> instance and see the recently created ApplicationSet, then navigate to <strong><em>argocd-infra</em></strong> instance on <em>SNO</em> and see the Applications managed by the Application generated by ApplicationSet.</p>
+</div>
+<div class="paragraph">
+<p>It might take a while till it syncs all the resources affected by the changes. Once everything is synced, you can try deleting <em>sno-&lt;name&gt;-monitoring</em> Application on argocd-infra instance to verify ApplicationSet recreates it.</p>
 </div>
 <div class="imageblock">
 <div class="content">
