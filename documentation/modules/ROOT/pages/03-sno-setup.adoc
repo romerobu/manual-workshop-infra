@@ -835,6 +835,18 @@ Verify you can create apliations on _'Dev'_ project for _argocd-apps_ instance.
 
 IMPORTANT: This app should be deployed as *prerequisite* of *_4.5 Vault Configuration subsection_*.
 
+Make sure you push content to your working branch:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "initial commit for testing app"
+git push sno-<name>
+----
+
 Click -> *_New app_* -> *_Edit as Yaml_* 
 
 IMPORTANT: *Insert the following Application with the changing _<name>_ and <your_user>*:

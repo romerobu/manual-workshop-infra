@@ -138,7 +138,7 @@ NOTE: _Keycloak_ and _LDAP Free IPA_ server are running on _Argo Hub_ cluster.
 
 Let´s deploy the _Oauth_ resources required and verify how groups are synchronized.
 
-First we need to take a look to _charts/oauth/values.yaml_. As you can see, you need to define some missing _values_ for each managed cluster. You can do this by setting those on this Chart values file, setting them as parametes or defining a new _values.yaml file_ for your deployment. We are going to be using this second approach.
+First we need to take a look to _charts/oauth/values.yaml_. As you can see, you need to define some missing _values_ for each managed cluster. You can do this by setting those on this Chart values file, setting them as parametes or defining a new _values.yaml file_ for your deployment. We will follow the second approach.
 
 Go to your working branch in the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-oauth.yaml*:
 
@@ -198,7 +198,7 @@ image::keycloack-login.png[]
 
 6) Click on _Credentials_ tab, you will see your _<your_keycloak_secret_data>_ there.
 
-Once the _values-oauth.yaml_ exists in your repository, make a push and create a new Application in the _argocd-infra_ instance:
+Once the _values-oauth.yaml_ exists in your repository, push it and create a new Application in the _argocd-infra_ instance:
 
 [.lines_7]
 [.console-input]
@@ -326,6 +326,8 @@ Take a look also to the _YAML_ definition:
 oc get oauth cluster -o yaml 
 ----
 
+It might take a while till authentication pods restart, if you see oauth is not progressing manually restart openshift-authentication pods.
+
 - _Log out_ and _Log in_ back (E.g. https://console-openshift-console.apps.sno-<name>.<domain>.opentlc.com). 
 
 - Then you should see new Identity Providers listed in your _SNO_.
@@ -404,7 +406,7 @@ operators:
     enabled: true      
 ---- 
 
-Once the _values-operators.yaml_ exists in your repository, make a push and create a new Application in the _argocd-infra_ instance:
+Once the _values-operators.yaml_ exists in your repository, push it and create a new Application in the _argocd-infra_ instance:
 
 [.lines_7]
 [.console-input]
@@ -512,106 +514,8 @@ spec:
 
 - Then hit *_Save_* -> *_Create_*
 
-[#monitoring]
-== 4.3 Configure Monitoring
-
-Now we are going to deploy some basic configuration about monitoring.
-
-In OpenShift 4, monitoring is enabled by default. However there are lots of configurations we can modify and configure non default _user-defined_ projects monitoring stack.
-
-NOTE: Take a look to the https://docs.openshift.com/container-platform/4.12/monitoring/enabling-monitoring-for-user-defined-projects.html[Monitoring documentation].
-
-In the first place, we are going to enable _user-defined_ projects monitoring. Then we will create an *_example-app_*, with a _Service Monitor_ and a custom _Prometheus Rule_ in order to gather metrics from the _example-app_ application and trigger an alarm based on an specific metric value.
-
-Go to your working branch in the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-monitoring.yaml*:
-
-[.lines_7]
-[.console-input]
-[source, shell,subs="+macros,+attributes"]
-----
-cd ~/helm-infra-gitops-workshop
-vi values-monitoring.yaml
-----
-
-[.lines_7]
-[.console-output]
-[source, shell,subs="+macros,+attributes"]
-----
-monitoring:
-  enabled: true #Enable dependency   
----- 
-
-Once the _values-monitoring.yaml_ exists in your repository, make a push and create a new Application in the _argocd-infra_ instance:
-
-[.lines_7]
-[.console-input]
-[source, shell,subs="+macros,+attributes"]
-----
-cd ~/helm-infra-gitops-workshop
-git add .
-git commit -m "monitoring"
-git push sno-<name>
-----
-
-Log in the _argocd-infra_ instance (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
-
-To create _sno-<name>-monitoring_ Application, once logged in, click on:
-
-- *_New app_* -> *_Edit as Yaml_*
-
-Replace the following in the Application:
-
-- *<name> -> Assigned cluster*
-- *<your_user> -> Your GitHub user account*
-
-[.lines_7]
-[.console-output]
-[source, shell,subs="+macros,+attributes"]
-----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: sno-<name>-monitoring
-  namespace: openshift-gitops
-spec:
-  destination:
-    server: 'https://kubernetes.default.svc'
-  project: default
-  source:
-    helm:
-      valueFiles:
-        - values-monitoring.yaml
-    path: .
-    repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
-    targetRevision: sno-<name>
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true                                                            
----- 
-
-- Then hit *_Save_* -> *_Create_*
-
-Configuring the monitoring application is relatively straightforward since it does not have any direct dependencies on other objects. As such, you do not need to worry about setting up _Sync Waves_, which are typically used to manage the order in which objects are deployed to avoid issues with dependencies.
-
-Then navigate to OpenShift _SNO_ console (E.g. https://console-openshift-console.apps.sno-<name>.<domain>.opentlc.com) to verify those objects deployed in the _argocd-infra_ instance exist on the _SNO_ and if _Service Monitor_ is scraping your metrics properly:
-
-Once the _Service Monitor_ is created, the respective metrics should be found in the _SNO_ OpenShift Console (*_Observe_* -> *_Metrics_*). For example, it is possible to find the *_tomcat_sessions_active_current_sessions metric_*:
-
-.Metrics
-image::service-monitor-1.png[]
-
-The respective alert to the _Prometheus rule_ created should be found in the OpenShift Console (*_Observe_* -> *_Alerting_*). For example, it is possible to find the *App1SessionsAlert* alert:
-
-.Prometheus rule
-image::promethus-alert-1.png[]
-
-In this case, it is possible to see that this alarm is firing because the metric *tomcat_sessions_alive_max_seconds* is equal to *0*.
-
-NOTE: Please pay special attention to alerting best practices included in the following https://docs.openshift.com/container-platform/4.11/monitoring/managing-alerts.html#Optimizing-alerting-for-user-defined-projects_managing-alerts[link].
-
 [#namespace]
-== 4.4 Namespace Configuration
+== 4.3 Namespace Configuration
 
 Part of day 2 configurations are setting _namespace scoped_ configurations for managing _networking_ and _quotas_ for apps, as well as setting _RBAC_.
 
@@ -672,7 +576,7 @@ namespace:
     enabled: true
 ---- 
 
-Once the _values-namespace.yaml_ exists in your repository, make a push and create a new Application in the _argocd-infra_ instance:
+Once the _values-namespace.yaml_ exists in your repository, push it and create a new Application in the _argocd-infra_ instance:
 
 [.lines_7]
 [.console-input]
@@ -858,10 +762,10 @@ vi charts/namespace/templates/values.yaml
 [source, shell,subs="+macros,+attributes"]
 ----
 ...
-networkpolicy:
-  name: deny-by-default
-  namespace: app
-  enabled: false
+namespace:
+  enabled: true #Enable dependency
+  networkpolicy:
+    enabled: false
 ...
 ----
 
@@ -881,7 +785,103 @@ curl app-app.apps.sno-<name>.<domain>.opentlc.com
 .app available
 image::traffic-allowed.png[]
 
-NOTE: You will probably need to delete the _Network Policy_ *_deny-by-default_* in OpenShift in namespace _app_, as it already exists, Argo will not apply our latest changes. 
+[#monitoring]
+== 4.4 Configure Monitoring
+
+Now we are going to deploy some basic configuration about monitoring.
+
+In OpenShift 4, monitoring is enabled by default. However there are lots of configurations we can modify and configure non default _user-defined_ projects monitoring stack.
+
+NOTE: Take a look to the https://docs.openshift.com/container-platform/4.12/monitoring/enabling-monitoring-for-user-defined-projects.html[Monitoring documentation].
+
+In the first place, we are going to enable _user-defined_ projects monitoring. Then we will create an *_example-app_*, with a _Service Monitor_ and a custom _Prometheus Rule_ in order to gather metrics from the _example-app_ application and trigger an alarm based on an specific metric value.
+
+Go to your working branch in the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-monitoring.yaml*:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+vi values-monitoring.yaml
+----
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
+monitoring:
+  enabled: true #Enable dependency   
+---- 
+
+Once the _values-monitoring.yaml_ exists in your repository, push it and create a new Application in the _argocd-infra_ instance:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "monitoring"
+git push sno-<name>
+----
+
+Log in the _argocd-infra_ instance (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
+
+To create _sno-<name>-monitoring_ Application, once logged in, click on:
+
+- *_New app_* -> *_Edit as Yaml_*
+
+Replace the following in the Application:
+
+- *<name> -> Assigned cluster*
+- *<your_user> -> Your GitHub user account*
+
+[.lines_7]
+[.console-output]
+[source, shell,subs="+macros,+attributes"]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sno-<name>-monitoring
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    helm:
+      valueFiles:
+        - values-monitoring.yaml
+    path: .
+    repoURL: 'https://github.com/<your_user>/helm-infra-gitops-workshop.git'
+    targetRevision: sno-<name>
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true                                                            
+---- 
+
+- Then hit *_Save_* -> *_Create_*
+
+Configuring the monitoring application is quite straightforward since it does not have any direct dependencies on other objects. As such, you do not need to worry about setting up _Sync Waves_, which are typically used to manage the order in which objects are deployed to avoid issues with dependencies.
+
+Then navigate to OpenShift _SNO_ console (E.g. https://console-openshift-console.apps.sno-<name>.<domain>.opentlc.com) to verify those objects deployed in the _argocd-infra_ instance exist on the _SNO_ and if _Service Monitor_ is scraping your metrics properly:
+
+Once the _Service Monitor_ is created, the respective metrics should be found in the _SNO_ OpenShift Console (*_Observe_* -> *_Metrics_*). For example, it is possible to find the *_tomcat_sessions_active_current_sessions metric_*:
+
+.Metrics
+image::service-monitor-1.png[]
+
+The respective alert to the _Prometheus rule_ created should be found in the OpenShift Console (*_Observe_* -> *_Alerting_*). For example, it is possible to find the *App1SessionsAlert* alert:
+
+.Prometheus rule
+image::promethus-alert-1.png[]
+
+In this case, it is possible to see that this alarm is firing because the metric *tomcat_sessions_alive_max_seconds* is equal to *0*.
+
+NOTE: Please pay special attention to alerting best practices included in the following https://docs.openshift.com/container-platform/4.11/monitoring/managing-alerts.html#Optimizing-alerting-for-user-defined-projects_managing-alerts[link].
 
 [#vault]
 == 4.5 Vault Configuration
@@ -985,7 +985,7 @@ Then it is necessary to configure using this plugin on ArgoCD:
 
 IMPORTANT: In this case, this configuration is already running on your cluster. 
 
-Take a look to the configuration applied by the Application _sno-setup_ on your _SNO_  _argocd-infra_ instance where those resources have been already created as part of _bootstrapping_. Do not make any change.
+Take a look to the configuration applied by the Application _sno-<name>-bootstrap on your _SNO_  _argocd-infra_ instance where those resources have been already created as part of _bootstrapping_. Do not make any change.
 
 [.lines_7]
 [.console-output]
@@ -1148,7 +1148,7 @@ IMPORTANT: Replace only the plugin section. And change _<your_user>_ for your Gi
 As you can see, this application is slightly different to the last one used. This is due to we need to pass _values_ files and parameters so *_argocd-vault-plugin-helm_* secret can used them
 to render Helm charts. This might looks slightly different depending on you repository structure. 
 
-NOTE: If you do not need to pass any plugin you can simply invoke *"plugin: {}"*.
+NOTE: If you do not need to pass any values you can simply invoke *"plugin: {}"*.
 
 After applying this new application, it will be _Out of Sync_ for some seconds. Once it is _Synced_, navigate to your OpenShift _SNO_ and verify Vault has replaced secret data properly.
 You can try to delete it and see how it is created. 
@@ -1167,6 +1167,10 @@ curl vault-vault-secrets.apps.sno-<name>.<domain>.opentlc.com
 ----
 The password value is: cGFzc3dvcmQxMjM=
 ----
+
+It might take a while, if you keep on seeing plain text, navigate to the SNO console and check it there.
+
+image::data-secret.png[]
 
 Finally you can ask your instructor to update this secret on Vault server, try a *_Hard refresh_* on _argocd-apps_ instance and see how it is updated.
 
@@ -1331,6 +1335,8 @@ git push sno-name-setup
 ----  
 
 Finally, navigate to _Argo Hub_ *_argocd_* instance and see the recently created ApplicationSet, then navigate to *_argocd-infra_* instance on _SNO_ and see the Applications managed by the Application generated by ApplicationSet.
+
+It might take a while till it syncs all the resources affected by the changes. Once everything is synced, you can try deleting _sno-<name>-monitoring_ Application on argocd-infra instance to verify ApplicationSet recreates it.
 
 .Complete view of GitOps approach for infraestructure and application deployment
 image::diagram-8.png[]

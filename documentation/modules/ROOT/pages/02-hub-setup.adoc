@@ -122,6 +122,7 @@ IMPORTANT: As this configuration is already deployed you do not need to make any
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/workshop-gitops-content-deploy
+git checkout setup-sno
 cat global-config/bootstrap-a/hub-setup-a.yaml
 ----
 
