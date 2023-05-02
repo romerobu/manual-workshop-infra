@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>http://localhost:3000/rhs-build-course/index.html/template-tutorial/01-setup.html</loc>
-<lastmod>2023-05-01T17:38:40.521Z</lastmod>
+<loc>http://localhost:3000/rhs-build-course/index.html/manual-workshop-infra/01-setup.html</loc>
+<lastmod>2023-05-02T15:38:10.568Z</lastmod>
 </url>
 <url>
-<loc>http://localhost:3000/rhs-build-course/index.html/template-tutorial/02-hub-setup.html</loc>
-<lastmod>2023-05-01T17:38:40.521Z</lastmod>
+<loc>http://localhost:3000/rhs-build-course/index.html/manual-workshop-infra/02-hub-setup.html</loc>
+<lastmod>2023-05-02T15:38:10.568Z</lastmod>
 </url>
 <url>
-<loc>http://localhost:3000/rhs-build-course/index.html/template-tutorial/03-sno-setup.html</loc>
-<lastmod>2023-05-01T17:38:40.521Z</lastmod>
+<loc>http://localhost:3000/rhs-build-course/index.html/manual-workshop-infra/03-sno-setup.html</loc>
+<lastmod>2023-05-02T15:38:10.568Z</lastmod>
 </url>
 <url>
-<loc>http://localhost:3000/rhs-build-course/index.html/template-tutorial/04-day2-config.html</loc>
-<lastmod>2023-05-01T17:38:40.521Z</lastmod>
+<loc>http://localhost:3000/rhs-build-course/index.html/manual-workshop-infra/04-day2-config.html</loc>
+<lastmod>2023-05-02T15:38:10.568Z</lastmod>
 </url>
 <url>
-<loc>http://localhost:3000/rhs-build-course/index.html/template-tutorial/index.html</loc>
-<lastmod>2023-05-01T17:38:40.521Z</lastmod>
+<loc>http://localhost:3000/rhs-build-course/index.html/manual-workshop-infra/index.html</loc>
+<lastmod>2023-05-02T15:38:10.568Z</lastmod>
 </url>
 </urlset>

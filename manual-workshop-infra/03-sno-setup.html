@@ -4,7 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>3. Deploy Managed Cluster Setup :: GitOps Infrastructure Configuration Workshop</title>
+<<<<<<< HEAD
     <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/template-tutorial/03-sno-setup.html">
+=======
+    <link rel="canonical" href="http://localhost:3000/rhs-build-course/index.html/manual-workshop-infra/03-sno-setup.html">
+>>>>>>> 20e05e21932439d401f736f085c931424e6e572d
     <link rel="prev" href="02-hub-setup.html">
     <link rel="next" href="04-day2-config.html#daytwooperations">
     <meta name="generator" content="Antora 3.0.0">
@@ -42,7 +46,11 @@
   </nav>
 </header>
 <div class="body">
+<<<<<<< HEAD
 <div class="nav-container" data-component="template-tutorial" data-version="master">
+=======
+<div class="nav-container" data-component="manual-workshop-infra" data-version="master">
+>>>>>>> 20e05e21932439d401f736f085c931424e6e572d
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -131,6 +139,10 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
+<<<<<<< HEAD
+=======
+  <a href="index.html" class="home-link"></a>
+>>>>>>> 20e05e21932439d401f736f085c931424e6e572d
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Lab GitOps infra</a></li>
@@ -1046,7 +1058,7 @@ Make sure you are in the <em>sno-&lt;name&gt;-setup</em> branch.
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/workshop-gitops-content-deploy
 git add .
 git commit -m "bootstrap application for SNO"
-git push sno-&lt;name&gt;-setup</code></pre>
+git push origin sno-&lt;name&gt;-setup</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1357,6 +1369,17 @@ This app should be deployed as <strong>prerequisite</strong> of <strong><em>4.5 
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>Make sure you push content to your working branch:</p>
+</div>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
+git add .
+git commit -m "initial commit for testing app"
+git push origin sno-&lt;name&gt;</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Click &#8594; <strong><em>New app</em></strong> &#8594; <strong><em>Edit as Yaml</em></strong></p>
