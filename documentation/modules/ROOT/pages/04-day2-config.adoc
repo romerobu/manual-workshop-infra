@@ -1180,7 +1180,7 @@ Finally you can ask your instructor to update this secret on Vault server, try a
 
 Until now, you have applied day 2 operations by creating single Applications by hand. However there is an easier way to render those apps using ApplicationSets.
 
-Checkout to *main-day2* branch in this git@github.com:romerobu/workshop-gitops-content-deploy.git[workshop-gitops-content-deploy] repository to take a look:
+Checkout to *main-day2* branch in this https://github.com/romerobu/workshop-gitops-content-deploy[workshop-gitops-content-deploy] repository to take a look:
 
 [.lines_7]
 [.console-input]
