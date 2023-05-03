@@ -46,13 +46,13 @@ NOTE: Learn more about *https://www.redhat.com/en/blog/meet-single-node-openshif
 
 Let´s start log in to *_Argo Hub_* cluster:
 
-IMPORTANT: Replace *_<name>_* for your assigned cluster in this workshop. *_<pass>_* and *_<ocp-cluster-api>_* provided by the instructor at the beginning of this workshop. 
+IMPORTANT: Replace *_<name>_* for your assigned cluster in this workshop. *_<pass>_* and *_<ocp-hub-cluster-api>_* provided by the instructor at the beginning of this workshop. 
 
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-oc login -u user-<name> -p <pass> <ocp-cluster-api>
+oc login -u user-<name> -p <pass> <ocp-hub-cluster-api>
 ----  
 
 It is possible to log in as well trough the web console, we recommend to do it because this way you will be able to jump between _Argo Hub_ and _SNO_ clusters easily.

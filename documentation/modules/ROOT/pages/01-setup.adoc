@@ -53,7 +53,7 @@ IMPORTANT: Replace *_<your_user>_* for your GitHub user account, and *_<name>_* 
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~
-git clone https://github.com/<your_user>/workshop-gitops-content-deploy.git
+git clone git@github.com:<your_user>/workshop-gitops-content-deploy.git
 
 cd ~/workshop-gitops-content-deploy
 git checkout -b sno-<name>-setup
@@ -76,7 +76,7 @@ IMPORTANT: Replace *_<your_user>_* for your GitHub user account, and *_<name>_* 
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~
-git clone https://github.com/<your_user>/helm-infra-gitops-workshop.git
+git clone git@github.com:<your_user>/helm-infra-gitops-workshop.git
 
 cd ~/helm-infra-gitops-workshop
 git checkout -b sno-<name>  
