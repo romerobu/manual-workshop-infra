@@ -456,7 +456,7 @@ vi values-oauth.yaml</code></pre>
 <p>2) Find <em>Keycloack</em> URL, in OpenShift <em>Routes</em> section, it should be something like: <a href="https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;.opentlc.com" class="bare">https://keycloak-keycloak.apps.argo-hub.&lt;domain&gt;.opentlc.com</a></p>
 </div>
 <div class="paragraph">
-<p>3) Login in <em>Keycloack</em> as <em>"admin/admin"</em></p>
+<p>3) Login in <em>Keycloack</em> as <em>"admin/admin"</em> (Administrative Console)</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -467,11 +467,16 @@ vi values-oauth.yaml</code></pre>
 <div class="paragraph">
 <p>4) Navigate to your <em>realm-&lt;name&gt;</em></p>
 </div>
-<div class="paragraph">
-<p>5) Then go to your <em>client-&lt;name&gt;</em></p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/realm-navbar.png" alt="realm navbar">
+</div>
 </div>
 <div class="paragraph">
-<p>6) Click on <em>Credentials</em> tab, you will see your <em>&lt;your_keycloak_secret_data&gt;</em> there.</p>
+<p>5) Then go to your <em>myclient-&lt;name&gt;</em></p>
+</div>
+<div class="paragraph">
+<p>6) Click on <em>Credentials</em> tab, you will see your client secret (<em>&lt;your_keycloak_secret_data&gt;</em>) there.</p>
 </div>
 <div class="paragraph">
 <p>Once the <em>values-oauth.yaml</em> exists in your repository, push it and create a new Application in the <em>argocd-infra</em> instance:</p>
@@ -964,7 +969,7 @@ spec:
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
-cat charts/namespace/template/app/newtwork-policy.yaml</code></pre>
+cat charts/namespace/templates/app/newtwork-policy.yaml</code></pre>
 </div>
 </div>
 <div class="listingblock lines_7 console-output">
@@ -1205,8 +1210,7 @@ Replace &lt;name&gt; and &lt;domain&gt; when needed.
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get route app -n app
-curl app-app.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get route back-springboot -n app</code></pre>
 </div>
 </div>
 <div class="imageblock">
@@ -1221,7 +1225,7 @@ curl app-app.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</code></pre>
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/helm-infra-gitops-workshop
-vi charts/namespace/templates/values.yaml</code></pre>
+vi values-namespace.yaml</code></pre>
 </div>
 </div>
 <div class="listingblock lines_7 console-input">
@@ -1241,8 +1245,7 @@ git add .
 git commit -m "network policy disabled"
 git push origin sno-&lt;name&gt;
 
-oc get route app -n app
-curl app-app.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com</code></pre>
+oc get route back-springboot -n app</code></pre>
 </div>
 </div>
 <div class="imageblock">
