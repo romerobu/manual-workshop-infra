@@ -338,15 +338,15 @@ It might take a while till authentication pods restart, if you see oauth is not 
 
 NOTE: _LDAP pods_ can take some minutes to restart.
 
-- You can try _Log in_ to _LDAP_ server with credentials:
+- You can try _Log in_ to _LDAP_ server (FreeIPA) with credentials:
 
   paul/Passw0rd 
 
 NOTE: _paul_ is _admin_ user.
 
-- You can try _Log in_ to _LDAP_ server with credentials:
+- You can try _Log in_ to _LDAP_ server (FreeIPA) with credentials:
 
-  user mark/Passw0rd
+  mark/Passw0rd
   
 NOTE: _mark_ is _viewer_ user.
 
