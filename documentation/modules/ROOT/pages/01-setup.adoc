@@ -44,7 +44,9 @@ Regarding this workshop, there are two GitHub repositories you will need to fork
 .Fork workshop-gitops-content-deploy
 image::fork-1.png[]
 
-Now you have the *_workshop-gitops-content-deploy_* repository forked in your GitHub account, let´s clone it in local and create a new branch.
+Now you have the *_workshop-gitops-content-deploy_* repository forked in your GitHub account, let´s clone it and create a new branch.
+
+You will need to clone your repo using SSH keys in Git, if you haven't configured a ssh key pair you can take a look https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/github-clone-with-ssh-keys[here].
 
 IMPORTANT: Replace *_<your_user>_* for your GitHub user account, and *_<name>_* for your assigned cluster in this workshop.
 
@@ -59,7 +61,7 @@ cd ~/workshop-gitops-content-deploy
 git checkout -b sno-<name>-setup
 ----
 
-Replicate the same with the second repository.
+Do the same with the second repository.
 
 - Access https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository.
 - Hit *_Fork_* available at the top right of the screen. Then click *_Create fork_* with the default configuration.
