@@ -75,10 +75,13 @@ On top of that, once logged into _Argo Hub_ you will only have permissions over 
 The reason why _Argo Hub_ has permissions over your managed cluster is because it is configured as a destination server, given an authentication method.
 
 In _Argo Hub_ there is a secret in _openshift-operators_ namespace for every managed cluster containing this information. There are several ways to implement this, you can generate an 
-authentication token for this purpose or you can pass _kubeconfig_ file to give full control over the destination cluster.
+authentication token for this purpose or you can pass _kubeconfig_ file to give full control over the destination cluster. You do not need to do anything as this is already done
+on hub-setup Application.
 
 .Managed cluster secret in Argo Hub
 image::cluster-api-sno.png[]
+
+You can take a look to the chart used for creating these secrets https://github.com/romerobu/workshop-gitops-content-deploy/blob/setup-sno/hub-setup/charts/gitops-setup/values.yaml[here] and https://github.com/romerobu/workshop-gitops-content-deploy/blob/setup-sno/hub-setup/charts/gitops-setup/templates/secret-cluster.yaml[here].
 
 [#hubsetup]
 == 2.3 Argo Hub Setup

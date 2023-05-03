@@ -1251,6 +1251,16 @@ image::diagram-7.png[]
 
 If you navigate to the Charts folder, *_~/workshop-gitops-content-deploy/cluster-addons/day2-as/_*, you will see you are not creating objects itself but Applications. Let´s test it.
 
+Save and commit your last changes:
+
+[.lines_7]
+[.console-input]
+[source, shell,subs="+macros,+attributes"]
+----
+git add .
+git commit -m "wip"
+----  
+
 Go back to your working branch *_sno-<name>-setup_* and merge it with *main-day2* branch. 
 
 [.lines_7]
