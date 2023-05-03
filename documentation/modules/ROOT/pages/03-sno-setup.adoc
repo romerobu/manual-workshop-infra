@@ -600,7 +600,7 @@ Additionally to the defined roles, it is possible to create some specific roles 
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/workshop-gitops-content-deploy
-vi cluster-addons/charts/bootstrap/templates/values.yaml
+vi cluster-addons/charts/bootstrap/values.yaml
 ----
 
 [.lines_7]
