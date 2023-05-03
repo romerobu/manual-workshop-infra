@@ -83,7 +83,7 @@ You will now deploy applications to our _SNO_ Argo console by hand, and then at 
 
 - Log in *_argocd-infra_* instance using OpenShift credentials, with user _admin_ and <pass> provided by intructor. 
 
-NOTE: Replace *_<name>_* and *_<domain>_*. (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
+NOTE: Replace *_<name>_* and *_<domain>_*. (E.g. https://argocd-infra-server-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
 
 - If you try to deploy this Application on your cluster you will see it _syncs_, but it does not render objects as every value is disabled.
 
@@ -216,7 +216,7 @@ Replace the following:
 - *<domain> -> Assigned domain cluster*
 - *<your_user> -> Your GitHub user account*
 
-Log in the _argocd-infra_ instance (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
+Log in the _argocd-infra_ instance (E.g. https://argocd-infra-server-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
 
 To create _sno-<name>-oauth_ Application, once logged in, click on:
 
@@ -418,7 +418,7 @@ git commit -m "operators"
 git push origin sno-<name>
 ----
 
-Log in the _argocd-infra_ instance (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
+Log in the _argocd-infra_ instance (E.g. https://argocd-infra-server-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
 
 To create _sno-<name>-operators_ Application, once logged in, click on:
 
@@ -465,7 +465,7 @@ If _Sync Waves_ are not configured properly it will try to create resources whos
 
 Once operators are installed, you can view them as well with the _Install Plan_ managed by Argo:
 
-- Log in _argocd-infra_ instance console: (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
+- Log in _argocd-infra_ instance console: (E.g. https://argocd-infra-server-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
 
 - Click on _sno-<name>-operators_ Application
 
@@ -474,7 +474,7 @@ image::operators-install-plan.png[]
 
 Then, deploy _Bookinfo_ app using _argocd-apps_ instance. You will realize you only need to deploy apps components as namespace is already managed by _argocd-infra_ instance:
 
-- Log in *_argocd-apps_* instance console: (E.g. https://argocd-apps-openshift-operators.apps.sno-<name>.<domain>.opentlc.com)
+- Log in *_argocd-apps_* instance console: (E.g. https://argocd-apps-server-openshift-operators.apps.sno-<name>.<domain>.opentlc.com)
 
 Deploy the _sno-<name>-bookinfo_ Application, once logged in, click on:
 
@@ -588,7 +588,7 @@ git commit -m "namespace configuration"
 git push origin sno-<name>
 ----
 
-Log in the _argocd-infra_ instance (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
+Log in the _argocd-infra_ instance (E.g. https://argocd-infra-server-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
 
 To create _sno-<name>-namespace_ Application, once logged in, click on:
 
@@ -627,7 +627,7 @@ spec:
 
 - Then hit *_Save_* -> *_Create_*
 
-Then deploy an _example-app_ on *_argocd-apps_* instance (E.g. https://argocd-apps-openshift-operators.apps.sno-<name>.<domain>.opentlc.com)
+Then deploy an _example-app_ on *_argocd-apps_* instance (E.g. https://argocd-apps-server-openshift-operators.apps.sno-<name>.<domain>.opentlc.com)
 
 Deploy the _sno-<name>-app_ Application, once logged in, click on:
 
@@ -826,7 +826,7 @@ git commit -m "monitoring"
 git push origin sno-<name>
 ----
 
-Log in the _argocd-infra_ instance (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
+Log in the _argocd-infra_ instance (E.g. https://argocd-infra-server-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com)
 
 To create _sno-<name>-monitoring_ Application, once logged in, click on:
 
@@ -1120,7 +1120,7 @@ If you take a look to the existing secret in _vault-secrets_ namespace, as we ar
 .Vault plugin secret
 image::secret-vault.png[]
 
-So we need to modify existing Application _sno-<name>-vault_ in _argocd-apps_ instance (E.g. https://argocd-apps-openshift-operators.apps.sno-<name>.<domain>.opentlc.com) to use *plugin*. 
+So we need to modify existing Application _sno-<name>-vault_ in _argocd-apps_ instance (E.g. https://argocd-apps-server-openshift-operators.apps.sno-<name>.<domain>.opentlc.com) to use *plugin*. 
 
 NOTE: This modification applies to *Vault application* deployed at the end of *_3.2 Helm Charts subsection_*.
 

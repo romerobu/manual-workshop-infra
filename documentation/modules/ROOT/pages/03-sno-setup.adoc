@@ -299,7 +299,7 @@ If you navigate to _cluster-addons/charts/gitops-setup/templates/operators/subsc
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/workshop-gitops-content-deploy
-vi cluster-addons/charts/gitops-setup/templates/operators/subscription.yaml
+cat cluster-addons/charts/gitops-setup/templates/operators/subscription.yaml
 ----
 
 [.lines_7]
@@ -349,7 +349,7 @@ After setting this global variable you can see a new _Cluster Role Binding_ for 
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-oc get clusterrolebinding openshift-gitops-openshift-gitops-argocd-application-controller -n openshift-operators
+oc get clusterrolebinding openshift-gitops-openshift-gitops-argocd-application-controller -n openshift-operators -o yaml
 ----
 
 It is possible also to take a look in the _Argo Hub_ web console (https://console-openshift-console.apps.argo-hub.<domain>.opentlc.com/):
@@ -714,12 +714,17 @@ To create bootstrap application, once logged in, click on:
 
 IMPORTANT: *Insert the following Application with the changes we previously pushed to the repository*:
 
+Update from _global-config/bootstrap-a/managed-setup.yaml_:
+
+- *<name> -> Assigned cluster*
+- *<your_user> -> Your GitHub user account*
+
 [.lines_7]
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/workshop-gitops-content-deploy
-cat global-config/bootstrap-a/managed-setup.yaml
+vi global-config/bootstrap-a/managed-setup.yaml
 ----
 
 [.lines_7]
@@ -814,7 +819,7 @@ Verify that:
 
 Now Log in _argocd-infra_ instance using OpenShift credentials, with user _admin_ and <pass> provided by intructor.
 
-- 3) Click *_Settings_* section  (E.g. https://argocd-infra-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com/settings)
+- 3) Click *_Settings_* section  (E.g. https://argocd-infra-server-openshift-gitops.apps.sno-<name>.<domain>.opentlc.com/settings)
 
 .Settings section
 image::settings-section-argocd.png[]
