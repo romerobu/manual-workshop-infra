@@ -262,7 +262,7 @@ And finally replace values in bootstrap _cluster-addons/charts/bootstrap/values.
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/workshop-gitops-content-deploy
-vi cluster-addons/charts/bootstrap-app/values.yaml
+vi cluster-addons/charts/bootstrap/values.yaml
 ----
 
 [.lines_7]
