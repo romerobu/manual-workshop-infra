@@ -101,7 +101,7 @@ spec:
 
 The source path of this Application points to the ApplicationSet used.
 
-ApplicationSet is a Custom Resource that can be used to genereate Applications to multiple clusters from multiple originis. ApplicationSet controller is installed alongside ArgoCD even though it must be explicitaly enabled. 
+ApplicationSet is a Custom Resource that can be used to genereate Applications to multiple clusters from multiple origins. ApplicationSet controller is installed alongside ArgoCD even though it must be explicitaly enabled. 
 
 ApplicationSet is a helpful approach for multi cluster management, and it supplements ArgoCD by adding additional features in support of _cluster-administrator-focused_ scanerios. Some of those are:
 
