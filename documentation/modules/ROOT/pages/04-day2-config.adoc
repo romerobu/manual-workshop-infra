@@ -985,7 +985,7 @@ Then it is necessary to configure using this plugin on ArgoCD:
 
 IMPORTANT: In this case, this configuration is already running on your cluster. 
 
-Take a look to the configuration applied by the Application _sno-<name>-bootstrap on your _SNO_  _argocd-infra_ instance where those resources have been already created as part of _bootstrapping_. Do not make any change.
+Take a look to the configuration applied by the Application _sno-<name>-bootstrap on your sno  _argocd-infra_ instance where those resources have been already created as part of _bootstrapping_. Do not make any change.
 
 [.lines_7]
 [.console-output]
