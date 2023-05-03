@@ -1124,7 +1124,7 @@ So we need to modify existing Application _sno-<name>-vault_ in _argocd-apps_ in
 
 NOTE: This modification applies to *Vault application* deployed at the end of *_3.2 Helm Charts subsection_*.
 
-- Click *_sno-<name>-vault_* -> *_App details_* -> then *_Edit_*, and add:
+- Click *_sno-<name>-vault_* -> *_App details_* -> *_Manifest_* -> then *_Edit_*, and add:
 
 IMPORTANT: Replace only the plugin section. And change _<your_user>_ for your GitHub user account.
 
