@@ -544,7 +544,7 @@ ApplicationSet controller is not enabled by default and must be configured on Ar
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/workshop-gitops-content-deploy
-vi cluster-addons/charts/gitops-setup/templates/operators/subscription.yaml</code></pre>
+cat cluster-addons/charts/gitops-setup/templates/operators/subscription.yaml</code></pre>
 </div>
 </div>
 <div class="listingblock lines_7 console-output">
@@ -594,7 +594,7 @@ you need to change this configuration to make the instance <em>cluster wide</em>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get clusterrolebinding openshift-gitops-openshift-gitops-argocd-application-controller -n openshift-operators</code></pre>
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">oc get clusterrolebinding openshift-gitops-openshift-gitops-argocd-application-controller -n openshift-operators -o yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1114,10 +1114,23 @@ git push origin sno-&lt;name&gt;-setup</code></pre>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>Update from <em>global-config/bootstrap-a/managed-setup.yaml</em>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>&lt;name&gt; &#8594; Assigned cluster</strong></p>
+</li>
+<li>
+<p><strong>&lt;your_user&gt; &#8594; Your GitHub user account</strong></p>
+</li>
+</ul>
+</div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/workshop-gitops-content-deploy
-cat global-config/bootstrap-a/managed-setup.yaml</code></pre>
+vi global-config/bootstrap-a/managed-setup.yaml</code></pre>
 </div>
 </div>
 <div class="listingblock lines_7 console-output">
@@ -1301,7 +1314,7 @@ Remember to use your &lt;name&gt; and &lt;domain&gt;.
 <div class="ulist">
 <ul>
 <li>
-<p>3) Click <strong><em>Settings</em></strong> section  (E.g. <a href="https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com/settings" class="bare">https://argocd-infra-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com/settings</a>)</p>
+<p>3) Click <strong><em>Settings</em></strong> section  (E.g. <a href="https://argocd-infra-server-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com/settings" class="bare">https://argocd-infra-server-openshift-gitops.apps.sno-&lt;name&gt;.&lt;domain&gt;.opentlc.com/settings</a>)</p>
 </li>
 </ul>
 </div>
