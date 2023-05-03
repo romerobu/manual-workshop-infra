@@ -187,16 +187,18 @@ image::hub-login-1.png[]
   
 2) Find _Keycloack_ URL, in OpenShift _Routes_ section, it should be something like: https://keycloak-keycloak.apps.argo-hub.<domain>.opentlc.com
   
-3) Login in _Keycloack_ as _"admin/admin"_
+3) Login in _Keycloack_ as _"admin/admin"_ (Administrative Console)
 
 .Keycloack log in
 image::keycloack-login.png[]
 
 4) Navigate to your _realm-<name>_
 
-5) Then go to your _client-<name>_ 
+image::realm-navbar.png[]
 
-6) Click on _Credentials_ tab, you will see your _<your_keycloak_secret_data>_ there.
+5) Then go to your _myclient-<name>_ 
+
+6) Click on _Credentials_ tab, you will see your client secret (_<your_keycloak_secret_data>_) there.
 
 Once the _values-oauth.yaml_ exists in your repository, push it and create a new Application in the _argocd-infra_ instance:
 
@@ -532,7 +534,7 @@ Take a look to the _Network Policy_ Helm chart:
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/helm-infra-gitops-workshop
-cat charts/namespace/template/app/newtwork-policy.yaml
+cat charts/namespace/templates/app/newtwork-policy.yaml
 ----
 
 [.lines_7]
@@ -740,8 +742,7 @@ IMPORTANT: Replace <name> and <domain> when needed.
 [.console-input]
 [source, shell,subs="+macros,+attributes"]
 ----
-oc get route app -n app 
-curl app-app.apps.sno-<name>.<domain>.opentlc.com
+oc get route back-springboot -n app
 ----
 
 .app not responsible
@@ -754,7 +755,7 @@ Then disable _Network Policy_ and verify how you have traffic access:
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/helm-infra-gitops-workshop
-vi charts/namespace/templates/values.yaml
+vi values-namespace.yaml
 ----
 
 [.lines_7]
@@ -778,8 +779,7 @@ git add .
 git commit -m "network policy disabled"
 git push origin sno-<name>
 
-oc get route app -n app 
-curl app-app.apps.sno-<name>.<domain>.opentlc.com
+oc get route back-springboot -n app
 ----
 
 .app available
