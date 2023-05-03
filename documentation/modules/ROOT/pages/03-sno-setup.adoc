@@ -593,7 +593,7 @@ ArgoCD has two pre-defined roles but _RBAC_ configuration allows defining roles 
 
 - 2) role:admin - unrestricted access to all resources
 
-Additionally to the defined roles, it is possible to create some specific roles to allow _argo-operators_ and _argo-dev-operators_ group members manage applications in ArgoCD. See the groups in _cluster-addons/charts/bootstrap/templates/values.yaml_ values file:
+Additionally to the defined roles, it is possible to create some specific roles to allow _argo-operators_ and _argo-dev-operators_ group members manage applications in ArgoCD. See the groups in _cluster-addons/charts/bootstrap/values.yaml_ values file:
 
 [.lines_7]
 [.console-input]
