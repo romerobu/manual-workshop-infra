@@ -829,12 +829,16 @@ image::settings-section-argocd.png[]
 .General overview argocd-infra instance
 image::cluster-wide.png[]
 
-- 5) Follow the same steps to verify that *_argocd-apps_* instance exists and is NOT _cluster-wide_.
+- 5) Follow the same steps to verify that *_argocd-apps_* (E.g. https://argocd-apps-server-openshift-operators.apps.sno-<name>.<domain>.opentlc.com/settings) instance exists and is NOT _cluster-wide_.
 
 .General overview argocd-apps instance
 image::argocd-apps-general-1.png[]
 
 - 6) Both _'Dev'_ and _'Pro'_ _App Project_ exist on _argocd-apps_ instance.
+
+Click on Projects on the left menu:
+
+image::projects.png[]
 
 Verify you can create apliations on _'Dev'_ project for _argocd-apps_ instance.
 
