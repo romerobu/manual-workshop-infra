@@ -103,10 +103,10 @@
     <a class="nav-link" href="#deployoperators">4.2 Deploy Operators</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#monitoring">4.3 Configure Monitoring</a>
+    <a class="nav-link" href="#namespace">4.3 Namespace Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#namespace">4.4 Namespace Configuration</a>
+    <a class="nav-link" href="#monitoring">4.4 Configure Monitoring</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="#vault">4.5 Vault Configuration</a>
@@ -1889,7 +1889,7 @@ spec:
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/workshop-gitops-content-deploy
-git checkout sno-name-setup
+git checkout sno-&lt;name&gt;-setup
 git merge main-day2</code></pre>
 </div>
 </div>
@@ -1984,14 +1984,14 @@ spec:
 </div>
 </div>
 <div class="paragraph">
-<p>Then push to your changes to working branch <strong><em>sno-name-setup</em></strong>.</p>
+<p>Then push to your changes to working branch <strong><em>sno-&lt;name&gt;-setup</em></strong>.</p>
 </div>
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">cd ~/workshop-gitops-content-deploy
 git add .
 git commit -m "day 2 with ApplicationSet"
-git push origin sno-name-setup</code></pre>
+git push origin sno-&lt;name&gt;-setup</code></pre>
 </div>
 </div>
 <div class="paragraph">
