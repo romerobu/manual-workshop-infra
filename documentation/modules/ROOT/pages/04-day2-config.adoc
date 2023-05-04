@@ -534,7 +534,7 @@ Take a look to the _Network Policy_ Helm chart:
 [source, shell,subs="+macros,+attributes"]
 ----
 cd ~/helm-infra-gitops-workshop
-cat charts/namespace/templates/app/newtwork-policy.yaml
+cat charts/namespace/templates/app/network-policy.yaml
 ----
 
 [.lines_7]
