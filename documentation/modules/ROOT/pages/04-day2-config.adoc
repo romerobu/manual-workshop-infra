@@ -6,7 +6,7 @@ At this point you have a _SNO_, with two ArgoCD instances deployed and _cluster-
 As we might need to apply this configuration to multiple managed clusters, we need to be able to render multiple applications using Helm charts, even though we are applying this configuration
 to our single scoped cluster.
 
-Go to https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and checkout to your working branch.
+Go to https://github.com/WorkshopGitOpsInfra/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and checkout to your working branch.
 
 [.lines_7]
 [.console-input]
@@ -140,7 +140,7 @@ Let´s deploy the _Oauth_ resources required and verify how groups are synchroni
 
 First we need to take a look to _charts/oauth/values.yaml_. As you can see, you need to define some missing _values_ for each managed cluster. You can do this by setting those on this Chart values file, setting them as parametes or defining a new _values.yaml file_ for your deployment. We will follow the second approach.
 
-Go to your working branch in the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-oauth.yaml*:
+Go to your working branch in the https://github.com/WorkshopGitOpsInfra/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-oauth.yaml*:
 
 [.lines_7]
 [.console-input]
@@ -375,7 +375,7 @@ cat ~/helm-infra-gitops-workshop/charts/operators/templates/operators/subscripti
 
 We are going to deploy *Tekton*, *Kiali*, *Jaeger*, *Service Mesh* and *Nmstate* operators. Furthermore we are going to deploy *_Service Mesh Control Plane_* and *_Service Mesh Member Roll_* instances and an example application called _Bookinfo_ for Service Mesh.
 
-Go to your working branch in the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-operators.yaml*:
+Go to your working branch in the https://github.com/WorkshopGitOpsInfra/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-operators.yaml*:
 
 [.lines_7]
 [.console-input]
@@ -558,7 +558,7 @@ spec:
 The previous *_Network Policy_* blocks all incoming traffic by selecting all pods in the namespace and denying all ingress traffic. This is controlled by the *_networkpolicy.enabled_* value in the *_values-namespace.yaml_* file we are going to create bellow.
 
 
-Go to your working branch in the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-namespace.yaml*:
+Go to your working branch in the https://github.com/WorkshopGitOpsInfra/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-namespace.yaml*:
 
 [.lines_7]
 [.console-input]
@@ -796,7 +796,7 @@ NOTE: Take a look to the https://docs.openshift.com/container-platform/4.12/moni
 
 In the first place, we are going to enable _user-defined_ projects monitoring. Then we will create an *_example-app_*, with a _Service Monitor_ and a custom _Prometheus Rule_ in order to gather metrics from the _example-app_ application and trigger an alarm based on an specific metric value.
 
-Go to your working branch in the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-monitoring.yaml*:
+Go to your working branch in the https://github.com/WorkshopGitOpsInfra/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository and create a file called *values-monitoring.yaml*:
 
 [.lines_7]
 [.console-input]
@@ -1087,7 +1087,7 @@ Take a look to the configuration applied by the Application _sno-<name>-bootstra
 
 So the next step is testing this actually works!
 
-In the https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository, you can find a _secret_ using a Vault placeholder in _charts/vault/values.yaml_:
+In the https://github.com/WorkshopGitOpsInfra/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository, you can find a _secret_ using a Vault placeholder in _charts/vault/values.yaml_:
 
 [.lines_7]
 [.console-input]
@@ -1180,7 +1180,7 @@ Finally you can ask your instructor to update this secret on Vault server, try a
 
 Until now, you have applied day 2 operations by creating single Applications by hand. However there is an easier way to render those apps using ApplicationSets.
 
-Checkout to *main-day2* branch in this https://github.com/romerobu/workshop-gitops-content-deploy[workshop-gitops-content-deploy] repository to take a look:
+Checkout to *main-day2* branch in this https://github.com/WorkshopGitOpsInfra/workshop-gitops-content-deploy[workshop-gitops-content-deploy] repository to take a look:
 
 [.lines_7]
 [.console-input]
