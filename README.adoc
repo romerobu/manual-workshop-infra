@@ -1,3 +1,6 @@
+
+**Repo added to this https://github.com/WorkshopGitOpsInfra** organization, this is view-only.
+
 # Red Hat Workshop - ArgoCD Managing Infrastructure
 
 ## Introduction
