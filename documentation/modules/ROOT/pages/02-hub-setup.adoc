@@ -81,7 +81,7 @@ on hub-setup Application.
 .Managed cluster secret in Argo Hub
 image::cluster-api-sno.png[]
 
-You can take a look to the chart used for creating these secrets https://github.com/WorkshopGitOpsInfra/workshop-gitops-content-deploy/blob/setup-sno/hub-setup/charts/gitops-setup/values.yaml[here] and https://github.com/WorkshopGitOpsInfra/workshop-gitops-content-deploy/blob/setup-sno/hub-setup/charts/gitops-setup/templates/secret-cluster.yaml[here].
+You can take a look to the chart used for creating these secrets https://github.com/romerobu/workshop-gitops-content-deploy/blob/setup-sno/hub-setup/charts/gitops-setup/values.yaml[here] and https://github.com/romerobu/workshop-gitops-content-deploy/blob/setup-sno/hub-setup/charts/gitops-setup/templates/secret-cluster.yaml[here].
 
 [#hubsetup]
 == 2.3 Argo Hub Setup

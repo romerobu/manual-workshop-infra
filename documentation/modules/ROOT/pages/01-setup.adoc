@@ -39,7 +39,7 @@ Regarding this workshop, there are two GitHub repositories you will need to fork
 Beware to select all branches when you fork your repo!
 
 - Login in https://github.com/[GitHub].
-- Access https://github.com/WorkshopGitOpsInfra/workshop-gitops-content-deploy[workshop-gitops-content-deploy] repository.
+- Access https://github.com/romerobu/workshop-gitops-content-deploy[workshop-gitops-content-deploy] repository.
 - Hit *_Fork_* available at the top right of the screen. Then click *_Create fork_* with the default configuration.
 
 .Fork workshop-gitops-content-deploy
@@ -64,7 +64,7 @@ git checkout -b sno-<name>-setup
 
 Do the same with the second repository.
 
-- Access https://github.com/WorkshopGitOpsInfra/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository.
+- Access https://github.com/romerobu/helm-infra-gitops-workshop[helm-infra-gitops-workshop] repository.
 - Hit *_Fork_* available at the top right of the screen. Then click *_Create fork_* with the default configuration.
 
 .Fork helm-infra-gitops-workshop

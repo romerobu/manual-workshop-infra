@@ -1,5 +1,5 @@
 
-**Repo added to this https://github.com/WorkshopGitOpsInfra** organization, this is view-only.
+**Repo added to this https://github.com/romerobu** organization, this is view-only.
 
 # Red Hat Workshop - ArgoCD Managing Infrastructure
 
@@ -16,7 +16,7 @@ _Manual Workshop Infra_ is a repository that includes a tutorial deployed on Git
 - Automating the deployment of Day 2 operations and applications through _ApplicationSet_ and _Application_.
 
 ## Workshop Infraestructure
-To complete this tutorial, we recommend using the https://github.com/WorkshopGitOpsInfra/workshop-gitops-infra-deploy[Workshop GitOps Infra Deploy] repository to deploy all the necessary infrastructure.
+To complete this tutorial, we recommend using the https://github.com/romerobu/workshop-gitops-infra-deploy[Workshop GitOps Infra Deploy] repository to deploy all the necessary infrastructure.
 
 ## Courseware official documentation
 
