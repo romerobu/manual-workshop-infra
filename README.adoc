@@ -1,11 +1,9 @@
 
-**Repo added to this https://github.com/WorkshopGitOpsInfra** organization, this is view-only.
-
 # Red Hat Workshop - ArgoCD Managing Infrastructure
 
 ## Introduction
 
-_Manual Workshop Infra_ is a repository that includes a tutorial deployed on GitHub Pages. The goal of this tutorial is to learn how to deploy _Day 2 operations_ and _applications_ through ArgoCD, with a focus on GitOps infrastructure configuration. Some of the contents you can expect in this tutorial include: 
+_Manual Workshop Infra_ is a repository that includes a tutorial deployed on GitHub Pages. The goal of this tutorial is to learn how to deploy a distributed GitOps architecture plus _Day 2 operations_ and _applications_ following a GitOps approach. Some of the contents you can expect in this tutorial include: 
 
 - Setting up an OpenShift _Argo Hub_ cluster. 
 
@@ -13,10 +11,13 @@ _Manual Workshop Infra_ is a repository that includes a tutorial deployed on Git
 
 - Deploying Day 2 operations and applications with ArgoCD. 
 
-- Automating the deployment of Day 2 operations and applications through _ApplicationSet_ and _Application_.
+- Automating the deployment of Day 2 operations and applications through _ApplicationSet_.
+
+- Estimated completion time is 3 hours.
 
 ## Workshop Infraestructure
-To complete this tutorial, we recommend using the https://github.com/WorkshopGitOpsInfra/workshop-gitops-infra-deploy[Workshop GitOps Infra Deploy] repository to deploy all the necessary infrastructure.
+
+To complete this tutorial, we recommend using the https://github.com/romerobu/workshop-gitops-infra-deploy[Workshop GitOps Infra Deploy] repository to deploy all the necessary infrastructure on AWS for so many users as you need.
 
 ## Courseware official documentation
 
