@@ -1,7 +1,7 @@
 
 # Red Hat Workshop - ArgoCD Managing Infrastructure
 
-You can take a look to the manual [here](https://romerobu.github.io/manual-workshop-infra/manual-workshop-infra/index.html).
+You can take a look to the manual https://romerobu.github.io/manual-workshop-infra/manual-workshop-infra/index.html[here].
 
 Repo used for course environment deployment is linked in the following section, and repositories used for the lab are linked in the manual instructions.
 
