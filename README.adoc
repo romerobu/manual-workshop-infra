@@ -1,6 +1,10 @@
 
 # Red Hat Workshop - ArgoCD Managing Infrastructure
 
+You can take a look to the manual [here](https://romerobu.github.io/manual-workshop-infra/manual-workshop-infra/index.html).
+
+Repo used for course environment deployment is linked in the following section, and repositories used for the lab are linked in the manual instructions.
+
 ## Introduction
 
 _Manual Workshop Infra_ is a repository that includes a tutorial deployed on GitHub Pages. The goal of this tutorial is to learn how to deploy a distributed GitOps architecture plus _Day 2 operations_ and _applications_ following a GitOps approach. Some of the contents you can expect in this tutorial include: 
@@ -15,13 +19,9 @@ _Manual Workshop Infra_ is a repository that includes a tutorial deployed on Git
 
 - Estimated completion time is 3 hours.
 
-## Workshop Infraestructure
-<<<<<<< HEAD
-To complete this tutorial, we recommend using the https://github.com/romerobu/workshop-gitops-infra-deploy[Workshop GitOps Infra Deploy] repository to deploy all the necessary infrastructure.
-=======
+## Workshop Infrastructure
 
 To complete this tutorial, we recommend using the https://github.com/romerobu/workshop-gitops-infra-deploy[Workshop GitOps Infra Deploy] repository to deploy all the necessary infrastructure on AWS for so many users as you need.
->>>>>>> 1b754313f588674863a8d00599719c5e737878ca
 
 ## Courseware official documentation
 
